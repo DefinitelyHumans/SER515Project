@@ -7,4 +7,4 @@ A project for SER515
 - Himanshu Dua (hdua1)
 - Cecilia La Place (HalcyonAura)
 - Namratha Olety Venkatesh (namrathaov)
-- Kaelan Strones (sk33p0)
+- Kaelan Strones (kstrones)
