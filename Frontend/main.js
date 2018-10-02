@@ -1,5 +1,10 @@
 // Modules to control application life and create native browser window
-const {app, BrowserWindow} = require('electron')
+const app =  require.resolve('electron').app;
+const BrowserWindow = require('electron').app
+// const electron = require('electron');
+// const app = require('electron').app;
+// const BrowserWindow = require('browser-window').app
+
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
