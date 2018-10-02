@@ -1,9 +1,15 @@
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+import React from 'react';
+import ReactDOM from 'react-dom';
 
-const REACT_VERSION = React.version;
+class App extends React.Component {
 
-ReactDOM.render(
-<h4>We are using React: {REACT_VERSION}</h4>,
-document.getElementById('root')
-);
+    constructor(props){
+        super(props);
+    }
+
+    render(){
+        return (<div><p>This is a sample paragraph in the container component.</p></div>);
+    }
+}
+
+export default App;
