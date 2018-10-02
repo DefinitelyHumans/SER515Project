@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import TabbedPanels from './components/sidebar/TabbedPanels';
 
 class App extends React.Component {
 
@@ -8,7 +9,7 @@ class App extends React.Component {
     }
 
     render(){
-        return (<div><p>This is a sample paragraph in the container component.</p></div>);
+        return (<TabbedPanels></TabbedPanels>);
     }
 }
 
