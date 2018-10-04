@@ -1,34 +1,37 @@
-CREATE TABLE topic (
-	topic_id NOT NULL SERIAL PRIMARY KEY,
+CREATE TABLE topics (
+	topic_id SERIAL NOT NULL PRIMARY KEY,
 	topic_name VARCHAR(20),
-	topic_time_posted TIME,
-	update_time TIME,
+	topic_time_posted TIMESTAMP WITH TIME ZONE,
+	update_time TIMESTAMP WITH TIME ZONE,
 	topic_type VARCHAR(5),
 	topic_content VARCHAR(250),
-	FOREIGN KEY (user_id_fk) REFERENCES userdata(user_id)
+	user_fk VARCHAR(255),
+	FOREIGN KEY (user_fk) REFERENCES users(user_id)
 );
 
-CREATE TABLE token (
-	token_id INT NOT NULL SERIAL PRIMARY KEY,
-	expiration_time DATE
+CREATE TABLE tokens (
+	token_id SERIAL NOT NULL PRIMARY KEY,
+	expiration_time TIMESTAMP WITH TIME ZONE
 );
 
-CREATE TABLE userdata (
-	user_id VARCHAR(255) NOT NULL SERIAL PRIMARY KEY,
+CREATE TABLE users (
+	user_id VARCHAR(255) NOT NULL PRIMARY KEY,
 	tag_list TEXT [],
 	topic_list TEXT [],
-	user_email VARCHAR(254),
-	password_hash VARCHAR(60),
-	FOREIGN KEY (token_id_fk) REFERENCES token(token_id)
+	email VARCHAR(254) NOT NULL,
+	password_hash VARCHAR(60) NOT NULL,
+	token_fk INTEGER,
+	FOREIGN KEY (token_fk) REFERENCES tokens(token_id)
 );
 
-CREATE TABLE tag (
+CREATE TABLE tags (
 	tag_id INT NOT NULL SERIAL PRIMARY KEY,
 	tag_name VARCHAR(15),
 );
 
-CREATE TABLE commentdata (
+CREATE TABLE comments (
 	comment_id INT NOT NULL SERIAL PRIMARY KEY,
-	comment_content VARCHAR(150),
-	FOREIGN KEY (user_id_fk) REFERENCES userdata(user_id)
+	comment_body VARCHAR(150),
+	user_fk VARCHAR(255),
+	FOREIGN KEY (user_id_fk) REFERENCES users(user_id)
 );
