@@ -24,26 +24,59 @@ app.get('/', function (req, res) {
     res.sendFile("login.html", { root: __dirname });
 });
 
-app.post('/api/login', function (req, res) {
+app.post('/api/auth/login', async function (req, res) {
     let body = req.body;
 
-    let login_info = auth.login(body.email, body.password);
-
-    if(login_info != null) {
-        res.send(login_info); //TODO: does more info need to be sent?
+    let login_info = await auth.login(body.email, body.password);
+    if(login_info.invalid_password) {
+        res.statusCode = 401;
+        res.send("")
+    } else if(login_info.server_error) {
+        res.statusCode = 500;
+        res.send("")
+    } else {
+        if(login_info.token && login_info.user_id) {
+            res.statusCode = 200;
+            res.send({
+                auth_token: login_info.token,
+                user_id: login_info.user_id,
+            })
+        } else {
+            //if we make it here then something failed pretty hard
+            res.statusCode = 500;
+            res.send("")
+        }
     }
-
-    res.statusCode = 401
-    res.send("")
 });
 
-app.post('/api/register', function (req, res) {
+app.post('/api/auth/register', async function (req, res) {
+    // invalid_password
+    // recaptcha_fail
+    // server_error
+    // user_already_registered
+    // success
     let body = req.body;
 
-    if(auth.register(body.email, body.password)) {
-        res.statusCode = 200;
-    }
+    let register_info = await auth.register(body.email, body.password, body["g-recaptcha-response"]);
 
-    res.statusCode = 401;
-    res.send("")
+    if(register_info.invalid_password) {
+        res.statusCode = 401;
+        res.send("");
+    } else if(register_info.recaptcha_fail ||
+              register_info.user_already_registered) {
+        res.statusCode = 400;
+        res.send("");
+    } else if(register_info.server_error) {
+        res.statusCode = 500;
+        res.send("");
+    } else {
+        if(register_info.success) {
+            res.statusCode = 200;
+            res.send("");
+        } else {
+            //if we make it here then something failed pretty hard
+            res.statusCode = 500;
+            res.send("");
+        }
+    }
 });
