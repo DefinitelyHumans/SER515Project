@@ -1,0 +1,9 @@
+language: node_js
+node_js:
+    - "node"
+#installs will go here.
+#before_scripts go here.
+#scripts go here.
+script:
+    - npm test --prefix Frontend/
+    - npm test --prefix Backend/
