@@ -12,8 +12,6 @@
 --should the tag arrays be limited in size(maybe a max of 10 tags per post?)
 --will user's be allowed to edit their posts?
 
-DROP owned BY zawata; --not added to database yet
-
 CREATE TYPE   C_topic_post_type AS ENUM ('text', 'link', 'image');
 
 CREATE TABLE public.users (
