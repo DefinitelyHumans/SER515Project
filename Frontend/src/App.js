@@ -8,7 +8,7 @@ class App extends React.Component {
     }
 
     render(){
-        return (<div><p>This is a sample paragraph in the container component.</p></div>);
+        return (<div><p class="id1">This is a sample paragraph in the container component.</p></div>);
     }
 }
 
