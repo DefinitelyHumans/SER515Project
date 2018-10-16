@@ -128,6 +128,22 @@ async function add_token(user_id, token_id, expiration_time) {
         });
 };
 
+exports.update_token =
+async function update_token(user_id, token_id, expiration_time) {
+    //expiration time is an integer representing GMT epoch time
+    return await pool.query(
+            `UPDATE ${token_table} SET expiration_time=to_timestamp($1) WHERE user_id=$2 AND token_id=$3;`,
+            [expiration_time, user_id, token_id])
+        .then((res)=> {
+            return {
+                error: db_errors.NO_ERROR,
+            };
+        })
+        .catch((err) => {
+            return { error: db_errors.INTERNAL_ERROR };
+        });
+};
+
 exports.remove_token =
 async function remove_token(user_id, token_id) {
     return await pool.query(
