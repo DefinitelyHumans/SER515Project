@@ -10,6 +10,7 @@ class Viewpane extends React.Component {
             topics:['A', 'B', 'C', 'D']
         }
         this.renderTopics = this.renderTopics.bind(this);
+        this.addTopic = this.addTopic.bind(this);
     }
 
     renderTopics(){
@@ -17,10 +18,16 @@ class Viewpane extends React.Component {
         return <div className="ViewPaneTopics">{tmp}</div>
     }
 
+    addTopic(){
+        let t = this.state.topics;
+        t.push("new");
+        this.setState({topics: t});
+    }
     render(){
+        let topicsView = this.renderTopics();
         return (<div className="ViewPane">
-            <p>This is the viewpane panel</p>
-            {this.renderTopics()}
+            {topicsView}
+            <button className="ViewPane-Topic-Button" onClick={this.addTopic}>add topic</button>
         </div>);
     }
 }
