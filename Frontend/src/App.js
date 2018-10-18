@@ -4,7 +4,6 @@ import ReactDOM from 'react-dom';
 import Sidebar from './sidebar/sidebar';
 import ViewPane from './viewpane/viewpane';
 
-//import './App.css';
 class App extends React.Component {
 
     constructor(props){

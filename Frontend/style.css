@@ -1,3 +1,29 @@
-.id1 {
-background-color: gray
+/* This is for the overall body of the application */
+.App {
+    width:100vw;
+    height:100vh;
+    display:flex;
 }
+.Sidebar{
+    width:25vw;
+    height:100vh;
+    flex: 0 0 20vw;
+    background:lightblue;
+}
+.ViewPane{
+    flex: 1;
+    height:100vh;
+    background:lightgreen;
+}
+
+/* VIEWPANE */
+/* This is for topics to be formatted in the viewpane */
+.Topic{
+    text-align:center;
+    width:5vw;
+    margin:5vh;
+    float:left;
+    border: 2px solid lightpink; 
+}
+
+/* SIDEBAR */

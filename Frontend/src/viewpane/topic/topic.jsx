@@ -7,7 +7,7 @@ class Topic extends React.Component {
     }
 
     render(){
-        return (<div><p>This is the topic panel</p></div>);
+        return (<div className="Topic"><p>{this.props.name}</p></div>);
     }
 }
 
