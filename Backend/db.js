@@ -35,6 +35,35 @@ db_errors = {
     TOKEN_EXISTS: 4
 }
 
+
+/**
+ * Post object passed as parameter:
+ * post {
+ *  title
+ *  topicType
+ *  content
+ *  token
+ * }  
+ * */ 
+exports.add_post =
+async function add_post(user_id, post) {
+    // TODO: Generate post ID
+    return await pool.query(
+        `INSERT INTO ${topic_table} (topic_id, topic_title, topic_time_post, update_time, topic_type, topic_content, user_posted) VALUES ($1,$2,$3,$4,$5,$6,$7,$8);`,
+        [post.topic_id, post.topic_title, post.topic_time_post, post.topic_time_post, post.topic_type, post.topic_content, post.user_posted])
+    .then( () => {
+        return { error: db_errors.NO_ERROR };
+    })
+    .catch((err) => {
+        if(err.code == pg_errors.UNIQUE_VIOLATION ) {
+            return { error: db_errors.USER_ALREADY_REGISTERED };
+        } else {
+            return { error: db_errors.INTERNAL_ERROR };
+        }
+    });
+
+};
+
 exports.add_user =
 async function add_user(user_id, email, password_hash) {
     return await pool.query(
