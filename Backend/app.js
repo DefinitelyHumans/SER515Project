@@ -28,7 +28,7 @@ app.post('/api/auth/login', async function (req, res) {
     let body = req.body;
 
     let login_info = await auth.login(body.email, body.password);
-    if(login_info.invalid_password) {
+    if(login_info.invalid_login) {
         res.statusCode = 401;
         res.send("")
     } else if(login_info.server_error) {
@@ -50,7 +50,7 @@ app.post('/api/auth/login', async function (req, res) {
 });
 
 app.post('/api/auth/register', async function (req, res) {
-    // invalid_password
+    // invalid_login
     // recaptcha_fail
     // server_error
     // user_already_registered
@@ -59,16 +59,16 @@ app.post('/api/auth/register', async function (req, res) {
 
     let register_info = await auth.register(body.email, body.password, body["g-recaptcha-response"]);
 
-    if(register_info.invalid_password) {
+    if(register_info.invalid_login) {
         res.statusCode = 401;
-        res.send("");
+        res.send({error: "Invalid Password"});
     } else if(register_info.recaptcha_fail ||
               register_info.user_already_registered) {
         res.statusCode = 400;
-        res.send("");
+        res.send({error: "User Already Registered"});
     } else if(register_info.server_error) {
         res.statusCode = 500;
-        res.send("");
+        res.send({error: "Server Error"});
     } else {
         if(register_info.success) {
             res.statusCode = 200;
@@ -76,7 +76,7 @@ app.post('/api/auth/register', async function (req, res) {
         } else {
             //if we make it here then something failed pretty hard
             res.statusCode = 500;
-            res.send("");
+            res.send({error: "Server Error"});
         }
     }
 });
