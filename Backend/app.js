@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 
 //localfiles
 const auth       = require('./login.js')
+const topic      = require('./topic.js')
 
 //module setup
 const app = express();
@@ -79,4 +80,29 @@ app.post('/api/auth/register', async function (req, res) {
             res.send({error: "Server Error"});
         }
     }
+});
+
+//path listeners for topic.js
+
+app.get('/api/topic/:id', (req, res) => {
+  let id = req.topic_id;
+
+  if (!ObjectID.isValid(id)) {  //ObjectID from postgres module
+    return res.status(404).send();
+  }
+
+  topic.findOne(id).then((topic) => {
+    if (!topic) {
+      return res.status(404).send();
+    }
+
+    res.send({
+        topic_title: topic.title,
+        topic_type: topic.type,
+        topic_timePosted: topic.timePosted,
+        topic_timeUpdated: topic.timeUpdated
+    });
+  }).catch((e) => {
+    res.status(400).send();
+  });
 });
