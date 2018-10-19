@@ -125,3 +125,23 @@ app.get('/api/topic/:id', (req, res) => {
     res.status(400).send();
   });
 });
+
+app.delete('/api/topic/:id', (req, res) => {
+  let id = req.params.id,
+  let token = req.params.token;
+  if (!ObjectID.isValid(id)) {
+    return res.status(404).send();
+  }
+
+  topic.findOneAndRemove({
+    _id: id,
+    _token: token
+  }).then((topic) => {
+    if (!topic) {
+      return res.status(404).send();
+    }
+     return res.status(200).send();
+  }).catch((e) => {
+    res.status(400).send();
+  });
+});
