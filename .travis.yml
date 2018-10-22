@@ -2,8 +2,18 @@ language: node_js
 node_js:
     - "node"
 #installs will go here.
+before_install:
+    - npm install mocha
+    - npm install expect
+    - npm install spectron
+    - npm install electron
 #before_scripts go here.
 #scripts go here.
 script:
-    - npm test --prefix Frontend/
-    - npm test --prefix Backend/
+    - mocha Frontend/**/assertions.test.js
+    - mocha Frontend/**/utils.test.js
+#Uncomment this next line when we have mocah tests that need to be run in the backend
+#    - ./node_modules/.bin/mocha Backend/**/*.test.js
+#These lines is not working properly with travis
+#    - npm test --prefix Frontend/
+#    - npm test --prefix Backend/
