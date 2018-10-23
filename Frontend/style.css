@@ -1,3 +1,64 @@
-.id1 {
-background-color: gray
+/* GLOBAL DEFAULTS */
+*{
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    background: lightgoldenrodyellow;
 }
+
+/* This is for the overall body of the application */
+.App {
+    width:99vw;
+    height:98vh;
+    display:flex;
+}
+.Sidebar{
+    flex: 0 0 18vw;
+    background:lightblue;
+    overflow:auto;
+}
+.ViewPane{
+    flex: 1;
+    background:lightgreen;
+    overflow:auto;
+}
+
+/* VIEWPANE */
+/* This is for topics to be formatted in the viewpane */
+.Topic{
+    text-align:center;
+    width:5vw;
+    height:5vw;
+    margin:5vh;
+    float:left;
+    border: 2px solid lightpink; 
+    background: transparent;
+    text-decoration-color: none;
+}
+.ViewPane-Topic-Button{
+    border: 2px solid lightpink;
+    background: transparent;
+    width: 5vw;
+    height: 5vw;
+    margin:5vh;
+    float:left;
+    text-align:center;
+    text-decoration: none;
+}
+
+/* SIDEBAR */
+/* This is for Sidebar components formatting */
+.SidebarUserImage{
+    height: 5vh;
+    width: 5vh;
+    border-radius: 50%;
+    background-color:red;
+    float:left;
+}
+.SidebarUserInfo{
+    height: 5vh;
+}
+.SidebarUserProfile{
+}
+.SettingsButton{
+}
+/* menu things */

@@ -1,6 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+import Sidebar from './sidebar/sidebar';
+import ViewPane from './viewpane/viewpane';
+
 class App extends React.Component {
 
     constructor(props){
@@ -8,7 +11,11 @@ class App extends React.Component {
     }
 
     render(){
-        return (<div><p class="id1">This is a sample paragraph in the container component.</p></div>);
+        return (<div className="App">
+            <Sidebar></Sidebar>
+            <ViewPane></ViewPane>
+            </div>);
+
     }
 }
 
