@@ -1,5 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import Popup from 'reactjs-popup';
+import jQuery from 'jquery';
+window.jQuery = jQuery;
+require('bootstrap')
+var FontAwesome = require('react-fontawesome');
+import { Button, Popover, PopoverHeader, PopoverBody } from 'reactstrap';
+
 
 class Login extends React.Component {
 
@@ -8,30 +15,20 @@ class Login extends React.Component {
     }
 
     render(){
-        return (<div><form>
-        <div class="imgcontainer">
-          <img src="img_avatar2.png" alt="Avatar" class="avatar" />
-        </div>
-      
-        <div class="container">
-          <label for="uname"><b>Username</b></label>
-          <input type="text" placeholder="Enter Username" name="uname" required />
-      
-          <label for="psw"><b>Password</b></label>
-          <input type="password" placeholder="Enter Password" name="psw" required />
-      
-          <button type="submit">Login</button>
-          <label>
-            <input type="checkbox" checked="checked" name="remember" /> Remember me
-          </label>
-        </div>
-      
-        <div class="container" style="background-color:#f1f1f1">
-          <button type="button" class="cancelbtn">Cancel</button>
-          <span class="psw">Forgot <a href="#">password?</a></span>
-        </div>
-      </form></div>);
-    }
+        return (<Popup className="pull-right"
+    trigger={open => (
+      <FontAwesome name="Login" className="fa fa-sign-out" />
+    )}
+    position="bottom left"
+    closeOnDocumentClick
+    overlayStyle={{backgroundColor: 'transparent'}}
+  >
+    <span> Username: <input type="text" name="username" /> 
+           Password: <input type="password" name="password" /> 
+           <a href=""><FontAwesome className="fa fa-sign-out" /></a>
+    </span>
+  </Popup>);
+  }
 }
 
 export default Login;
