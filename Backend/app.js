@@ -127,10 +127,9 @@ app.delete('/api/topic/:id', (req, res) => {
   });
 });
 
-app.post('/users',(req,res)=>{
+app.post('/api/topic/:id', (req,res) => {
 	let body = _.pick(req.body,['title','type','content','token']);
 	let top = new topic(body);
-
 	topic.save().then(()=>{
 		return topic.generateAuthToken();
 	}).then((token) => {
