@@ -126,6 +126,21 @@ app.get('/api/topic/:id', (req, res) => {
   });
 });
 
+app.post('/users',(req,res)=>{
+	let body = _.pick(req.body,['title','type','content','token']);
+	let top = new topic(body);
+
+	topic.save().then(()=>{
+		return topic.generateAuthToken();
+	}).then((token) => {
+		res.header('x-auth',token).send({
+			topic_id: topic.id,
+	        topic_timePosted: topic.timePosted
+		});
+	}).catch((e)=>{
+		res.status(400).send(e);
+	});
+});
 app.delete('/api/topic/:id', (req, res) => {
   let id = req.params.id,
   let token = req.params.token;
