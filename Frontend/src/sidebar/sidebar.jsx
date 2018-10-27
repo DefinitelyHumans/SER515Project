@@ -14,7 +14,7 @@ class Sidebar extends React.Component {
                 <div className="SidebarUserProfile">
                     <div className="SidebarUserImage"></div>
                 </div><br/>
-                <Login className="SidebarUserInfo"/><br/>
+                Login <Login className="SidebarUserInfo"/><br/>
                 <input className="TopicSearch"></input>
                 <Menu></Menu>
                 <button className="SettingsButton">Settings</button>
