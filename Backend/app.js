@@ -110,7 +110,7 @@ app.get('/api/topic/:id', (req, res) => {
     return res.status(404).send();
   }
 
-  topic.findOne(id).then((topic) => {
+  topic.Get(id).then((topic) => {
     if (!topic) {
       return res.status(404).send();
     }
@@ -126,28 +126,50 @@ app.get('/api/topic/:id', (req, res) => {
   });
 });
 
-app.post('/api/topic/:id', (req,res) => {
-	let body = _.pick(req.body,['title','type','content','token']);
-	let top = new topic(body);
-	topic.save().then(()=>{
-		return topic.generateAuthToken();
-	}).then((token) => {
-		res.header('x-auth',token).send({
-			topic_id: topic.id,
-	        topic_timePosted: topic.timePosted
+app.post('/api/topic/create', (req,res) => {
+	let title = req.params.title,
+	let type = req.params.type,
+	let content = req.params.content,
+	let token = req.params.token;
+	
+	topic.CreateTopic(title,type,content,token).then((topic)=>{
+		res.send({
+			topic_id : topic.id,
+			topic_timePosted : topic.timePosted
 		});
 	}).catch((e)=>{
 		res.status(400).send(e);
 	});
 });
-app.delete('/api/topic/:id', (req, res) => {
+
+app.put('/api/topic/:id',(req,res)=>{
+	let id = req.id,
+	let token = req.token,
+	let content = req.content;
+
+	if (!ObjectID.isValid(id)) {  //ObjectID from postgres module
+    	return res.status(404).send();
+  	}
+
+  	topic.UpdateTopic(id,token,content).then((topic)=>{
+  		res.send({
+  			topic_timePosted : topic.timePosted
+  		});
+  	}).catch((e)=>{
+  		res.status(400).send(e);
+  	});
+});app.delete('/api/topic/:id', (req, res) => {
   let id = req.params.id,
   let token = req.params.token;
   if (!ObjectID.isValid(id)) {
     return res.status(404).send();
   }
 
-  topic.findOneAndRemove({
+  if (!ObjectID.isValid(id)) {  //ObjectID from postgres module
+    return res.status(404).send();
+  }
+
+  topic.DeleteTopic({
     _id: id,
     _token: token
   }).then((topic) => {
