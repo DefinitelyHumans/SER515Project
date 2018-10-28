@@ -13,7 +13,7 @@ class Sidebar extends React.Component {
         return (<div className="Sidebar">
                 <div className="SidebarUserProfile">
                     <div className="SidebarUserImage"></div>
-                </div><br/>
+                </div>
                 Login <Login className="SidebarUserInfo"/><br/>
                 <input className="TopicSearch"></input>
                 <Menu></Menu>

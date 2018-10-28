@@ -43,7 +43,7 @@ class Login extends React.Component {
   }
 
   submitForm(e) {
-    e.preventDefault();
+    //e.preventDefault();
     console.log(`Email: ${ this.state.email }`)
   }
 
