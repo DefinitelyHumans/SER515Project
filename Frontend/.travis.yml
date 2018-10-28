@@ -1,6 +1,0 @@
-language: node_js
-node_js:
-    - "0.10"
-#installs will go here.
-#before_scripts go here.
-#scripts co here.
