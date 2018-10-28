@@ -139,4 +139,21 @@ Purple: #8e7cc3
     left:6vw;
     bottom:4vh;
 }
+
+.Menu{    
+    background-color:#d4eff7;
+}
+
+.Settings{
+    background-color:#d4eff7;
+}
 /* menu things */
+/* settings things */
+.SettingsOption{
+    color: #d4eff7;
+    text-align:center;
+    background-color: #3b9ddc;
+    text-decoration: none;
+    border: none;
+    font-size: 3vh;
+}
