@@ -165,9 +165,16 @@ Purple: #8e7cc3
 
 /*  Simple pin for testing. This should be removed 
     once we have all the pin information defined */
-.Pin{
+.SelectedPin{
     border-radius: 50%;
     width: 4vh;
     height: 4vh;
     background-color: #dc3c41;
+}
+
+.DeselectedPin{
+    border-radius: 50%;
+    width: 4vh;
+    height: 4vh;
+    background-color: #78b929;
 }

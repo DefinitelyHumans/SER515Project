@@ -5,41 +5,45 @@ class Settings extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            Setting1 : true,
-            Setting2 : true,
-            Setting3 : true,
+            setting1 : false,
+            setting2 : true,
+            setting3 : true,
         }
-        this.setting1 = this.setting1.bind(this)
-        this.setting2 = this.setting2.bind(this)
-        this.setting3 = this.setting3.bind(this)
+        this.changeSetting1 = this.changeSetting1.bind(this)
+        this.changeSetting2 = this.changeSetting2.bind(this)
+        this.changeSetting3 = this.changeSetting3.bind(this)
     }
 
-    setting1(){
+    changeSetting1(){
         this.setState({setting1 : !this.state.setting1})
     }
 
-    setting2(){
+    changeSetting2(){
         this.setState({setting2 : !this.state.setting2})
     }
 
-    setting3(){
+    changeSetting3(){
         this.setState({setting3 : !this.state.setting3})
     }
 
     render(){
+        let button1Status = this.state.setting1 ? "SelectedPin" : "DeselectedPin";
+        let button2Status = this.state.setting2 ? "SelectedPin" : "DeselectedPin";
+        let button3Status = this.state.setting3 ? "SelectedPin" : "DeselectedPin";
+
         return (<div className="Settings">
                     Settings:
                     <div>
-                        <button className="Pin" onClick={this.setting1}/>
-                        <button className="SettingsOption" onClick={this.setting1} style={{float: "right"}}>Setting 1</button>
+                        <button className={button1Status} onClick={this.changeSetting1}/>
+                        <button className="SettingsOption" onClick={this.changeSetting1} style={{float: "right"}}>Setting 1</button>
                     </div>
                     <div>
-                        <button className="Pin" onClick={this.setting2}/>
-                        <button className="SettingsOption" onClick={this.setting2} style={{float: "right"}}>Setting 2</button>
+                        <button className={button2Status} onClick={this.changeSetting2}/>
+                        <button className="SettingsOption" onClick={this.changeSetting2} style={{float: "right"}}>Setting 2</button>
                     </div>
                     <div>
-                        <button className="Pin" onClick={this.setting3}/>
-                        <button className="SettingsOption" onClick={this.setting3} style={{float: "right"}}>Setting 3</button>
+                        <button className={button3Status} onClick={this.changeSetting3}/>
+                        <button className="SettingsOption" onClick={this.changeSetting3} style={{float: "right"}}>Setting 3</button>
                     </div>
                 </div>);
     }
