@@ -103,12 +103,9 @@ app.post('/api/auth/register', async function (req, res) {
 
 //path listeners for topic.js
 
+//Getting topic by its id
 app.get('/api/topic/:id', (req, res) => {
   let id = req.topic_id;
-
-  if (!ObjectID.isValid(id)) {  //ObjectID from postgres module
-    return res.status(404).send();
-  }
 
   topic.Get(id).then((topic) => {
     if (!topic) {
@@ -122,15 +119,37 @@ app.get('/api/topic/:id', (req, res) => {
         topic_timeUpdated: topic.timeUpdated
     });
   }).catch((e) => {
-    res.status(400).send();
+    res.status(500).send();
   });
 });
 
+//Deleting existing topic
+app.delete('/api/topic/:id', (req, res) => {
+  let id = req.params.id,
+  let token = req.body.token;
+  if (!ObjectID.isValid(id)) {
+    return res.status(404).send();
+  }
+
+  topic.DeleteTopic({
+    _id: id,
+    _token: token
+  }).then((topic) => {
+    if (!topic) {
+      return res.status(404).send();
+    }
+     return res.status(200).send();
+  }).catch((e) => {
+    res.status(500).send();
+  });
+});
+
+// Creating/Posting new topic
 app.post('/api/topic/create', (req,res) => {
-	let title = req.params.title,
-	let type = req.params.type,
-	let content = req.params.content,
-	let token = req.params.token;
+	let title = req.body.title,
+	let type = req.body.type,
+	let content = req.body.content,
+	let token = req.body.token;
 	
 	topic.CreateTopic(title,type,content,token).then((topic)=>{
 		res.send({
@@ -138,25 +157,22 @@ app.post('/api/topic/create', (req,res) => {
 			topic_timePosted : topic.timePosted
 		});
 	}).catch((e)=>{
-		res.status(400).send(e);
+		res.status(500).send(e);
 	});
 });
 
+// Updating existing topic
 app.put('/api/topic/:id',(req,res)=>{
-	let id = req.id,
-	let token = req.token,
-	let content = req.content;
-
-	if (!ObjectID.isValid(id)) {  //ObjectID from postgres module
-    	return res.status(404).send();
-  	}
+	let id = req.params.id,
+	let token = req.body.token,
+	let content = req.body.content;
 
   	topic.UpdateTopic(id,token,content).then((topic)=>{
   		res.send({
   			topic_timePosted : topic.timePosted
   		});
   	}).catch((e)=>{
-  		res.status(400).send(e);
+  		res.status(500).send(e);
   	});
 });app.delete('/api/topic/:id', (req, res) => {
   let id = req.params.id,
