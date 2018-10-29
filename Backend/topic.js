@@ -1,54 +1,119 @@
-//modules
+// MODULES
 const rand_token = require('rand-token');
-const bcrypt     = require('bcrypt')
-const request    = require('request-promise')
-const dateTime   = require('node-datetime');
+const bcrypt = require('bcrypt')
+const request = require('request-promise')
+const dateTime = require('node-datetime');
 
-//local files
-const database   = require('./db.js')
+// LOCAL FILES
+const database = require('./db.js')
+const auth = require('./login.js')
 const { g_cred } = require('./priv/cred.js')
 
+// MODULE SETUP
+const rand = rand_token.generator({ source: 'crypto' }); //TODO: check for entropy exceptions
 
-//constants
-let userID = 1;     // TODO: Need to add User ID
-//local functions
+// CONSTANTS
+let userID = auth.get_user_id();    // Grab user ID from auth script, assign as global class var.
+const topicid_length = 64;      // Defined in schema
+const topicid_style = '0123456789abcdefghijklmnopqrstuvwxyz';
 
+// LOCAL FUNCTIONS
+function gen_topic_id() {
+    return rand.generate(topicid_length, topicid_style);
+}
 
+// EXPORTED FUNCTIONS 
 
-
-//exported functions
+/**
+ * Topic Created contains title, type, content, and user ID.
+ * Topic ID is generated here. Timestamp is assigned in DB query depending on success of query.
+ * @returns success/fail message.
+ */
 exports.CreateTopic =
-async function CreateTopic(topic_title, topic_type, topic_content, token) {
-    let timestamp = dateTime.create().epoch();  // Add datetimestamp
-    let post = {
-        topic_title: "",
-        topic_type: "",
-        topic_content: "",
-        topic_time_post: timestamp,
-        token: token,
-        user_posted: userID
-    };
-    
-    // TOOD: Change topic type to swtich-case
-    // and use it for specifying the content type
-    // for database query.
-    if (TopicType == "Text") {
-        // call database for creating topic
-        let {error} = await database.add_post(userID,post);
-        if(error == database.errors.INTERNAL_ERROR) {
+    async function CreateTopic(topic_title, topic_type, topic_content, token) {        
+        let topic_id = gen_topic_id();  // Generate topic ID.
+        console.log("Trying to create topic:");
+        console.log(topic_id);
+        // TODO: Validate token
+        let topic = {
+            topic_id: topic_id,
+            topic_title: topic_title,
+            topic_type: topic_type,
+            topic_content: topic_content,
+            user_posted: userID
+        };
+        // Check for DB errors, otherwise return success.
+        let { error } = await database.add_topic(topic);
+        if (error == database.errors.INTERNAL_ERROR) {
+            console.log("Failed to create because:");
+            console.log(error);
             return { server_error: true };
         }
-        return {success: true};
+        return { success: true };
     }
-}
 
+/**
+ * Using topic ID to query a delete request.
+ * @returns error and success message.
+ */
 exports.DeleteTopic =
-async function DeleteTopic(ID, token) {
+    async function DeleteTopic(topic_id, token) {
+        console.log("Trying to delete topic:");
+        console.log(topic_id);
+        // TODO: Validate Topic ID
+        // TODO: Validate token
+        let { error } = await database.remove_topic(topic_id, token);
+        if (error == database.errors.INTERNAL_ERROR) {
+            console.log(error); // Debug error.
+            return {
+                server_error: true,
+                success: false,
+            };
+        }
+        return { success: true };
+    }
 
-}
-
+/**
+ * Taking in Topic ID, and new content. 
+ * Validate token, fire off query.
+ * @returns the updated timestamp on success.
+ */
 exports.UpdateTopic =
-async function UpdateTopic(ID, token, content) {
+    async function UpdateTopic(topic_id, token, topic_content) {
+        console.log("Trying to update topic:");
+        console.log(topic_id);
+        // TODO: Validate token and topic ID.
+        let topic = {
+            topic_id: topic_id,
+            topic_content: topic_content,
+            user_posted: userID
+        };
+        let queryUpdate = await database.update_topic(topic, token);
+        if (queryUpdate.error == database.errors.NO_ERROR) {
+            return queryUpdate.update_time;
+        } else {    // Return error if query was unsucessfull.
+            console.log(queryUpdate.error);
+            return queryUpdate.error;
+        }
+    }
 
-}
-
+/**
+ * Taking in Topic ID, and new content. 
+ * Validate token, fire off query.
+ * @returns the updated timestamp on success.
+ */
+exports.GetTopic =
+    async function GetTopic(topic_id) {
+        console.log("Trying to get topic:");
+        console.log(topic_id);
+        // TODO: Validate ID check.
+        let topic = await database.get_topic(topic_id);
+        if (topic.error == database.errors.NO_ERROR) {
+            // If topic is retrieved, return it with all properties.
+            return topic;
+        } else {    // Return error if query was unsucessfull.
+            console.log("Failed to get topic.");
+            console.log(topic.error);
+            return topic.error;
+        }
+    }

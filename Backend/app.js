@@ -31,11 +31,16 @@ app.listen(port, () => {
     console.log(`Listening on port ${port}!`)
 });
 
-//path listeners
+/** PATH LISTENERS */
 app.get('/', function (req, res) {
     res.sendFile("login.html", { root: __dirname });
 });
 
+// PATHS FOR LOGIN/AUTHENTICATION
+
+/**
+ * Post request for logging in.
+ */
 app.post('/api/auth/login', async function (req, res) {
     let body = req.body;
 
@@ -67,6 +72,9 @@ app.post('/api/auth/login', async function (req, res) {
     }
 });
 
+/**
+ * Post request for registration.
+ */
 app.post('/api/auth/register', async function (req, res) {
     // invalid_login
     // recaptcha_fail
@@ -101,13 +109,15 @@ app.post('/api/auth/register', async function (req, res) {
     }
 });
 
-//path listeners for topic.js
+// PATH LISTENERS FOR TOPICS
 
-//Getting topic by its id
+/**
+ * Getting single topic by it's ID.
+ */
 app.get('/api/topic/:id', (req, res) => {
   let id = req.topic_id;
 
-  topic.Get(id).then((topic) => {
+  topic.GetTopic(id).then((topic) => {
     if (!topic) {
       return res.status(404).send();
     }
@@ -123,7 +133,9 @@ app.get('/api/topic/:id', (req, res) => {
   });
 });
 
-//Deleting existing topic
+/**
+ * Deleting an existing topic based on its ID.
+ */
 app.delete('/api/topic/:id', (req, res) => {
   let id = req.params.id,
   let token = req.body.token;
