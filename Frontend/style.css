@@ -135,9 +135,9 @@ Purple: #8e7cc3
     text-decoration: none;
     border: none;
     font-size:4vh;
-    position: absolute;
-    left:6vw;
-    bottom:4vh;
+    position: relative;
+    left:20%;
+    top:4vh;
 }
 
 .Menu{    
@@ -149,7 +149,7 @@ Purple: #8e7cc3
     font-size: 2vh;
     background-color:#d4eff7;
     padding: 1vh;
-    border: 2px solid #266791;
+    border: none;
     margin-top: 4vh;
 }
 /* menu things */

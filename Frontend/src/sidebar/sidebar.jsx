@@ -26,6 +26,8 @@ class Sidebar extends React.Component {
     }
 
     render(){
+        let settingText = this.state.settingsHidden ? "Settings" : "Exit";
+
         return (<div className="Sidebar">
                 <div className="SidebarUserProfile">
                     <div className="SidebarUserImage"></div>
@@ -33,7 +35,7 @@ class Sidebar extends React.Component {
                 </div>
                 <input className="TopicSearch"></input>
                 {this.currentWindow(this.state.settingsHidden)}
-                <button className="SettingsButton" onClick={this.swapMenus}>Settings</button>
+                <button className="SettingsButton" onClick={this.swapMenus}>{settingText}</button>
             </div>);
     }
 }

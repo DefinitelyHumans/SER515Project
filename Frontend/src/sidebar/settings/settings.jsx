@@ -32,7 +32,6 @@ class Settings extends React.Component {
         let button3Status = this.state.setting3 ? "SelectedPin" : "DeselectedPin";
 
         return (<div className="Settings">
-                    Settings:
                     <div>
                         <button className={button1Status} onClick={this.changeSetting1}/>
                         <button className="SettingsOption" onClick={this.changeSetting1} style={{float: "right"}}>Setting 1</button>
