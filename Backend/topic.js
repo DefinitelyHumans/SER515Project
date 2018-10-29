@@ -11,9 +11,10 @@ const { g_cred } = require('./priv/cred.js')
 
 // MODULE SETUP
 const rand = rand_token.generator({ source: 'crypto' }); //TODO: check for entropy exceptions
+// let userID = auth.get_user_id();    // Grab user ID from auth script, assign as global class var.
+let userID = 0;
 
 // CONSTANTS
-let userID = auth.get_user_id();    // Grab user ID from auth script, assign as global class var.
 const topicid_length = 64;      // Defined in schema
 const topicid_style = '0123456789abcdefghijklmnopqrstuvwxyz';
 

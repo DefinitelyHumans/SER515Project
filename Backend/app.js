@@ -22,6 +22,7 @@ app.use(bearerToken({
     headerKey: 'Bearer',
     reqKey: 'token'
 }));
+let userID = 0;
 
 //constants
 const port = 3300;
@@ -64,6 +65,7 @@ app.post('/api/auth/login', async function (req, res) {
                 res.statusCode = 500;
                 res.send("");
             })
+            userID = login_info.user_id;
         } else {
             //if we make it here then something failed pretty hard
             res.statusCode = 500;
@@ -137,7 +139,7 @@ app.get('/api/topic/:id', (req, res) => {
  * Deleting an existing topic based on its ID.
  */
 app.delete('/api/topic/:id', (req, res) => {
-  let id = req.params.id,
+  let id = req.params.id;
   let token = req.body.token;
   if (!ObjectID.isValid(id)) {
     return res.status(404).send();
@@ -158,9 +160,9 @@ app.delete('/api/topic/:id', (req, res) => {
 
 // Creating/Posting new topic
 app.post('/api/topic/create', (req,res) => {
-	let title = req.body.title,
-	let type = req.body.type,
-	let content = req.body.content,
+	let title = req.body.title;
+	let type = req.body.type;
+	let content = req.body.content;
 	let token = req.body.token;
 	
 	topic.CreateTopic(title,type,content,token).then((topic)=>{
@@ -175,8 +177,8 @@ app.post('/api/topic/create', (req,res) => {
 
 // Updating existing topic
 app.put('/api/topic/:id',(req,res)=>{
-	let id = req.params.id,
-	let token = req.body.token,
+	let id = req.params.id;
+	let token = req.body.token;
 	let content = req.body.content;
 
   	topic.UpdateTopic(id,token,content).then((topic)=>{
