@@ -93,20 +93,20 @@ Purple: #8e7cc3
 
 .ActiveTab{
     border: none;
-    background-color: #266791;
+    background-color: #d4eff7;
     width: 50%;
     height: 5vh;
     float:left;
     text-align:center;
     text-decoration: none;
-    color:white;
 }
 .Tabs{
     height:5vh;
 }
 .InactiveTab{
     border: none;
-    background-color: #d4eff7;
+    color:white;
+    background-color: #266791;
     width: 50%;
     height: 5vh;
     float:left;
