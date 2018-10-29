@@ -7,7 +7,7 @@ class TopicCard extends React.Component {
     }
 
     render(){
-        return (<div><p>This is the topic card panel</p></div>);
+        return (<div className="TopicCard"><p>This is a topic card</p></div>);
     }
 }
 

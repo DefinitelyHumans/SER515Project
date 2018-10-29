@@ -7,7 +7,7 @@ class SubscriptionCard extends React.Component {
     }
 
     render(){
-        return (<div><p>This is the subscription panel</p></div>);
+        return (<div className="SubsCard"><p>This is a subscription card</p></div>);
     }
 }
 
