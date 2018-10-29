@@ -11,8 +11,6 @@ const { g_cred } = require('./priv/cred.js')
 
 // MODULE SETUP
 const rand = rand_token.generator({ source: 'crypto' }); //TODO: check for entropy exceptions
-// let userID = auth.get_user_id();    // Grab user ID from auth script, assign as global class var.
-let userID = 0;
 
 // CONSTANTS
 const topicid_length = 64;      // Defined in schema
@@ -31,11 +29,11 @@ function gen_topic_id() {
  * @returns success/fail message.
  */
 exports.CreateTopic =
-    async function CreateTopic(topic_title, topic_type, topic_content, token) {        
+    async function CreateTopic(userID, topic_title, topic_type, topic_content, token) {        
         let topic_id = gen_topic_id();  // Generate topic ID.
         console.log("Trying to create topic:");
         console.log(topic_id);
-        // TODO: Validate token
+        // TODO: Validate token & User ID
         let topic = {
             topic_id: topic_id,
             topic_title: topic_title,
@@ -58,10 +56,10 @@ exports.CreateTopic =
  * @returns error and success message.
  */
 exports.DeleteTopic =
-    async function DeleteTopic(topic_id, token) {
+    async function DeleteTopic(userID, topic_id, token) {
         console.log("Trying to delete topic:");
         console.log(topic_id);
-        // TODO: Validate Topic ID
+        // TODO: Validate Topic ID & User ID
         // TODO: Validate token
         let { error } = await database.remove_topic(topic_id, token);
         if (error == database.errors.INTERNAL_ERROR) {
@@ -80,10 +78,10 @@ exports.DeleteTopic =
  * @returns the updated timestamp on success.
  */
 exports.UpdateTopic =
-    async function UpdateTopic(topic_id, token, topic_content) {
+    async function UpdateTopic(userID, topic_id, token, topic_content) {
         console.log("Trying to update topic:");
         console.log(topic_id);
-        // TODO: Validate token and topic ID.
+        // TODO: Validate token, topic ID, User ID.
         let topic = {
             topic_id: topic_id,
             topic_content: topic_content,

@@ -139,16 +139,16 @@ app.get('/api/topic/:id', (req, res) => {
  * Deleting an existing topic based on its ID.
  */
 app.delete('/api/topic/:id', (req, res) => {
+    if (req.body.user_id == undefined) {res.status(400).send("Invalid User ID.");}
   let id = req.params.id;
   let token = req.body.token;
+  let userID = req.body.user_id;
+  
   if (!ObjectID.isValid(id)) {
     return res.status(404).send();
   }
 
-  topic.DeleteTopic({
-    _id: id,
-    _token: token
-  }).then((topic) => {
+  topic.DeleteTopic(userID, id, token).then((topic) => {
     if (!topic) {
       return res.status(404).send();
     }
@@ -160,15 +160,18 @@ app.delete('/api/topic/:id', (req, res) => {
 
 // Creating/Posting new topic
 app.post('/api/topic/create', (req,res) => {
+    if (req.body.user_id == undefined) {res.status(400).send("Invalid User ID.");}
+
 	let title = req.body.title;
 	let type = req.body.type;
 	let content = req.body.content;
-	let token = req.body.token;
+    let token = req.body.token;
+    let userID = req.body.user_id;
 	
-	topic.CreateTopic(title,type,content,token).then((topic)=>{
+	topic.CreateTopic(userID, title,type,content,token).then((topic)=>{
 		res.send({
-			topic_id : topic.id,
-			topic_timePosted : topic.timePosted
+			topic_id : topic.topic_id,
+			topic_time_posted : topic.topic_time_posted
 		});
 	}).catch((e)=>{
 		res.status(500).send(e);
@@ -177,13 +180,15 @@ app.post('/api/topic/create', (req,res) => {
 
 // Updating existing topic
 app.put('/api/topic/:id',(req,res)=>{
+    if (req.body.user_id == undefined) {res.status(400).send("Invalid User ID.");}
 	let id = req.params.id;
 	let token = req.body.token;
-	let content = req.body.content;
+    let content = req.body.content;
+    let userID = req.body.user_id;
 
-  	topic.UpdateTopic(id,token,content).then((topic)=>{
+  	topic.UpdateTopic(userID, id,token,content).then((topic)=>{
   		res.send({
-  			topic_timePosted : topic.timePosted
+  			topic_time_posted : topic.update_time,
   		});
   	}).catch((e)=>{
   		res.status(500).send(e);
