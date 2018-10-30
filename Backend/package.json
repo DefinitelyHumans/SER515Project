@@ -13,6 +13,7 @@
     "bcrypt": "^3.0.0",
     "body-parser": "^1.18.3",
     "express": "^4.16.3",
+    "jsonwebtoken": "^8.3.0",
     "node-datetime": "^2.1.2",
     "pg": "^7.4.3",
     "pg-error-constants": "^1.0.0",
