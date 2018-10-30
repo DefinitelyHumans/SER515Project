@@ -22,6 +22,7 @@ const userid_style      = '0123456789abcdefghijklmnopqrstuvwxyz';
 
 //local functions
 async function check_recaptcha(response_token, remote_ip) {
+    if(!response_token) return { success: false };
     return await request({
         method: 'POST',
         url: 'https://www.google.com/recaptcha/api/siteverify',
@@ -40,16 +41,22 @@ async function check_recaptcha(response_token, remote_ip) {
         }
     })
     .catch((err) => {
-       return { error: true }; //TODO: maybe just 500?
+       return { error: true };
     });
 }
 
 function check_password(password) {
+    if(!password) return false
     //check min and max lengths
     if(password.length < password_min_len) return false;
     if(password.length > password_max_len) return false;
     //make sure password is ascii only
     return /^[\x00-\x7F]*$/.test(password);
+}
+
+function check_email(email) {
+    if(!email) return false;
+    return /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(email);
 }
 
 function gen_user_id() {
@@ -66,14 +73,13 @@ async function register(email, password, recaptcha_code) {
     // user_already_registered
     // success
 
-    if(!check_password(password)) return { invalid_login: true };
+    if(!check_password(password) || !check_email(email)) return { invalid_login: true };
 
     //check the recaptcha field
-    let verify_return = check_recaptcha(recaptcha_code);
-
-    if(verify_return.success == false)
+    let recaptcha_check = await check_recaptcha(recaptcha_code);
+    if(!recaptcha_check.success)
         return { recaptcha_fail: true };
-    else if(verify_return.error)
+    else if(recaptcha_check.error)
         return { server_error: true };
 
     let salted_hash = await bcrypt.hash(password, salt_rounds);
@@ -97,7 +103,7 @@ async function login(email, password) {
     // invalid_login
     // server_error
     // token, user_id
-    if(!check_password) return { invalid_login: true };
+    if(!check_password(password) || !check_email(email)) return { invalid_login: true };
 
     console.log("get login");
     let login_info = await database.get_login(email);

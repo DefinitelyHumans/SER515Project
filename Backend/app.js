@@ -79,9 +79,11 @@ app.post('/api/auth/register', async function (req, res) {
 
     if(register_info.invalid_login) {
         res.statusCode = 401;
-        res.send({error: "Invalid Password"});
-    } else if(register_info.recaptcha_fail ||
-              register_info.user_already_registered) {
+        res.send({error: "Invalid Credentials"});
+    } else if(register_info.recaptcha_fail) {
+        res.statusCode = 412;
+        res.send({error: "Invalid Recaptcha Token"});
+    } else if(register_info.user_already_registered) {
         res.statusCode = 400;
         res.send({error: "User Already Registered"});
     } else if(register_info.server_error) {
