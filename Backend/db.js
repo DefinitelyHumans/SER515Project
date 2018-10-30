@@ -79,83 +79,83 @@ async function get_login(email) {
         });
 };
 
-exports.get_token =
-async function get_token(user_id) {
-    //expiration time is an integer representing GMT epoch time
-    return await pool.query(
-            `SELECT token_id, extract(epoch FROM expiration_time) AS expiration_time FROM ${token_table} WHERE user_id=$1;`,
-            [user_id])
-        .then((res)=> {
-            //check how many results we got
-            if(res.rowCount == 0) {
-                //if none, return empty
-                return { error: db_errors.NO_RESPONSE };
-            } else if(res.rowCount == 1) {
-                //if one, pull out the info and return it
-                return {
-                    error: db_errors.NO_ERROR,
-                    token: res.rows[0].token_id,
-                    expiration: res.rows[0].expiration_time,
-                };
-            } else {
-                //if more than one, we've got issues
-                return { error: db_errors.INTERNAL_ERROR };
-            }
-        })
-        .catch((err) => {
-            return { error: db_errors.INTERNAL_ERROR };
-        });
-};
+// exports.get_token =
+// async function get_token(user_id) {
+//     //expiration time is an integer representing GMT epoch time
+//     return await pool.query(
+//             `SELECT token_id, extract(epoch FROM expiration_time) AS expiration_time FROM ${token_table} WHERE user_id=$1;`,
+//             [user_id])
+//         .then((res)=> {
+//             //check how many results we got
+//             if(res.rowCount == 0) {
+//                 //if none, return empty
+//                 return { error: db_errors.NO_RESPONSE };
+//             } else if(res.rowCount == 1) {
+//                 //if one, pull out the info and return it
+//                 return {
+//                     error: db_errors.NO_ERROR,
+//                     token: res.rows[0].token_id,
+//                     expiration: res.rows[0].expiration_time,
+//                 };
+//             } else {
+//                 //if more than one, we've got issues
+//                 return { error: db_errors.INTERNAL_ERROR };
+//             }
+//         })
+//         .catch((err) => {
+//             return { error: db_errors.INTERNAL_ERROR };
+//         });
+// };
 
-exports.add_token =
-async function add_token(user_id, token_id, expiration_time) {
-    //expiration time is an integer representing GMT epoch time
-    return await pool.query(
-            `INSERT INTO ${token_table} VALUES ($1,$2, to_timestamp($3));`,
-            [user_id, token_id, expiration_time])
-        .then((res)=> {
-            return {
-                error: db_errors.NO_ERROR,
-            }
-        })
-        .catch((err) => {
-            if(err.code == pg_errors.UNIQUE_VIOLATION ) {
-                //user already has a token
-                return { error: db_errors.TOKEN_EXISTS };
-            } else {
-                return { error: db_errors.INTERNAL_ERROR };
-            }
-        });
-};
+// exports.add_token =
+// async function add_token(user_id, token_id, expiration_time) {
+//     //expiration time is an integer representing GMT epoch time
+//     return await pool.query(
+//             `INSERT INTO ${token_table} VALUES ($1,$2, to_timestamp($3));`,
+//             [user_id, token_id, expiration_time])
+//         .then((res)=> {
+//             return {
+//                 error: db_errors.NO_ERROR,
+//             }
+//         })
+//         .catch((err) => {
+//             if(err.code == pg_errors.UNIQUE_VIOLATION ) {
+//                 //user already has a token
+//                 return { error: db_errors.TOKEN_EXISTS };
+//             } else {
+//                 return { error: db_errors.INTERNAL_ERROR };
+//             }
+//         });
+// };
 
-exports.update_token =
-async function update_token(user_id, token_id, expiration_time) {
-    //expiration time is an integer representing GMT epoch time
-    return await pool.query(
-            `UPDATE ${token_table} SET expiration_time=to_timestamp($1) WHERE user_id=$2 AND token_id=$3;`,
-            [expiration_time, user_id, token_id])
-        .then((res)=> {
-            return {
-                error: db_errors.NO_ERROR,
-            };
-        })
-        .catch((err) => {
-            return { error: db_errors.INTERNAL_ERROR };
-        });
-};
+// exports.update_token =
+// async function update_token(user_id, token_id, expiration_time) {
+//     //expiration time is an integer representing GMT epoch time
+//     return await pool.query(
+//             `UPDATE ${token_table} SET expiration_time=to_timestamp($1) WHERE user_id=$2 AND token_id=$3;`,
+//             [expiration_time, user_id, token_id])
+//         .then((res)=> {
+//             return {
+//                 error: db_errors.NO_ERROR,
+//             };
+//         })
+//         .catch((err) => {
+//             return { error: db_errors.INTERNAL_ERROR };
+//         });
+// };
 
-exports.remove_token =
-async function remove_token(user_id, token_id) {
-    return await pool.query(
-            `DELETE FROM ${token_table} WHERE user_id=$1 AND token_id=$2;`,
-            [user_id, token_id])
-        .then((res)=> {
-            // res.rowCount is # of deleted rows
-            return {
-                error: db_errors.NO_ERROR,
-            };
-        })
-        .catch((err) => {
-            return { error: db_errors.INTERNAL_ERROR };
-        });
-};
+// exports.remove_token =
+// async function remove_token(user_id, token_id) {
+//     return await pool.query(
+//             `DELETE FROM ${token_table} WHERE user_id=$1 AND token_id=$2;`,
+//             [user_id, token_id])
+//         .then((res)=> {
+//             // res.rowCount is # of deleted rows
+//             return {
+//                 error: db_errors.NO_ERROR,
+//             };
+//         })
+//         .catch((err) => {
+//             return { error: db_errors.INTERNAL_ERROR };
+//         });
+// };

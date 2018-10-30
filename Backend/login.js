@@ -9,16 +9,13 @@ const database   = require('./db.js')
 const { g_cred } = require('./priv/cred.js')
 
 //module setup
-const rand = rand_token.generator({source : 'crypto'}); //TODO: check for entropy exceptions
+const rand = rand_token.generator({source : 'crypto'});
 
 //constants
 const password_min_len = 8;
 const password_max_len = 32;
 
 const salt_rounds      = 10;
-
-const token_length     = 32;
-const token_style      = 'default';
 
 const userid_length     = 32;
 const userid_style      = '0123456789abcdefghijklmnopqrstuvwxyz';
@@ -37,7 +34,6 @@ async function check_recaptcha(response_token, remote_ip) {
     })
     .then((body) => {
         if(body["success"]) {
-            console.log("Confirmed human");
             return { success: true };
         } else {
             return { success: false };
@@ -46,19 +42,6 @@ async function check_recaptcha(response_token, remote_ip) {
     .catch((err) => {
        return { error: true }; //TODO: maybe just 500?
     });
-}
-
-function get_expiration_time() {
-    dateTime.setOffsetInHours(4);
-
-    let timestamp = dateTime.create().epoch();
-    dateTime.setOffsetInHours(0);
-    return timestamp;
-}
-
-function is_expired(expiration_time) {
-    dateTime.setOffsetInHours(0); //just in case
-    return (expiration_time >= dateTime.create().epoch())
 }
 
 function check_password(password) {
@@ -71,10 +54,6 @@ function check_password(password) {
 
 function gen_user_id() {
     return rand.generate(userid_length, userid_style);
-}
-
-function gen_token() {
-    return rand.generate(token_length, token_style);
 }
 
 //exported functions
@@ -90,7 +69,7 @@ async function register(email, password, recaptcha_code) {
     if(!check_password(password)) return { invalid_login: true };
 
     //check the recaptcha field
-    let verify_return = check_recaptcha(recaptcha_code)
+    let verify_return = check_recaptcha(recaptcha_code);
 
     if(verify_return.success == false)
         return { recaptcha_fail: true };
@@ -122,62 +101,19 @@ async function login(email, password) {
 
     console.log("get login");
     let login_info = await database.get_login(email);
-
     if(login_info.error == database.errors.NO_RESPONSE) {
         return { invalid_login: true };
-    } else if (login_info.error = database.errors.INTERNAL_ERROR) {
+    } else if (login_info.error == database.errors.INTERNAL_ERROR) {
         return { server_error: true };
     } else {
         //compare the password to the hash using a specialized comparison function
-        if(!(await bcrypt.compare(password, salted_hash))) {
+        let password_compare = bcrypt.compare(password, login_info.salted_hash).catch(() => {return false;});
+        if(!(await password_compare)) {
             //if it fails the password is wrong
             return { invalid_login: true };
         }
         else {
-            console.log("get token");
-            let old_token = await database.get_token(user_id);
-            console.log(old_token);
-            if(old_token.error != database.errors.NO_ERROR) {
-                return { server_error: true }
-            }
-
-            let token = gen_token();
-            let expire_time = get_expiration_time();
-
-            if(old_token.token) {
-                if(!is_expired(old_token.expiration)) {
-                    //if they already have a token and it isn't expired
-                    // just return the token
-                    return {
-                        token: old_token.token,
-                        user_id: user_id
-                    };
-                } else {
-                    //if it is expired, update it.
-                    console.log("update token");
-                    let { error } = await database.update_token(user_id, token, expire_time);
-                    console.log(error);
-                    if(error == database.errors.NO_ERROR) {
-                        return {
-                            token: token,
-                            user_id: user_id
-                        };
-                    }
-                }
-            } else {
-                //add the login token the user db entry
-                console.log("add token");
-                let { error } = await database.add_token(user_id, token, expire_time);
-                console.log(error);
-                if(error == database.errors.NO_ERROR) {
-                    return {
-                        token: token,
-                        user_id: user_id
-                    };
-                }
-            }
+            return { success: true, user_id: login_info.user_id };
         }
     }
-    //for all remaining un-successful flows, return a server_failure
-    return { server_error: true };
 }
