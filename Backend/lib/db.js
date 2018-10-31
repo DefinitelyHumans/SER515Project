@@ -3,7 +3,7 @@ const {Client, Pool}  = require('pg');
 const pg_errors       = require('pg-error-constants');
 
 //local files
-const { db_cred }     = require('./priv/cred.js');
+const { db_cred }     = require('../priv/cred.js');
 
 //module setup
 

@@ -1,24 +1,19 @@
 //modules
-const rand_token = require('rand-token');
-const bcrypt     = require('bcrypt')
-const request    = require('request-promise')
-const dateTime   = require('node-datetime');
+const bcrypt     = require('bcrypt');
+const request    = require('request-promise');
 
 //local files
-const database   = require('./db.js')
-const { g_cred } = require('./priv/cred.js')
+const database        = require('../lib/db.js');
+const { g_cred }      = require('../priv/cred.js');
+const { gen_user_id } = require('../lib/id_gen');
 
 //module setup
-const rand = rand_token.generator({source : 'crypto'});
 
 //constants
 const password_min_len = 8;
 const password_max_len = 32;
 
 const salt_rounds      = 10;
-
-const userid_length     = 32;
-const userid_style      = '0123456789abcdefghijklmnopqrstuvwxyz';
 
 //local functions
 async function check_recaptcha(response_token, remote_ip) {
@@ -59,10 +54,6 @@ function check_email(email) {
     return /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(email);
 }
 
-function gen_user_id() {
-    return rand.generate(userid_length, userid_style);
-}
-
 //exported functions
 exports.register =
 async function register(email, password, recaptcha_code) {
@@ -85,7 +76,7 @@ async function register(email, password, recaptcha_code) {
     let salted_hash = await bcrypt.hash(password, salt_rounds);
     let userID = gen_user_id();
 
-    let {error} = await database.add_user(userID,email, salted_hash);
+    let { error } = await database.add_user(userID,email, salted_hash);
 
     if(error == database.errors.USER_ALREADY_REGISTERED) {
         return { user_already_registered: true };
@@ -105,7 +96,6 @@ async function login(email, password) {
     // token, user_id
     if(!check_password(password) || !check_email(email)) return { invalid_login: true };
 
-    console.log("get login");
     let login_info = await database.get_login(email);
     if(login_info.error == database.errors.NO_RESPONSE) {
         return { invalid_login: true };

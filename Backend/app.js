@@ -5,8 +5,8 @@ const bearerToken        = require('express-bearer-token');
 const enforceContentType = require('enforce-content-type')
 
 //local files
-const auth  = require('./login.js')
 const token = require('./lib/token.js')
+const auth  = require('./modules/login.js')
 
 //module setup
 const app = express();
