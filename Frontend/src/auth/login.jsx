@@ -34,7 +34,7 @@ class Login extends React.Component {
   validateEmail(e) {
     const emailRex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     const { validate } = this.state
-      if (emailRex.test(e.target.value)) {
+      if (emailRex.test(validate.email)) {
         validate.emailState = 'has-success'
       } else {
         validate.emailState = 'has-danger'
@@ -50,6 +50,8 @@ class Login extends React.Component {
     this.setState({
       [ name ]: value
     });
+    const { validate } = this.state
+    this.setState({ validate })
   }
 
   // Form validation and post validation
@@ -85,14 +87,12 @@ class Login extends React.Component {
                               type="email"
                               name="email"
                               id="userEmail"
-                              value={ email }
+                              value={ this.state.email }
                               valid={ this.state.validate.emailState === 'has-success' }
                               invalid={ this.state.validate.emailState === 'has-danger' }
                               required
-                              onChange={ (e) => {
-                                          this.validateEmail(e)
-                                          this.handleChange(e)
-                                        } }
+                              onChange={this.handleChange}
+                              //this.validateEmail(e)}}
                             />
                           </FormGroup>
                         </Col>
@@ -105,7 +105,7 @@ class Login extends React.Component {
                               id="userPassword"
                               value={ password }
                               required
-                              onChange={ (e) => this.handleChange(e) }
+                              onChange={this.handleChange.bind(this)} 
                             />
                           </FormGroup>
                         </Col>
