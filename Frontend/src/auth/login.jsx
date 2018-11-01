@@ -8,7 +8,7 @@ var FontAwesome = require('react-fontawesome');
 import { Form, FormControl, Label, Input, Col, FormGroup, FormFeedback, HelpBlock,ControlLabel, Button, Popover, PopoverHeader, PopoverBody } from 'reactstrap';
 import {Tabs, Tab } from 'react-bootstrap';
 require('react-bootstrap')
-
+var Recaptcha = require('react-gcaptcha');
 class Login extends React.Component {
   constructor(props, context) {
     super(props,context);
@@ -144,6 +144,7 @@ class Login extends React.Component {
                             />
                           </FormGroup>
                         </Col>
+                        <Recaptcha sitekey="6LfQWXEUAAAAAFtwz82Pefv5SHDkqc6_Deyxhd75" render="explicit" />
                         <Button id="signup_button">Submit</Button>
                       </Form>
                     </Tab>
