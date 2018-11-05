@@ -9,3 +9,7 @@ exports.db_cred = {
     password:  "",
     port:      "",
 };
+
+exports.jwt_cred = {
+    secret: ""
+}

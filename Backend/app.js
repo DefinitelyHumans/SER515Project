@@ -1,15 +1,27 @@
 //modules
-const express    = require('express');
-const bodyParser = require('body-parser');
+const express            = require('express');
+const bodyParser         = require('body-parser');
+const bearerToken        = require('express-bearer-token');
+const enforceContentType = require('enforce-content-type')
 
-//localfiles
-const auth       = require('./login.js')
+//local files
+const token = require('./lib/token.js')
+const auth  = require('./modules/login.js')
 
 //module setup
 const app = express();
 
+app.use(enforceContentType({
+    type: 'application/json'
+}));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bearerToken({
+    bodyKey: 'access_token',
+    queryKey: 'access_token',
+    headerKey: 'Bearer',
+    reqKey: 'token'
+}));
 
 //constants
 const port = 3300;
@@ -35,11 +47,17 @@ app.post('/api/auth/login', async function (req, res) {
         res.statusCode = 500;
         res.send("")
     } else {
-        if(login_info.token && login_info.user_id) {
-            res.statusCode = 200;
-            res.send({
-                auth_token: login_info.token,
-                user_id: login_info.user_id,
+        if(login_info.success && login_info.user_id) {
+            token.get_token(login_info.user_id)
+            .then((token) => {
+                res.statusCode = 200;
+                res.send({
+                    auth_token: token,
+                });
+            })
+            .catch((error) => {
+                res.statusCode = 500;
+                res.send("");
             })
         } else {
             //if we make it here then something failed pretty hard
@@ -61,9 +79,11 @@ app.post('/api/auth/register', async function (req, res) {
 
     if(register_info.invalid_login) {
         res.statusCode = 401;
-        res.send({error: "Invalid Password"});
-    } else if(register_info.recaptcha_fail ||
-              register_info.user_already_registered) {
+        res.send({error: "Invalid Credentials"});
+    } else if(register_info.recaptcha_fail) {
+        res.statusCode = 412;
+        res.send({error: "Invalid Recaptcha Token"});
+    } else if(register_info.user_already_registered) {
         res.statusCode = 400;
         res.send({error: "User Already Registered"});
     } else if(register_info.server_error) {
