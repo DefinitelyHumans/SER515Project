@@ -7,7 +7,7 @@ const dateTime = require('node-datetime');
 // LOCAL FILES
 const database = require('./db.js')
 const auth = require('./login.js')
-const { g_cred } = require('./priv/cred.js')
+const { g_cred } = require('../priv/cred.js')
 
 // MODULE SETUP
 const rand = rand_token.generator({ source: 'crypto' }); //TODO: check for entropy exceptions
@@ -21,7 +21,7 @@ function gen_topic_id() {
     return rand.generate(topicid_length, topicid_style);
 }
 
-// EXPORTED FUNCTIONS 
+// EXPORTED FUNCTIONS
 
 /**
  * Topic Created contains title, type, content, and user ID.
