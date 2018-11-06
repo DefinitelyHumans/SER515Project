@@ -1,25 +1,14 @@
 // MODULES
-const rand_token = require('rand-token');
-const bcrypt = require('bcrypt')
-const request = require('request-promise')
-const dateTime = require('node-datetime');
 
 // LOCAL FILES
-const database = require('./db.js')
-const auth = require('./login.js')
-const { g_cred } = require('../priv/cred.js')
+const database         = require('../lib/db.js')
+const { gen_topic_id } = require('../lib/id_gen');
 
 // MODULE SETUP
-const rand = rand_token.generator({ source: 'crypto' }); //TODO: check for entropy exceptions
 
 // CONSTANTS
-const topicid_length = 64;      // Defined in schema
-const topicid_style = '0123456789abcdefghijklmnopqrstuvwxyz';
 
 // LOCAL FUNCTIONS
-function gen_topic_id() {
-    return rand.generate(topicid_length, topicid_style);
-}
 
 // EXPORTED FUNCTIONS
 
