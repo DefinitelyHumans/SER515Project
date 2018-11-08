@@ -2,8 +2,8 @@
 var express = require('express');
 
 // LOCAL FILES
-const token = require('./lib/token.js')
-const auth  = require('./modules/login.js')
+const token = require('../lib/token.js')
+const auth  = require('../modules/login.js')
 
 // MODULE SETUP
 var router = express.Router()
@@ -77,4 +77,4 @@ router.post('/register', async function (req, res) {
     }
 });
 
-module.exports = router
+exports.auth_router = router
