@@ -95,11 +95,13 @@ async function get_topic(topic_id) {
                 return { error: db_errors.NO_RESPONSE };
             } else if(res.rowCount == 1) { // If found, parse out info & return.
                 return {    // Parsing data for pertinent information.
-                    topic_title: res.rows[0].topic_title,
-                    topic_time_posted: res.rows[0].topic_time_posted,
-                    topic_type: res.rows[0].topic_type,
-                    topic_content: res.rows[0].topic_content,
-                    user_posted: res.rows[0].user_posted,
+                    topic: {
+                        topic_title:       res.rows[0].topic_title,
+                        topic_time_posted: res.rows[0].topic_time_posted,
+                        topic_type:        res.rows[0].topic_type,
+                        topic_content:     res.rows[0].topic_content,
+                        user_posted:       res.rows[0].user_posted,
+                    },
                     error: db_errors.NO_ERROR,
                 };
             } else {    // If more than one, internal error.
@@ -128,7 +130,7 @@ async function get_topics_by_user(user_id) {
                 return { error: db_errors.NO_RESPONSE };
             } else if(res.rowCount > 1) {   // If list found, return list.
                 // Result list is stripped in query for necessary information.
-                return res.rows;    
+                return res.rows;
             } else {    // If more than one, internal error.
                 return { error: db_errors.INTERNAL_ERROR }
             }
@@ -146,7 +148,7 @@ async function get_topics_by_user(user_id) {
  *  topic_content
  *  user_posted
  * @returns a topic object with all properties assigned (date & ID)
- * */ 
+ * */
 exports.add_topic =
 async function add_topic(topic) {
     // Grab timestamp for when topic is created.
@@ -155,7 +157,7 @@ async function add_topic(topic) {
         `INSERT INTO ${topic_table} (topic_id, topic_title, topic_time_posted, update_time, topic_type, topic_content, user_posted) VALUES ($1,$2,$3,$3,$4,$5,$6,$7);`,
         [topic.topic_id, topic.topic_title, timestamp, topic.topic_type, topic.topic_content, topic.user_posted])
     .then( () => {  // Return no error, topic ID, and topic time posted.
-        return { 
+        return {
             error: db_errors.NO_ERROR,
             topic_id : topic_id,
             topic_time_posted : timestamp,
@@ -197,7 +199,7 @@ async function remove_topic(topic_id, token) {
     return await pool.query(
         `DELETE FROM ${topic_table} WHERE topic_id=$1;`,
         [topic_id])
-    .then( () => {
+    .then( (res) => {
         return { error: db_errors.NO_ERROR };
     })
     .catch((err) => {

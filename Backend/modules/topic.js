@@ -18,90 +18,108 @@ const { gen_topic_id } = require('../lib/id_gen');
  * @returns success/fail message.
  */
 exports.CreateTopic =
-    async function CreateTopic(userID, topic_title, topic_type, topic_content, token) {        
-        let topic_id = gen_topic_id();  // Generate topic ID.
-        console.log("Trying to create topic:");
-        console.log(topic_id);
-        // TODO: Validate token & User ID
-        let topic = {
-            topic_id: topic_id,
-            topic_title: topic_title,
-            topic_type: topic_type,
-            topic_content: topic_content,
-            user_posted: userID
+async function CreateTopic(userID, topic_title, topic_type, topic_content) {
+    let topic_id = gen_topic_id();  // Generate topic ID.
+    console.log("Create topic:", topic_id);
+
+    let topic = {
+        topic_id: topic_id,
+        topic_title: topic_title,
+        topic_type: topic_type,
+        topic_content: topic_content,
+        user_posted: userID
+    };
+
+    // Check for DB errors,
+    let { error } = await database.add_topic(topic);
+    if (error) {
+        console.log("Failed:", error);
+        return {
+            success: false,
+            server_error: true
         };
-        // Check for DB errors, otherwise return success.
-        let { error } = await database.add_topic(topic);
-        if (error == database.errors.INTERNAL_ERROR) {
-            console.log("Failed to create because:");
-            console.log(error);
-            return { server_error: true };
-        }
-        return { success: true };
     }
+    //otherwise return success.
+    return {
+        success: true,
+        topic: {
+            topic_id: topic_id,
+            //time_posted: //TODO
+        }
+    };
+}
 
 /**
  * Using topic ID to query a delete request.
  * @returns error and success message.
  */
 exports.DeleteTopic =
-    async function DeleteTopic(userID, topic_id, token) {
-        console.log("Trying to delete topic:");
-        console.log(topic_id);
-        // TODO: Validate Topic ID & User ID
-        // TODO: Validate token
-        let { error } = await database.remove_topic(topic_id, token);
-        if (error == database.errors.INTERNAL_ERROR) {
-            console.log(error); // Debug error.
-            return {
-                server_error: true,
-                success: false,
-            };
-        }
-        return { success: true };
+async function DeleteTopic(userID, topic_id) {
+    console.log("Delete topic:", topic_id);
+
+    // TODO: User ID Permissions
+    let { error } = await database.remove_topic(topic_id);
+    if (error) {
+        console.log("Failed:", error); // Debug error.
+        return {
+            success: false,
+            server_error: true,
+        };
     }
+    return { success: true };
+}
 
 /**
- * Taking in Topic ID, and new content. 
- * Validate token, fire off query.
+ * Taking in Topic ID, and new content.
  * @returns the updated timestamp on success.
  */
 exports.UpdateTopic =
-    async function UpdateTopic(userID, topic_id, token, topic_content) {
-        console.log("Trying to update topic:");
-        console.log(topic_id);
-        // TODO: Validate token, topic ID, User ID.
-        let topic = {
-            topic_id: topic_id,
-            topic_content: topic_content,
-            user_posted: userID
+async function UpdateTopic(userID, topic_id, topic_content) {
+    console.log("Update topic:", topic_id);
+    // TODO: Validate token, topic ID, User ID.
+    let topic = {
+        topic_id: topic_id,
+        topic_content: topic_content,
+        user_posted: userID
+    };
+    let { error, update_time } = await database.update_topic(topic);
+    if (error) {
+        // Return error if query was unsucessfull.
+        console.log("Failed:", error);
+        return {
+            success: false,
+            server_error: true
         };
-        let queryUpdate = await database.update_topic(topic, token);
-        if (queryUpdate.error == database.errors.NO_ERROR) {
-            return queryUpdate.update_time;
-        } else {    // Return error if query was unsucessfull.
-            console.log(queryUpdate.error);
-            return queryUpdate.error;
-        }
     }
+    return {
+        success: true,
+        topic: {
+            topic_id: topic_id,
+            update_time: update_time
+        }
+    };
+}
 
-/**
- * Taking in Topic ID, and new content. 
- * Validate token, fire off query.
- * @returns the updated timestamp on success.
- */
 exports.GetTopic =
-    async function GetTopic(topic_id) {
-        console.log("Trying to get topic:");
-        console.log(topic_id);
-        // TODO: Validate ID check.
-        let topic = await database.get_topic(topic_id);
-        if (topic.error == database.errors.NO_ERROR) {
-            // If topic is retrieved, return it with all properties.
-            return topic;
-        } else {    // Return error if query was unsucessfull.
-            console.log("Failed to get topic.");
-            console.log(topic.error);
-            return topic.error;
-        }
+async function GetTopic(topic_id) {
+    console.log("Get topic:", topic_id);
+
+    let {topic, error} = await database.get_topic(topic_id);
+    if (error == database.errors.NO_RESPONSE) {
+        return {
+            success: false,
+            not_found: true
+        };
+    } else if(error) {
+        console.log("Failed", error);
+        return {
+            success: false,
+            server_error: true
+        };
+    } else {
+        return {
+            success: true,
+            topic: topic
+        };
     }
+}

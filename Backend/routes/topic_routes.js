@@ -2,35 +2,36 @@
 var express = require('express');
 
 // LOCAL FILES
-const token = require('./lib/token.js')
-const topic = require('./modules/topic.js')
+const token = require('../lib/token.js')
+const topic = require('../modules/topic.js')
 
 // MODULE SETUP
 var router = express.Router()
 
 // TOPIC ROUTES
-router.get('/:id', (req, res) => {
+router.get('/:id', async function (req, res) {
     let id = req.params.id;
 
-    topic.GetTopic(id)
-        .then((topic) => {
-            if (!topic) {
-                return res.status(404).send();
-            }
+    let get_info = await topic.GetTopic(id);
 
-            res.send({
-                topic_title: topic.title,
-                topic_type: topic.type,
-                topic_timePosted: topic.timePosted,
-                topic_timeUpdated: topic.timeUpdated
-            });
-        })
-        .catch((e) => {
-            res.status(500).send();
+    if(get_info.success) {
+        let topic = get_info.topic;
+        res.status(200).send({
+            topic_title: topic.title,
+            topic_type: topic.type,
+            topic_timePosted: topic.timePosted,
+            topic_timeUpdated: topic.timeUpdated
         });
+    } else {
+        if(get_info.not_found) {
+            res.status(404).send("not found");
+        } else if(get_info.server_error) {
+            res.status(500).send("Internal Error");
+        }
+    }
 });
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', async function (req, res) {
     let id = req.params.id;
     let user_id;
     if(req.token) user_id = token.check_token(req.token);
@@ -38,20 +39,17 @@ router.delete('/:id', (req, res) => {
 
     if(!user_id) res.status(401).send("Invalid authentication token");
 
-    topic.DeleteTopic(userID, id, token)
-        .then((topic) => {
-            if (!topic) {
-                res.status(404).send();
-            }
-            res.status(200).send();
-        })
-        .catch((e) => {
-            res.status(500).send();
-        });
+    let del_info = await topic.DeleteTopic(userID, id, token)
+
+    if(del_info.success) {
+        res.status(200).send();
+    } else {
+        res.status(500).send("Internal Error");
+    }
 });
 
 // Updating existing topic
-router.put('/:id',(req,res)=>{
+router.put('/:id', async function (req, res) {
     let body = req.body;
     let id = req.params.id;
     let user_id;
@@ -60,42 +58,17 @@ router.put('/:id',(req,res)=>{
 
     if(!user_id) res.status(401).send("Invalid authentication token");
 
-    topic.UpdateTopic(user_id, id, token, content)
-        .then((topic)=>{
-            res.send({
-                topic_time_posted : topic.update_time,
-            });
-        })
-        .catch((e)=>{
-            res.status(500).send(e);
-        });
-});
+    let upd_info = await topic.UpdateTopic(user_id, id, token, body.content);
 
-router.delete('/:id', (req, res) => {s
-    let id = req.params.id;
-    let user_id;
-    if(req.token) user_id = token.check_token(req.token);
-    else res.status(401).send("Authentication token required");
-
-    if(!user_id) res.status(401).send("Invalid authentication token");
-
-    topic.DeleteTopic({
-        _id: id,
-        _token: token
-    })
-        .then((topic) => {
-            if (!topic) {
-                return res.status(404).send();
-            }
-            return res.status(200).send();
-        })
-        .catch((e) => {
-            res.status(400).send();
-        });
+    if(upd_info.success) {
+        res.status(200).send(upd_info.topic);
+    } else {
+        res.status(500).send("Internal Error");
+    }
 });
 
 // Creating/Posting new topic
-router.post('/create', (req,res) => {
+router.post('/create', async function (req, res) {
     let user_id;
     if(req.token) user_id = token.check_token(req.token);
     else res.status(401).send("Authentication token required");
@@ -106,16 +79,13 @@ router.post('/create', (req,res) => {
     let type = req.body.type;
     let content = req.body.content;
 
-    topic.CreateTopic(user_id, title, type, content, token)
-        .then((topic)=>{
-            res.send({
-                topic_id : topic.topic_id,
-                topic_time_posted : topic.topic_time_posted
-            });
-        })
-        .catch((e)=>{
-            res.status(500).send(e);
-        });
+    let crt_info = await topic.CreateTopic(user_id, title, type, content)
+
+    if(crt_info.success) {
+        res.status(200).send(crt_info.topic);
+    } else {
+        res.status(500).send("Internal Error");
+    }
 });
 
 exports.topic_router = router;
