@@ -8,62 +8,94 @@ var FontAwesome = require('react-fontawesome');
 import { Form, FormControl, Label, Input, Col, FormGroup, FormFeedback, HelpBlock,ControlLabel, Button, Popover, PopoverHeader, PopoverBody } from 'reactstrap';
 import {Tabs, Tab } from 'react-bootstrap';
 require('react-bootstrap')
+import userValidator from './validators';
 
 class Login extends React.Component {
-  constructor(props, context) {
-    super(props,context);
-    
+  constructor(props) {
+    super(props);
     this.state = {
-      signup:false,
-      login:true,
-      key: 1,
-      'email': '',
-      'password': '',
-      validate: {
-        emailState: ''
+      userCred: {
+        email: '',
+        password: '',
       }
-    }
-    
-    this.handleChange = this.handleChange.bind(this);
-  
-    this.handleSelect = this.handleSelect.bind(this);
-    
+    };
+    this.validators = userValidator;
+    this.resetValidators();
+
+    this.handleInputChange = this.handleInputChange.bind(this);
+    this.displayValidationErrors = this.displayValidationErrors.bind(this);
+    this.updateValidators = this.updateValidators.bind(this);
+    this.resetValidators = this.resetValidators.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.isFormValid = this.isFormValid.bind(this);
   }
   
-  //To validate email to match regex
-  validateEmail(e) {
-    const emailRex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    const { validate } = this.state
-      if (emailRex.test(e.target.value)) {
-        validate.emailState = 'has-success'
-      } else {
-        validate.emailState = 'has-danger'
-      }
-      this.setState({ validate })
-    }
-
-  //To update state on change of input  
-  handleChange(event) {
-    const { target } = event;
-    const value = target.type === 'checkbox' ? target.checked : target.value;
-    const { name } = target;
-    this.setState({
-      [ name ]: value
+  resetValidators() {
+    Object.keys(this.validators).forEach((fieldName) => {
+      this.validators[fieldName].errors = [];
+      this.validators[fieldName].state = '';
+      this.validators[fieldName].valid = false;
     });
   }
 
-  // Form validation and post validation
-  submitForm(e) {
+  handleSubmit(e) {
+    console.log(this.state.userCred);
+    console.log('Yepee! form submitted');
     e.preventDefault();
-    console.log(`Email: ${ this.state.email }`)
+  }
+  updateValidators(fieldName, value) {
+    this.validators[fieldName].errors = [];
+    this.validators[fieldName].state = value;
+    this.validators[fieldName].valid = true;
+    this.validators[fieldName].rules.forEach((rule) => {
+      if (rule.test instanceof RegExp) {
+        if (!rule.test.test(value)) {
+          this.validators[fieldName].errors.push(rule.message);
+          this.validators[fieldName].valid = false;
+        }
+      } else if (typeof rule.test === 'function') {
+        if (!rule.test(value)) {
+          this.validators[fieldName].errors.push(rule.message);
+          this.validators[fieldName].valid = false;
+        }
+      }
+    });
+  }
+  handleInputChange(event, inputPropName) {
+    const newState = Object.assign({}, this.state);
+    newState.userCred[inputPropName] = event.target.value;
+    this.setState(newState);
+    this.updateValidators(inputPropName, event.target.value);
   }
 
-  handleSelect(key) {
-    this.setState({ key });
+   displayValidationErrors(fieldName) {
+    const validator = this.validators[fieldName];
+    const result = '';
+    if (validator && !validator.valid) {
+      const errors = validator.errors.map((info, index) => {
+        return <span className="SidebarLoginErrorMsg" key={index}>&nbsp;&nbsp;&nbsp;{info}</span>;
+      });
+
+      return (
+        <div className="col s12 row">
+          {errors}
+        </div>
+      );
+    }
+    return result;
+    }
+
+    isFormValid() {
+    let status = true;
+    Object.keys(this.validators).forEach((field) => {
+      if (!this.validators[field].valid) {
+        status = false;
+      }
+    });
+    return status;
   }
 
   render() {
-    const { email, password } = this.state;
     return (<Popup className="SidebarUserSignUp"
               trigger = {<p>Login/Signup <FontAwesome name="Login" className="fa fa-sign-out" /></p>}
               position = "bottom center"
@@ -73,11 +105,9 @@ class Login extends React.Component {
               mouseEnterDelay = {0}
               overlayStyle = {{backgroundColor: 'transparent'}}>
                 <Tabs
-                  activeKey={this.state.key}
-                  onSelect={this.handleSelect}
                   id="controlled-tab-example">
                     <Tab eventKey={1} title="Log In">
-                      <Form onSubmit={ (e) => this.submitForm(e) }>
+                      <Form onSubmit={this.handleSubmit}>
                         <Col>
                           <FormGroup>
                             <Label>Email</Label>
@@ -85,15 +115,11 @@ class Login extends React.Component {
                               type="email"
                               name="email"
                               id="userEmail"
-                              value={ email }
-                              valid={ this.state.validate.emailState === 'has-success' }
-                              invalid={ this.state.validate.emailState === 'has-danger' }
                               required
-                              onChange={ (e) => {
-                                          this.validateEmail(e)
-                                          this.handleChange(e)
-                                        } }
+                              value={this.state.userCred.email}
+                              onChange={event => this.handleInputChange(event, 'email')}
                             />
+                            <Label>{ this.displayValidationErrors('email') }</Label>
                           </FormGroup>
                         </Col>
                         <Col>
@@ -103,17 +129,18 @@ class Login extends React.Component {
                               type="password"
                               name="password"
                               id="userPassword"
-                              value={ password }
                               required
-                              onChange={ (e) => this.handleChange(e) }
+                              value={this.state.userCred.password}
+                              onChange={event => this.handleInputChange(event, 'password')}
                             />
+                             <Label>{ this.displayValidationErrors('password') }</Label>
                           </FormGroup>
                         </Col>
                         <Button id="login_button">Submit</Button>
                       </Form>
                     </Tab>
                     <Tab eventKey={2} title="Sign Up">
-                     <Form className="form" onSubmit={ (e) => this.submitForm(e) }>
+                     <Form className="form" onSubmit={this.handleSubmit}>
                         <Col>
                           <FormGroup>
                             <Label>Email</Label>
@@ -121,14 +148,10 @@ class Login extends React.Component {
                               type="email"
                               name="email"
                               id="userEmail"
-                              value={ email }
-                              valid={ this.state.validate.emailState === 'has-success' }
-                              invalid={ this.state.validate.emailState === 'has-danger' }
-                              onChange={ (e) => {
-                                          this.validateEmail(e)
-                                          this.handleChange(e)
-                                        } }
-                            required />
+                              required 
+                              value={this.state.userCred.email}
+                              onChange={event => this.handleInputChange(event, 'email')}/>
+                              <Label>{ this.displayValidationErrors('email') }</Label>
                           </FormGroup>
                         </Col>
                         <Col>
@@ -138,10 +161,10 @@ class Login extends React.Component {
                               type="password"
                               name="password"
                               id="userPassword"
-                              value={ password }
-                              required
-                              onChange={ (e) => this.handleChange(e) }
+                              value={this.state.userCred.password}
+                              onChange={event => this.handleInputChange(event, 'password')}
                             />
+                             <Label>{ this.displayValidationErrors('password') }</Label>
                           </FormGroup>
                         </Col>
                         <Button id="signup_button">Submit</Button>

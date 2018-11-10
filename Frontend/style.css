@@ -78,7 +78,12 @@ Purple: #8e7cc3
 .SidebarUserSignUp {
     background-color: #d4eff7;
 	margin: 5vh;
+	
 }
+.SidebarLoginErrorMsg {
+  color: red;
+  font-size: 12px; }
+  
 .SidebarUserProfile{
     height:13vh;
 }
