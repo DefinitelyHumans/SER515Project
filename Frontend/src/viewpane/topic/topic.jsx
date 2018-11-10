@@ -1,5 +1,4 @@
 import React from 'react';
-import AutoScale from 'react-auto-scale';
 
 class Topic extends React.Component {
 
