@@ -94,6 +94,50 @@ Purple: #8e7cc3
     color: black;
     border:none;
 }
+.Menu{
+    margin-top: 3vh;
+    width:100%;
+    height:60vh;
+    background-color: #d4eff7;
+}
+
+.ActiveTab{
+    border: none;
+    background-color: #d4eff7;
+    width: 50%;
+    height: 5vh;
+    float:left;
+    text-align:center;
+    text-decoration: none;
+}
+.Tabs{
+    height:5vh;
+}
+.InactiveTab{
+    border: none;
+    color:white;
+    background-color: #266791;
+    width: 50%;
+    height: 5vh;
+    float:left;
+    text-align:center;
+    text-decoration: none;
+}
+.ActiveContent{
+    text-align:center;
+    height:55vh;
+    overflow:auto;
+}
+.TopicCard{
+    background-color:white;
+    height: 8vh;
+    margin: 2vw;
+}
+.SubsCard{
+    background-color:white;
+    height: 8vh;
+    margin: 2vw;
+}
 .SettingsButton{
     color: #d4eff7;
     text-align:center;
@@ -101,8 +145,46 @@ Purple: #8e7cc3
     text-decoration: none;
     border: none;
     font-size:4vh;
-    position: absolute;
-    left:7vw;
-    bottom:4vh;
+    position: relative;
+    left:20%;
+    top:4vh;
+}
+
+.Menu{    
+    background-color:#d4eff7;
+}
+
+.Settings{
+    color: #3b9ddc;
+    font-size: 2vh;
+    background-color:#d4eff7;
+    padding: 1vh;
+    border: none;
+    margin-top: 4vh;
 }
 /* menu things */
+/* settings things */
+.SettingsOption{
+    color: #3b9ddc;
+    text-align:center;
+    background-color: transparent;
+    text-decoration: none;
+    border: none;
+    font-size: 3vh;
+}
+
+/*  Simple pin for testing. This should be removed 
+    once we have all the pin information defined */
+.SelectedPin{
+    border-radius: 50%;
+    width: 4vh;
+    height: 4vh;
+    background-color: #dc3c41;
+}
+
+.DeselectedPin{
+    border-radius: 50%;
+    width: 4vh;
+    height: 4vh;
+    background-color: #78b929;
+}
