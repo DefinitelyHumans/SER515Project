@@ -31,7 +31,6 @@ router.post('/login', async function (req, res) {
                 res.statusCode = 500;
                 res.send("");
             })
-            userID = login_info.user_id;
         } else {
             //if we make it here then something failed pretty hard
             res.statusCode = 500;
