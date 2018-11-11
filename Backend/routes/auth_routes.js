@@ -8,7 +8,7 @@ const auth  = require('../modules/login.js')
 // MODULE SETUP
 var router = express.Router()
 
-router.post('/api/auth/login', async function (req, res) {
+router.post('/login', async function (req, res) {
     let body = req.body;
 
     let login_info = await auth.login(body.email, body.password);
