@@ -48,6 +48,70 @@
     text-align:center;
     text-decoration: none;
 }
+.FullTopic{
+    /* width: 40vw; */
+    /* height: 40vh; */
+    margin: 5vw;
+    padding: 2vw;
+    border: none;
+    background-color: #d4eff7;
+    text-decoration-color: none;
+}
+.TopicExitButton{
+    border-radius: 50%;
+    width: 2.5vh;
+    height: 2.5vh;
+    background-color: #f2e701;
+    position: relative;
+}
+.UpperContainer{
+    display: flex;
+    justify-content: space-between;
+}
+.TopicUserProfile{
+    height:7vh;
+}
+.TopicUserImage{
+    height: 7vh;
+    width: 7vh;
+    border-radius: 50%;
+    background-color: #266791;
+    float:left;
+}
+.TopicUserInfo{
+    height: 3vh;
+    color: #266791;
+    padding-top:2vh;
+    font-size:3vh;
+}
+.TopicTitle{
+    height: 5vh;
+    color: #266791;
+    font-size: 3vh;
+    text-align: center;
+}
+.TopicDescription{
+    height: 5vh;
+    color: #000000;
+    font-size: 2vh;
+    padding-bottom: 5vh;
+    text-align: center;
+}
+.CommentArea{
+    border: none;
+    background-color: white;
+    resize: none;
+    width: 80%;
+    margin-right: 3vw;
+}
+.SubmitButton{
+    border-radius: 10%;
+    color: #d4eff7;
+    font-size: 3vh;
+    background-color: #266791;
+    vertical-align: 75%;
+}
+
 /* Pin Colors */
 /*
 Red: #dc3c41
