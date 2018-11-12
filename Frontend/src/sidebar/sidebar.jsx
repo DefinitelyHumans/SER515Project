@@ -1,6 +1,8 @@
 import React from 'react';
 
 import Menu from './menu/menu';
+import Login from './../auth/login';
+require('react-bootstrap');
 import Settings from './settings/settings'
 
 class Sidebar extends React.Component {
@@ -31,8 +33,8 @@ class Sidebar extends React.Component {
         return (<div className="Sidebar">
                 <div className="SidebarUserProfile">
                     <div className="SidebarUserImage"></div>
-                    <p className="SidebarUserInfo">user@email.com</p>
                 </div>
+                <Login className="SidebarUserSignUp"/>
                 <input className="TopicSearch"></input>
                 {this.currentWindow(this.state.settingsHidden)}
                 <button className="SettingsButton" onClick={this.swapMenus}>{settingText}</button>
