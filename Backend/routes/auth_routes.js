@@ -8,9 +8,9 @@ const auth  = require('../modules/login.js')
 // MODULE SETUP
 var router = express.Router()
 
-router.post('/api/auth/login', async function (req, res) {
+router.post('/login', async function (req, res) {
     let body = req.body;
-
+    console.log("logging in user from auth_route");
     let login_info = await auth.login(body.email, body.password);
     if(login_info.invalid_login) {
         res.statusCode = 401;
@@ -31,7 +31,7 @@ router.post('/api/auth/login', async function (req, res) {
                 res.statusCode = 500;
                 res.send("");
             })
-            userID = login_info.user_id;
+            // userID = login_info.user_id;
         } else {
             //if we make it here then something failed pretty hard
             res.statusCode = 500;

@@ -1,6 +1,7 @@
 //modules
 const {Client, Pool}  = require('pg');
 const pg_errors       = require('pg-error-constants');
+const dateTime        = require('node-datetime');
 
 //local files
 const { db_cred }     = require('../priv/cred.js');
@@ -151,19 +152,22 @@ async function get_topics_by_user(user_id) {
  * */
 exports.add_topic =
 async function add_topic(topic) {
+    // console.log("DB Topic", topic);
     // Grab timestamp for when topic is created.
     let timestamp = dateTime.create().epoch();    // Insert timestamp twice for posted & update.
     return await pool.query(
-        `INSERT INTO ${topic_table} (topic_id, topic_title, topic_time_posted, update_time, topic_type, topic_content, user_posted) VALUES ($1,$2,$3,$3,$4,$5,$6,$7);`,
-        [topic.topic_id, topic.topic_title, timestamp, topic.topic_type, topic.topic_content, topic.user_posted])
-    .then( () => {  // Return no error, topic ID, and topic time posted.
+        `INSERT INTO ${topic_table} (topic_id, topic_title, topic_time_posted, update_time, topic_type, topic_content, user_posted) VALUES ($1,$2,to_timestamp($3),to_timestamp($3),$4,$5,$6);`,
+        [topic.topic_id, topic.topic_title, timestamp, topic.topic_type, topic.topic_content, topic.user_id])
+    .then((res) => {  // Return no error, topic ID, and topic time posted.
+        // console.log(res);
         return {
             error: db_errors.NO_ERROR,
-            topic_id : topic_id,
+            topic_id : topic.topic_id,
             topic_time_posted : timestamp,
-        };
-    })
+
+    }})
     .catch((err) => {
+        // console.log(err);
         return { error: db_errors.INTERNAL_ERROR };
     });
 };
@@ -173,11 +177,11 @@ async function add_topic(topic) {
  * @returns The post time updated.
  */
 exports.update_topic =
-async function update_topic(topic, token) {
+async function update_topic(topic) {
     // Update Topic time posted
     let timestamp = dateTime.create().epoch();
     return await pool.query(
-            `UPDATE ${topic_table} SET topic_content=$1 AND update_time=$2 WHERE topic_id=$3;`,
+            `UPDATE ${topic_table} SET topic_content=$1, update_time=to_timestamp($2) WHERE topic_id=$3;`,
             [topic.topic_content, timestamp, topic.topic_id])
         .then((res)=> { // Return no error message and updated time from success request.
             return {
@@ -186,6 +190,7 @@ async function update_topic(topic, token) {
             };
         })
         .catch((err) => {
+            // console.log(err);
             return { error: db_errors.INTERNAL_ERROR };
         });
 };
@@ -195,7 +200,7 @@ async function update_topic(topic, token) {
  * Expected parameter is the topic ID.
  */
 exports.remove_topic =
-async function remove_topic(topic_id, token) {
+async function remove_topic(topic_id) {
     return await pool.query(
         `DELETE FROM ${topic_table} WHERE topic_id=$1;`,
         [topic_id])

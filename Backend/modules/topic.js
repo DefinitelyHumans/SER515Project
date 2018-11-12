@@ -20,20 +20,18 @@ const { gen_topic_id } = require('../lib/id_gen');
 exports.CreateTopic =
 async function CreateTopic(userID, topic_title, topic_type, topic_content) {
     let topic_id = gen_topic_id();  // Generate topic ID.
-    console.log("Create topic:", topic_id);
-
     let topic = {
         topic_id: topic_id,
         topic_title: topic_title,
         topic_type: topic_type,
         topic_content: topic_content,
-        user_posted: userID
+        user_id: userID
     };
-
+    // console.log("Topic object", topic);
     // Check for DB errors,
     let { error } = await database.add_topic(topic);
     if (error) {
-        console.log("Failed:", error);
+        // console.log("Failed:", error);
         return {
             success: false,
             server_error: true
@@ -54,13 +52,12 @@ async function CreateTopic(userID, topic_title, topic_type, topic_content) {
  * @returns error and success message.
  */
 exports.DeleteTopic =
-async function DeleteTopic(userID, topic_id) {
-    console.log("Delete topic:", topic_id);
+async function DeleteTopic(topic_id) {
+    // console.log("Delete topic:", topic_id);
 
-    // TODO: User ID Permissions
     let { error } = await database.remove_topic(topic_id);
     if (error) {
-        console.log("Failed:", error); // Debug error.
+        // console.log("Failed:", error); // Debug error.
         return {
             success: false,
             server_error: true,
@@ -75,8 +72,7 @@ async function DeleteTopic(userID, topic_id) {
  */
 exports.UpdateTopic =
 async function UpdateTopic(userID, topic_id, topic_content) {
-    console.log("Update topic:", topic_id);
-    // TODO: Validate token, topic ID, User ID.
+    // console.log("Update topic:", topic_id);
     let topic = {
         topic_id: topic_id,
         topic_content: topic_content,
@@ -85,7 +81,7 @@ async function UpdateTopic(userID, topic_id, topic_content) {
     let { error, update_time } = await database.update_topic(topic);
     if (error) {
         // Return error if query was unsucessfull.
-        console.log("Failed:", error);
+        // console.log("Failed:", error);
         return {
             success: false,
             server_error: true
@@ -102,21 +98,22 @@ async function UpdateTopic(userID, topic_id, topic_content) {
 
 exports.GetTopic =
 async function GetTopic(topic_id) {
-    console.log("Get topic:", topic_id);
-
+    // console.log("Get topic:", topic_id);
     let {topic, error} = await database.get_topic(topic_id);
     if (error == database.errors.NO_RESPONSE) {
+        // console.log(topic);
         return {
             success: false,
             not_found: true
         };
     } else if(error) {
-        console.log("Failed", error);
+        // console.log("Failed", error);
         return {
             success: false,
             server_error: true
         };
     } else {
+        // console.log("Topic retrieved",topic);
         return {
             success: true,
             topic: topic

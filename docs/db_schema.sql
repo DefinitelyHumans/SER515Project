@@ -34,7 +34,6 @@ CREATE TABLE public.topics (
 	topic_title VARCHAR(64),
 	topic_time_posted TIMESTAMP WITH TIME ZONE,
  	update_time TIMESTAMP WITH TIME ZONE,
-	-- tag_list VARCHAR(12) [],
 	topic_type C_topic_post_type,
 	topic_content TEXT,
 	user_posted CHAR(32),
