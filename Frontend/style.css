@@ -151,6 +151,8 @@ Purple: #8e7cc3
     padding: 1vh;
     border: none;
     margin-top: 4vh;
+    overflow:auto;
+
 }
 /* menu things */
 /* settings things */
