@@ -1,5 +1,5 @@
 import React from 'react';
-import Modal from '../modal'
+import Modal from '../../modal'
 
 // Dialog box referenced from here: https://codepen.io/IbeVanmeenen/pen/RRpLxb
 
@@ -44,7 +44,7 @@ class Settings extends React.Component {
                         <button className={modalStatus} onClick={this.showModal}/>
                         <button className="SettingsOption" onClick={this.showModal} style={{float: "right"}}>About Corkboard</button>
                     {buttons}
-                <Modal visible={this.state.visible}>
+                <Modal className='SettingsModal' visible={this.state.visible}>
                         <h3 className="dialog__title">
                             Hello World
                         </h3>
