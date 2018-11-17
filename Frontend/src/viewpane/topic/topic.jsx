@@ -22,30 +22,35 @@ class Topic extends React.Component {
     }
 
     renderComments(){
-        return (<div className="Comments">{this.props.topic['comments'].map((c) => {
-            return (
-            <div key={c['id']} className="Comment">
-                <div className="CommentUserProfile">
-                    <div className="CommentUserImage"></div>
-                    <p className="CommentUserInfo">{c['user']}</p>
-                </div>
-                <div className="CommentContent">
-                    <p>{c['content']}</p>
-                </div>
-                <div className="CommentStats">
-                    <p className="CommentTime">{c['time']}</p>
-                </div>
-            </div>)
-        })}</div>);
+        if (this.props.comment !== []){
+            return (<div className="Comments">{this.props.comment.map((c) => {
+                return (
+                <div className="Comment">
+                    <div className="CommentUserProfile">
+                        <div className="CommentUserImage"></div>
+                        <p className="CommentUserInfo">{c['user']}</p>
+                    </div>
+                    <div className="CommentContent">
+                        <p>{c['content']}</p>
+                    </div>
+                    <div className="CommentStats">
+                        <p className="CommentTime">{c['time']}</p>
+                    </div>
+                </div>)
+            })}</div>);
+        }
     }
 
     handleSubmit(){
-        this.props.addComment(this.props.topic, this.state.newComment);
-        this.setState({newComment: {}});
+        if (!(Object.keys(this.state.newComment).length === 0 && this.state.newComment.constructor === Object)){
+            this.props.addComment(this.props.topic['title'], this.state.newComment);
+            this.setState({newComment: {}});
+        }
     }
 
     handleComment(event){
-        this.setState({newComment: {'user': 'user', 'time': 'time', 'content': event.target.value}});
+        if (event.target.value != '')
+            this.setState({newComment: {'id': this.props.topic['title'], 'user': 'user', 'time': 'time', 'content': event.target.value}});
     }
 
     renderFullTopic(){
@@ -69,7 +74,7 @@ class Topic extends React.Component {
                     {this.renderComments()}
                     <form className='CommentSubmission'>
                         <textarea className="CommentArea" rows="4" cols="200" onChange={this.handleComment.bind(this)}></textarea>
-                        <button onClick={this.handleSubmit.bind(this)} className="SubmitButton">Submit</button>
+                        <button type='button' onClick={this.handleSubmit.bind(this)} className="SubmitButton">Submit</button>
                     </form>
                 </div>
             </div>

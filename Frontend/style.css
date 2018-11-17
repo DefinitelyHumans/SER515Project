@@ -91,6 +91,11 @@
     float:none;
     margin:2vh;
 }
+.Comment{
+    margin:1vh;
+    display:block;
+    min-height: 7vh;
+}
 .CommentUserProfile{
     float:left;
     margin-left: 3vh;

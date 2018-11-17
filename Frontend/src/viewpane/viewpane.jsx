@@ -9,9 +9,11 @@ class Viewpane extends React.Component {
         super(props);
         this.state = {
             singleTopicView: false,
-            topics:[{'title': 'ATitle', 'descrip':'descripA', 'type':'link', 'user':'AUser', 'comments': [{'id': 0, 'user': 'user', 'content': 'comment content', 'time': 'Dec. 1. 1989'}]}, 
-                {'title': 'B', 'descrip':'descripB', 'type':'link', 'user':'BUser', 'comments': [{'id': 0, 'user': 'user', 'content': 'comment content', 'time': 'Dec. 1. 1989'}]}],
+            topics:[{'title': 'ATitle', 'descrip':'descripA', 'type':'link', 'user':'AUser'},
+                {'title': 'B', 'descrip':'descripB', 'type':'link', 'user':'BUser'}],
             topic: {},
+            comments: [{'id': 'ATitle', 'comment': [{'user': 'userC', 'content': 'comment content', 'time': 'Dec. 1. 1989'}]},
+            {'id': 'B', 'comment':[]}],
             inputTopicTitle: 'Title',
             inputTopicContent: 'Content',
             inputTopicType: 'Type',
@@ -51,32 +53,34 @@ class Viewpane extends React.Component {
     renderTopics(){
         var tmp
         if (this.state.singleTopicView){
-            tmp = <Topic key={this.state.topic['title']} topic={this.state.topic} parentSwapTopic={this.swapTopic} singleView={this.state.singleTopicView} addComment={this.addComment}></Topic>
+            let i;
+            for (i=0; i < this.state.topics.length; i++){
+                if (this.state.comments[i]['id'] === this.state.topic['title']){
+                    break;
+                }
+            }
+            tmp = <Topic key={this.state.topic['title']} topic={this.state.topic} parentSwapTopic={this.swapTopic} singleView={this.state.singleTopicView} addComment={this.addComment} comment={this.state.comments[i]['comment']}></Topic>
         } else {
             tmp = this.state.topics.map((a) => <Topic key={a['title']} topic={a} parentSwapTopic={this.swapTopic} singleView={this.state.singleTopicView}></Topic>)
         }
         return <div className="ViewPaneTopics">{tmp}</div>
     }
 
-    addComment(topic, comment){
+    addComment(title, comment){
+        let t = this.state.comments;
         let i;
-        console.log(this.state.topics.length);
-        for (i=0; i < this.state.topics.length; i++){
-            console.log(this.state.topics[i])
-            if (this.state.topics[i]['title'] == topic['title'])
-              break;  
+        for (i=0; i < t.length; i++){
+            if (t[i]['id'] === title){
+                break;
+            }
         }
-        console.log(i);
-        let nextId = this.state.topics[i]['comments'].length;
-        comment['id'] = nextId;
-        let t = this.state.topics;
-        t[i]['comments'].push(comment);
-        this.setState({topics: t});
+        t[i]['comment'].push(comment);
+        this.setState({comments: t});
     }
 
     swapTopic(topic){
         this.setState({singleTopicView: !this.state.singleTopicView})
-        this.setState({topic: topic})
+        this.setState({topic: topic})   
     }
 
     render(){
