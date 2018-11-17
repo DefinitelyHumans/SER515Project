@@ -37,6 +37,9 @@ class Viewpane extends React.Component {
         let t = this.state.topics;
         t.push({'title': this.state.inputTopicTitle, 'descrip': this.state.inputTopicContent,'user': 'User', 'type': this.state.inputTopicType});
         this.setState({topics: t});
+        let c = this.state.comments;
+        c.push({'id':this.state.inputTopicTitle, 'comment':[]});
+        this.setState({comments: c});
         this.hideModal();
     }
 
