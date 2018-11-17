@@ -22,6 +22,7 @@ class Viewpane extends React.Component {
         this.showModal = this.showModal.bind(this);
         this.hideModal = this.hideModal.bind(this);
         this.saveTopic = this.saveTopic.bind(this);
+        this.addComment = this.addComment.bind(this);
     }
 
     showModal () {
@@ -50,11 +51,27 @@ class Viewpane extends React.Component {
     renderTopics(){
         var tmp
         if (this.state.singleTopicView){
-            tmp = <Topic key={this.state.topic['title']} topic={this.state.topic} parentSwapTopic={this.swapTopic} singleView={this.state.singleTopicView}></Topic>
+            tmp = <Topic key={this.state.topic['title']} topic={this.state.topic} parentSwapTopic={this.swapTopic} singleView={this.state.singleTopicView} addComment={this.addComment}></Topic>
         } else {
             tmp = this.state.topics.map((a) => <Topic key={a['title']} topic={a} parentSwapTopic={this.swapTopic} singleView={this.state.singleTopicView}></Topic>)
         }
         return <div className="ViewPaneTopics">{tmp}</div>
+    }
+
+    addComment(topic, comment){
+        let i;
+        console.log(this.state.topics.length);
+        for (i=0; i < this.state.topics.length; i++){
+            console.log(this.state.topics[i])
+            if (this.state.topics[i]['title'] == topic['title'])
+              break;  
+        }
+        console.log(i);
+        let nextId = this.state.topics[i]['comments'].length;
+        comment['id'] = nextId;
+        let t = this.state.topics;
+        t[i]['comments'].push(comment);
+        this.setState({topics: t});
     }
 
     swapTopic(topic){

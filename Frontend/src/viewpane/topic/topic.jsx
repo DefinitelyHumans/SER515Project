@@ -4,6 +4,9 @@ class Topic extends React.Component {
 
     constructor(props){
         super(props);
+        this.state = {
+            newComment: {}
+        }
         this.swapTopic = this.swapTopic.bind(this);
         this.renderTopicCard = this.renderTopicCard.bind(this);
         this.renderFullTopic = this.renderFullTopic.bind(this);
@@ -36,6 +39,15 @@ class Topic extends React.Component {
         })}</div>);
     }
 
+    handleSubmit(){
+        this.props.addComment(this.props.topic, this.state.newComment);
+        this.setState({newComment: {}});
+    }
+
+    handleComment(event){
+        this.setState({newComment: {'user': 'user', 'time': 'time', 'content': event.target.value}});
+    }
+
     renderFullTopic(){
         return (
             <div className="FullTopic">
@@ -55,10 +67,10 @@ class Topic extends React.Component {
                 <hr/>
                 <div className='TopicComments'>
                     {this.renderComments()}
-                    <div className='CommentSubmission'>
-                        <textarea className="CommentArea" rows="4" cols="200">Comments can be made here!!</textarea>
-                        <button className="SubmitButton">Submit</button>
-                    </div>
+                    <form className='CommentSubmission'>
+                        <textarea className="CommentArea" rows="4" cols="200" onChange={this.handleComment.bind(this)}></textarea>
+                        <button onClick={this.handleSubmit.bind(this)} className="SubmitButton">Submit</button>
+                    </form>
                 </div>
             </div>
         );
