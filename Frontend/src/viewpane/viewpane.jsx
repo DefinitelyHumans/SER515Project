@@ -8,8 +8,8 @@ class Viewpane extends React.Component {
         super(props);
         this.state = {
             singleTopicView: false,
-            topics:['A', 'B', 'C', 'D'],
-            topic: "none"
+            topics:[{'title': 'ATitle', 'user':'AUser'}, {'title': 'B', 'user':'BUser'}, {'title': 'C', 'user':'CUser'}, {'title': 'D', 'user':'DUser'}],
+            topic: {}
         }
         this.renderTopics = this.renderTopics.bind(this);
         this.addTopic = this.addTopic.bind(this);
@@ -19,9 +19,9 @@ class Viewpane extends React.Component {
     renderTopics(){
         var tmp
         if (this.state.singleTopicView){
-            tmp = <Topic key={this.state.topic} name={this.state.topic} parentSwapTopic={this.swapTopic} singleView={this.state.singleTopicView}></Topic>
+            tmp = <Topic key={this.state.topic['title']} topic={this.state.topic} parentSwapTopic={this.swapTopic} singleView={this.state.singleTopicView}></Topic>
         } else {
-            tmp = this.state.topics.map((a) => <Topic key={a} name={a} parentSwapTopic={this.swapTopic} singleView={this.state.singleTopicView}></Topic>)
+            tmp = this.state.topics.map((a) => <Topic key={a['title']} topic={a} parentSwapTopic={this.swapTopic} singleView={this.state.singleTopicView}></Topic>)
         }
         return <div className="ViewPaneTopics">{tmp}</div>
     }
@@ -32,9 +32,9 @@ class Viewpane extends React.Component {
         this.setState({topics: t});
     }
 
-    swapTopic(name){
+    swapTopic(topic){
         this.setState({singleTopicView: !this.state.singleTopicView})
-        this.setState({topic: name})
+        this.setState({topic: topic})
     }
 
     render(){

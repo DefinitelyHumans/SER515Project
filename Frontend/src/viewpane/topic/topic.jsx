@@ -10,26 +10,27 @@ class Topic extends React.Component {
     }
 
     swapTopic(){
-        this.props.parentSwapTopic(this.props.name);
+        this.props.parentSwapTopic(this.props.topic);
     }
 
     renderTopicCard(){
-        return (<button className="Topic" onClick={this.swapTopic}><p>{this.props.name}</p></button>);
+        return (<button className="Topic" onClick={this.swapTopic}><p>{this.props.topic['title']}</p></button>);
     }
 
     renderFullTopic(){
+        console.log(this.props.topic['user']);
+        console.log(this.props.topic['title']);
         return (
                     <div className="FullTopic">
                         <div className="UpperContainer">
-                            <button className="TopicExitButton" onClick={this.swapTopic}></button>
-                            <button className="TopicExitButton" onClick={this.swapTopic}></button>
+                            <button className="TopicExitButton" onClick={this.swapTopic}>Return to Main Board</button>
                         </div>
                         <div className="TopicUserProfile">
                             <div className="TopicUserImage"></div>
-                            <p className="TopicUserInfo">Username</p>
+                            <p className="TopicUserInfo">{this.props.topic['user']}</p>
                         </div>
-                        <div>
-                            <h1 className="TopicTitle">{this.props.name}</h1>
+                        <div className="TopicContent">
+                            <h1 className="TopicTitle">{this.props.topic['title']}</h1>
                             <p className="TopicDescription">Check out this nice description of this topic you created!</p>
                         </div>
                         <div>
