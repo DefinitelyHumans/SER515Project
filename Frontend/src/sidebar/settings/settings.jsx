@@ -12,7 +12,7 @@ class Settings extends React.Component {
         }
         this.changeSetting = this.changeSetting.bind(this);
         this.showModal = this.showModal.bind(this);
-            this.hideModal = this.hideModal.bind(this);
+        this.hideModal = this.hideModal.bind(this);
         
     }
     showModal () {
@@ -44,16 +44,14 @@ class Settings extends React.Component {
                         <button className={modalStatus} onClick={this.showModal}/>
                         <button className="SettingsOption" onClick={this.showModal} style={{float: "right"}}>About Corkboard</button>
                     {buttons}
-                <Modal className='SettingsModal' visible={this.state.visible}>
-                        <h3 className="dialog__title">
-                            Hello World
+                <Modal visible={this.state.visible}>
+                        <h3 className="dialogTitle">
+                            Hello World!
                         </h3>
-                        <p className="dialog__txt">
-                            Nam condimentum quam varius convallis iaculis. Nulla facilisi. Maecenas pretium erat commodo, rhoncus quam quis, laoreet ante. Nunc egestas sapien et magna malesuada faucibus.
+                        <p className="dialogContent">
+                            Welcome to CorkBoard. A Reddit/Slack clone made by Arizona State University students to practice AGILE development.
                         </p>
-                        <button onClick={this.hideModal} type="button" className="btn btn--close dialog__btn">
-                            Close
-                        </button>
+                        <button onClick={this.hideModal} type="button" className="closeDialogButton">Close</button>
                     </Modal>
                 </div>);
     }

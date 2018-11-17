@@ -31,7 +31,7 @@ class Topic extends React.Component {
                         </div>
                         <div className="TopicContent">
                             <h1 className="TopicTitle">{this.props.topic['title']}</h1>
-                            <p className="TopicDescription">Check out this nice description of this topic you created!</p>
+                            <p className="TopicDescription">{this.props.topic['descrip']}</p>
                         </div>
                         <div>
                             <textarea className="CommentArea" rows="4" cols="200">Comments can be made here!!</textarea>
