@@ -57,6 +57,9 @@
     text-align:center;
     text-decoration: none;
 }
+.TopicContainer{
+    height:14vh;
+}
 .TopicUserProfile{
     float:left;
     margin:2vh;
@@ -84,7 +87,36 @@
     background-color:white;
     padding:1vh;
 }
-
+.TopicComments{
+    float:none;
+    margin:2vh;
+}
+.CommentUserProfile{
+    float:left;
+    margin-left: 3vh;
+}
+.CommentUserImage{
+    height: 3vh;
+    width: 3vh;
+    border-radius: 50%;
+    background-color: #d4eff7;
+    margin-bottom:1vh;
+}
+.CommentUserInfo{
+    color:white;
+}
+.CommentContent{
+    margin-left:10vh;
+    width:90%;
+    padding-right:2vh;
+    background:#d4eff7;
+}
+.CommentStats{
+    float:right;
+}
+.CommentTime{
+    color:white;
+}
 /* Pin Colors */
 /*
 Red: #dc3c41

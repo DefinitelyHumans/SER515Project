@@ -9,8 +9,8 @@ class Viewpane extends React.Component {
         super(props);
         this.state = {
             singleTopicView: false,
-            topics:[{'title': 'ATitle', 'descrip':'descripA', 'type':'link', 'user':'AUser'}, 
-                {'title': 'B', 'descrip':'descripB', 'type':'link', 'user':'BUser'}],
+            topics:[{'title': 'ATitle', 'descrip':'descripA', 'type':'link', 'user':'AUser', 'comments': [{'id': 0, 'user': 'user', 'content': 'comment content', 'time': 'Dec. 1. 1989'}]}, 
+                {'title': 'B', 'descrip':'descripB', 'type':'link', 'user':'BUser', 'comments': [{'id': 0, 'user': 'user', 'content': 'comment content', 'time': 'Dec. 1. 1989'}]}],
             topic: {},
             inputTopicTitle: 'Title',
             inputTopicContent: 'Content',

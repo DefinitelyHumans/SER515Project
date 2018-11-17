@@ -4,9 +4,10 @@ class Topic extends React.Component {
 
     constructor(props){
         super(props);
-        this.swapTopic = this.swapTopic.bind(this)
-        this.renderTopicCard = this.renderTopicCard.bind(this)
-        this.renderFullTopic = this.renderFullTopic.bind(this)
+        this.swapTopic = this.swapTopic.bind(this);
+        this.renderTopicCard = this.renderTopicCard.bind(this);
+        this.renderFullTopic = this.renderFullTopic.bind(this);
+        this.renderComments = this.renderComments.bind(this);
     }
 
     swapTopic(){
@@ -17,28 +18,50 @@ class Topic extends React.Component {
         return (<button className="Topic" onClick={this.swapTopic}><p>{this.props.topic['title']}</p></button>);
     }
 
+    renderComments(){
+        return (<div className="Comments">{this.props.topic['comments'].map((c) => {
+            return (
+            <div key={c['id']} className="Comment">
+                <div className="CommentUserProfile">
+                    <div className="CommentUserImage"></div>
+                    <p className="CommentUserInfo">{c['user']}</p>
+                </div>
+                <div className="CommentContent">
+                    <p>{c['content']}</p>
+                </div>
+                <div className="CommentStats">
+                    <p className="CommentTime">{c['time']}</p>
+                </div>
+            </div>)
+        })}</div>);
+    }
+
     renderFullTopic(){
-        console.log(this.props.topic['user']);
-        console.log(this.props.topic['title']);
         return (
-                    <div className="FullTopic">
-                        <div className="UpperContainer">
-                            <button className="TopicExitButton" onClick={this.swapTopic}>Return to Main Board</button>
-                        </div>
-                        <div className="TopicUserProfile">
-                            <div className="TopicUserImage"></div>
-                            <p className="TopicUserInfo">{this.props.topic['user']}</p>
-                        </div>
-                        <div className="TopicContent">
-                            <h1 className="TopicTitle">{this.props.topic['title']}</h1>
-                            <p className="TopicDescription">{this.props.topic['descrip']}</p>
-                        </div>
-                        <div>
-                            <textarea className="CommentArea" rows="4" cols="200">Comments can be made here!!</textarea>
-                            <button className="SubmitButton">Submit</button>
-                        </div>
+            <div className="FullTopic">
+                <div className="UpperContainer">
+                    <button className="TopicExitButton" onClick={this.swapTopic}>Return to Main Board</button>
+                </div>
+                <div className="TopicContainer">
+                    <div className="TopicUserProfile">
+                        <div className="TopicUserImage"></div>
+                        <p className="TopicUserInfo">{this.props.topic['user']}</p>
                     </div>
-                );
+                    <div className="TopicContent">
+                        <h1 className="TopicTitle">{this.props.topic['title']}</h1>
+                        <p className="TopicDescription">{this.props.topic['descrip']}</p>
+                    </div>
+                </div>
+                <hr/>
+                <div className='TopicComments'>
+                    {this.renderComments()}
+                    <div className='CommentSubmission'>
+                        <textarea className="CommentArea" rows="4" cols="200">Comments can be made here!!</textarea>
+                        <button className="SubmitButton">Submit</button>
+                    </div>
+                </div>
+            </div>
+        );
     }
 
     render(){
