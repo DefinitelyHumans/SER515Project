@@ -12,9 +12,9 @@ class Viewpane extends React.Component {
             topics:[{'title': 'ATitle', 'descrip':'descripA', 'type':'link', 'user':'AUser'}, 
                 {'title': 'B', 'descrip':'descripB', 'type':'link', 'user':'BUser'}],
             topic: {},
-            inputTopicTitle: 'Title',
-            inputTopicContent: 'Content',
-            inputTopicType: 'Type',
+            inputTopicTitle: '',
+            inputTopicContent: '',
+            inputTopicType: '',
             visible: false
         }
         this.renderTopics = this.renderTopics.bind(this);
@@ -34,6 +34,7 @@ class Viewpane extends React.Component {
         let t = this.state.topics;
         t.push({'title': this.state.inputTopicTitle, 'descrip': this.state.inputTopicContent,'user': 'User', 'type': this.state.inputTopicType});
         this.setState({topics: t});
+        this.setState({inputTopicContent: '', inputTopicTitle: '', inputTopicType: ''});
         this.hideModal();
     }
 
@@ -73,9 +74,9 @@ class Viewpane extends React.Component {
                 <form>
                     <table>
                         <tr className='dialogTopicTitle'><td className='formDescrip'>Topic Title: </td>
-                            <td><input type="text" name="TopicTitle" onChange={this.handleTitle.bind(this)}/><br/></td></tr>
+                            <td><input type="text" name="TopicTitle" onChange={this.handleTitle.bind(this)} value={this.state.inputTopicTitle}/><br/></td></tr>
                         <tr className='dialogTopicContent'><td className='formDescrip'>Topic Content: </td>
-                            <td><input type="text" name="TopicContent" onChange={this.handleContent.bind(this)}/><br/></td></tr>
+                            <td><input type="text" name="TopicContent" onChange={this.handleContent.bind(this)} value={this.state.inputTopicContent}/><br/></td></tr>
                         <tr><td className='formDescrip'>Topic Type:</td>
                             <td><select onChange={this.handleSelect.bind(this)}>
                                 <option value="text">Text</option>
