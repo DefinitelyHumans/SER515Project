@@ -57,6 +57,33 @@
     text-align:center;
     text-decoration: none;
 }
+.TopicDelButton{
+    border: none;
+    background-color: #d4eff7;
+    color: black;
+    width: 5vw;
+    height: 3vh;
+    margin:1vh;
+    text-align:center;
+    text-decoration: none;
+    font-size:2vh;
+}
+.TopicMoodButton{
+    border: none;
+    background-color: #d4eff7;
+    color: black;
+    width: 5vw;
+    height: 3vh;
+    margin:1vh;
+    text-align:center;
+    text-decoration: none;
+    font-size:2vh;
+}
+.TopicControl{
+    height: 5vh;
+    display: flex;
+    justify-content: flex-end;
+}
 .TopicContainer{
     height:14vh;
 }

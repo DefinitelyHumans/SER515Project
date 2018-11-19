@@ -5,7 +5,8 @@ class Topic extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            newComment: {}
+            newComment: {},
+            visable: false
         }
         this.swapTopic = this.swapTopic.bind(this);
         this.renderTopicCard = this.renderTopicCard.bind(this);
@@ -67,6 +68,11 @@ class Topic extends React.Component {
                     <div className="TopicContent">
                         <h1 className="TopicTitle">{this.props.topic['title']}</h1>
                         <p className="TopicDescription">{this.props.topic['descrip']}</p>
+                        <div className="TopicControl">
+                            <button className="TopicDelButton">Like</button>
+                            <button className="TopicDelButton">Dislike</button>
+                            <button className="TopicDelButton">Delete</button>
+                        </div>
                     </div>
                 </div>
                 <hr/>
