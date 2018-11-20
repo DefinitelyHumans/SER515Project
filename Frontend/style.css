@@ -48,6 +48,43 @@
     text-align:center;
     text-decoration: none;
 }
+.TopicExitButton{
+    border: none;
+    background-color: #d4eff7;
+    width: 15vw;
+    height: 3vh;
+    margin:1vh;
+    text-align:center;
+    text-decoration: none;
+}
+.TopicUserProfile{
+    float:left;
+    margin:2vh;
+    width:8vh;
+    text-align:center;
+}
+.TopicUserImage{
+    height: 7vh;
+    width: 7vh;
+    border-radius: 50%;
+    background-color: #d4eff7;
+    margin-bottom:1vh;
+}
+.TopicUserInfo{
+    color:white;
+}
+.TopicContent{
+    float:none;
+    height:5vh;
+    margin:2vh;
+    color:#d4eff7;
+}
+.TopicDescription{
+    margin-left:8vw;
+    background-color:white;
+    padding:1vh;
+}
+
 /* Pin Colors */
 /*
 Red: #dc3c41
@@ -152,7 +189,6 @@ Purple: #8e7cc3
     border: none;
     margin-top: 4vh;
     overflow:auto;
-
 }
 /* menu things */
 /* settings things */
@@ -179,4 +215,24 @@ Purple: #8e7cc3
     width: 4vh;
     height: 4vh;
     background-color: #78b929;
+}
+
+.dialog{
+    margin-left:30vw;
+    width:60vw;
+    border:none;
+    background-color: #266791;
+    color:white;
+}
+.dialogContent{
+    color:white;
+}
+.closeDialogButton{
+    color:#266791;
+    text-align:center;
+    text-decoration: none;
+    float:right;
+}
+.formDescrip{
+    color:white;
 }
