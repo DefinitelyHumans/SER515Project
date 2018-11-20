@@ -5,7 +5,7 @@ class Topic extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            newComment: {}
+            newComment: {'content': ''}
         }
         this.swapTopic = this.swapTopic.bind(this);
         this.renderTopicCard = this.renderTopicCard.bind(this);
@@ -22,8 +22,8 @@ class Topic extends React.Component {
     }
 
     renderComments(){
-        if (this.props.comment !== []){
-            return (<div className="Comments">{this.props.comment.map((c) => {
+        if (this.props.comment !== {'content':''}){
+            return this.props.comment.map((c) => {
                 return (
                 <div className="Comment">
                     <div className="CommentUserProfile">
@@ -37,14 +37,14 @@ class Topic extends React.Component {
                         <p className="CommentTime">{c['time']}</p>
                     </div>
                 </div>)
-            })}</div>);
+            });
         }
     }
 
     handleSubmit(){
-        if (!(Object.keys(this.state.newComment).length === 0 && this.state.newComment.constructor === Object)){
+        if (this.state.newComment['content'] !== ''){
             this.props.addComment(this.props.topic['title'], this.state.newComment);
-            this.setState({newComment: {}});
+            this.setState({newComment: {'content': ''}});
         }
     }
 
@@ -57,7 +57,7 @@ class Topic extends React.Component {
         return (
             <div className="FullTopic">
                 <div className="UpperContainer">
-                    <button className="TopicExitButton" onClick={this.swapTopic}>Return to Main Board</button>
+                    <button className="TopicExitButton" onClick={this.swapTopic}>Return</button>
                 </div>
                 <div className="TopicContainer">
                     <div className="TopicUserProfile">
@@ -73,7 +73,7 @@ class Topic extends React.Component {
                 <div className='TopicComments'>
                     {this.renderComments()}
                     <form className='CommentSubmission'>
-                        <textarea className="CommentArea" rows="4" cols="200" onChange={this.handleComment.bind(this)}></textarea>
+                        <textarea className="CommentArea" rows="4" cols="60" onChange={this.handleComment.bind(this)} value={this.state.newComment['content']}></textarea>
                         <button type='button' onClick={this.handleSubmit.bind(this)} className="SubmitButton">Submit</button>
                     </form>
                 </div>
