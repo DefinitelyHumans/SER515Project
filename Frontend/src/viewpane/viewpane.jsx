@@ -1,7 +1,7 @@
 import React from 'react';
 import Modal from '../modal'
 import Topic from './topic/topic';
-
+import {NotificationContainer, NotificationManager} from 'react-notifications';
 
 class Viewpane extends React.Component {
 
@@ -34,6 +34,7 @@ class Viewpane extends React.Component {
         let t = this.state.topics;
         t.push({'title': this.state.inputTopicTitle, 'descrip': this.state.inputTopicContent,'user': 'User', 'type': this.state.inputTopicType});
         this.setState({topics: t});
+        NotificationManager.success('Topic '+this.state.topics[this.state.topics.length-1]['title']+' is created.', 'Success');
         this.setState({inputTopicContent: '', inputTopicTitle: '', inputTopicType: ''});
         this.hideModal();
     }
@@ -88,6 +89,7 @@ class Viewpane extends React.Component {
                 <button onClick={this.hideModal} type="button" className="closeDialogButton">Cancel</button>
                 <button onClick={this.saveTopic} type="button" className="closeDialogButton">Create Topic</button>
             </Modal>
+            <NotificationContainer/>
         </div>);
     }
 }
