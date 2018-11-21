@@ -48,6 +48,107 @@
     text-align:center;
     text-decoration: none;
 }
+.TopicExitButton{
+    border: none;
+    background-color: #d4eff7;
+    width: 15vw;
+    height: 3vh;
+    margin:1vh;
+    text-align:center;
+    text-decoration: none;
+}
+.TopicDelButton{
+    border: none;
+    background-color: #d4eff7;
+    color: black;
+    width: 5vw;
+    height: 3vh;
+    margin:1vh;
+    text-align:center;
+    text-decoration: none;
+    font-size:2vh;
+}
+.TopicMoodButton{
+    border: none;
+    background-color: #d4eff7;
+    color: black;
+    width: 5vw;
+    height: 3vh;
+    margin:1vh;
+    text-align:center;
+    text-decoration: none;
+    font-size:2vh;
+}
+.TopicControl{
+    height: 5vh;
+    display: flex;
+    justify-content: flex-end;
+}
+.TopicContainer{
+    height:14vh;
+}
+.TopicUserProfile{
+    float:left;
+    margin:2vh;
+    width:8vh;
+    text-align:center;
+}
+.TopicUserImage{
+    height: 7vh;
+    width: 7vh;
+    border-radius: 50%;
+    background-color: #d4eff7;
+    margin-bottom:1vh;
+}
+.TopicUserInfo{
+    color:white;
+}
+.TopicContent{
+    float:none;
+    height:5vh;
+    margin:2vh;
+    color:#d4eff7;
+}
+.TopicDescription{
+    margin-left:8vw;
+    background-color:white;
+    padding:1vh;
+}
+.TopicComments{
+    float:none;
+    margin:2vh;
+}
+.Comment{
+    margin:1vh;
+    display:block;
+    min-height: 7vh;
+}
+.CommentUserProfile{
+    float:left;
+    margin-left: 3vh;
+}
+.CommentUserImage{
+    height: 3vh;
+    width: 3vh;
+    border-radius: 50%;
+    background-color: #d4eff7;
+    margin-bottom:1vh;
+}
+.CommentUserInfo{
+    color:white;
+}
+.CommentContent{
+    margin-left:10vh;
+    width:90%;
+    padding-right:2vh;
+    background:#d4eff7;
+}
+.CommentStats{
+    float:right;
+}
+.CommentTime{
+    color:white;
+}
 /* Pin Colors */
 /*
 Red: #dc3c41
@@ -84,6 +185,50 @@ Purple: #8e7cc3
     color: black;
     border:none;
 }
+.Menu{
+    margin-top: 3vh;
+    width:100%;
+    height:60vh;
+    background-color: #d4eff7;
+}
+
+.ActiveTab{
+    border: none;
+    background-color: #d4eff7;
+    width: 50%;
+    height: 5vh;
+    float:left;
+    text-align:center;
+    text-decoration: none;
+}
+.Tabs{
+    height:5vh;
+}
+.InactiveTab{
+    border: none;
+    color:white;
+    background-color: #266791;
+    width: 50%;
+    height: 5vh;
+    float:left;
+    text-align:center;
+    text-decoration: none;
+}
+.ActiveContent{
+    text-align:center;
+    height:55vh;
+    overflow:auto;
+}
+.TopicCard{
+    background-color:white;
+    height: 8vh;
+    margin: 2vw;
+}
+.SubsCard{
+    background-color:white;
+    height: 8vh;
+    margin: 2vw;
+}
 .SettingsButton{
     color: #d4eff7;
     text-align:center;
@@ -91,8 +236,67 @@ Purple: #8e7cc3
     text-decoration: none;
     border: none;
     font-size:4vh;
-    position: absolute;
-    left:7vw;
-    bottom:4vh;
+    position: relative;
+    left:20%;
+    top:4vh;
+}
+
+.Menu{    
+    background-color:#d4eff7;
+}
+
+.Settings{
+    color: #3b9ddc;
+    font-size: 2vh;
+    background-color:#d4eff7;
+    padding: 1vh;
+    border: none;
+    margin-top: 4vh;
+    overflow:auto;
 }
 /* menu things */
+/* settings things */
+.SettingsOption{
+    color: #3b9ddc;
+    text-align:center;
+    background-color: transparent;
+    text-decoration: none;
+    border: none;
+    font-size: 3vh;
+}
+
+/*  Simple pin for testing. This should be removed 
+    once we have all the pin information defined */
+.SelectedPin{
+    border-radius: 50%;
+    width: 4vh;
+    height: 4vh;
+    background-color: #dc3c41;
+}
+
+.DeselectedPin{
+    border-radius: 50%;
+    width: 4vh;
+    height: 4vh;
+    background-color: #78b929;
+}
+
+.dialog{
+    margin-left:30vw;
+    width:60vw;
+    border:none;
+    background-color: #266791;
+    color:white;
+}
+.dialogContent{
+    color:white;
+}
+.closeDialogButton{
+    color:#266791;
+    text-align:center;
+    text-decoration: none;
+    float:right;
+}
+.formDescrip{
+    color:white;
+}
