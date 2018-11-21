@@ -50,12 +50,14 @@ class Login extends React.Component {
      'Authorization': 'Basic '+btoa('username:password'),
      'Content-Type':'application/json'}),
       body: JSON.stringify({ "email": email, "password": password})
-    }).then(console.log);
+    }).then(function(response) {
+        if(!response.ok)
+          console.log(response.statusText);
+    })
   }
 
   handleLogin(e) {
     e.preventDefault();
-     console.log('calling login '+this.state.userCred.email);
      const email = this.state.userCred.email
      const password = this.state.userCred.password
     fetch('http://localhost:3300/api/auth/login/',{
@@ -65,7 +67,10 @@ class Login extends React.Component {
      'Authorization': 'Basic '+btoa('username:password'),
      'Content-Type':'application/json'}),
       body: JSON.stringify({ "email": email, "password": password})
-    }).then(console.log);
+    }).then(function(response) {
+        if(!response.ok)
+          console.log(response.statusText);
+    })
   }
   
 
