@@ -26,7 +26,8 @@ class Login extends React.Component {
     this.displayValidationErrors = this.displayValidationErrors.bind(this);
     this.updateValidators = this.updateValidators.bind(this);
     this.resetValidators = this.resetValidators.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleLogin = this.handleLogin.bind(this);
+    this.handleRegister = this.handleRegister.bind(this);
     this.isFormValid = this.isFormValid.bind(this);
   }
   
@@ -38,11 +39,36 @@ class Login extends React.Component {
     });
   }
 
-  handleSubmit(e) {
-    console.log(this.state.userCred);
-    console.log('Yepee! form submitted');
+  handleRegister(e) {
     e.preventDefault();
+     const email = this.state.userCred.email
+     const password = this.state.userCred.password
+    fetch('http://localhost:3300/api/auth/register/',{
+      credentials: 'include',
+      method:'post',
+      headers: new Headers({
+     'Authorization': 'Basic '+btoa('username:password'),
+     'Content-Type':'application/json'}),
+      body: JSON.stringify({ "email": email, "password": password})
+    }).then(console.log);
   }
+
+  handleLogin(e) {
+    e.preventDefault();
+     console.log('calling login '+this.state.userCred.email);
+     const email = this.state.userCred.email
+     const password = this.state.userCred.password
+    fetch('http://localhost:3300/api/auth/login/',{
+      credentials: 'include',
+      method:'post',
+      headers: new Headers({
+     'Authorization': 'Basic '+btoa('username:password'),
+     'Content-Type':'application/json'}),
+      body: JSON.stringify({ "email": email, "password": password})
+    }).then(console.log);
+  }
+  
+
   updateValidators(fieldName, value) {
     this.validators[fieldName].errors = [];
     this.validators[fieldName].state = value;
@@ -107,7 +133,7 @@ class Login extends React.Component {
                 <Tabs
                   id="controlled-tab-example">
                     <Tab eventKey={1} title="Log In">
-                      <Form onSubmit={this.handleSubmit}>
+                      <Form onSubmit={this.handleLogin}>
                         <Col>
                           <FormGroup>
                             <Label>Email</Label>
@@ -140,7 +166,7 @@ class Login extends React.Component {
                       </Form>
                     </Tab>
                     <Tab eventKey={2} title="Sign Up">
-                     <Form className="form" onSubmit={this.handleSubmit}>
+                     <Form className="form" onSubmit={this.handleRegister}>
                         <Col>
                           <FormGroup>
                             <Label>Email</Label>
