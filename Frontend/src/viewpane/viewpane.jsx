@@ -1,6 +1,7 @@
 import React from 'react';
-
 import Topic from './topic/topic';
+import TopicForm from './topic/topicForm.jsx';
+import { Dirent } from 'fs';
 
 class Viewpane extends React.Component {
 
@@ -40,6 +41,9 @@ class Viewpane extends React.Component {
     render(){
         let renderedTopics = this.renderTopics();
         let newButton = this.state.singleTopicView ? null : <button className="ViewPane-Topic-Button" onClick={this.addTopic}>add topic</button>;
+        // let newButton = this.state.singleTopicView ? null : <button className="ViewPane-Topic-Button">add topic<TopicForm></TopicForm></button>;
+        // Strip input, call API endpoint.
+
         return (<div className="ViewPane">
             {renderedTopics}
             {newButton}
