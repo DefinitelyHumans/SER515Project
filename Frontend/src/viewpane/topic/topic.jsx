@@ -1,16 +1,22 @@
 import React from 'react';
+import Modal from '../../modal';
+
 
 class Topic extends React.Component {
 
     constructor(props){
         super(props);
         this.state = {
+            visible: false,
             newComment: {'content': ''}
         }
         this.swapTopic = this.swapTopic.bind(this);
         this.renderTopicCard = this.renderTopicCard.bind(this);
         this.renderFullTopic = this.renderFullTopic.bind(this);
         this.renderComments = this.renderComments.bind(this);
+        this.showModal = this.showModal.bind(this);
+        this.hideModal = this.hideModal.bind(this);
+        this.deleteTopic = this.deleteTopic.bind(this);
     }
 
     swapTopic(){
@@ -53,6 +59,18 @@ class Topic extends React.Component {
             this.setState({newComment: {'id': this.props.topic['title'], 'user': 'user', 'time': 'time', 'content': event.target.value}});
     }
 
+    deleteTopic () {
+        this.props.parentDeleteTopic(this.props.topic);
+        this.swapTopic();
+    }
+
+    showModal () {
+        this.setState({visible: true});
+    }
+    hideModal () {
+        this.setState({visible: false});
+    }
+
     renderFullTopic(){
         return (
             <div className="FullTopic">
@@ -67,6 +85,11 @@ class Topic extends React.Component {
                     <div className="TopicContent">
                         <h1 className="TopicTitle">{this.props.topic['title']}</h1>
                         <p className="TopicDescription">{this.props.topic['descrip']}</p>
+                        <div className="TopicControl">
+                            <button className="TopicMoodButton">Like</button>
+                            <button className="TopicMoodButton">Dislike</button>
+                            <button className="TopicDelButton" onClick={this.showModal}>Delete</button>
+                        </div>
                     </div>
                 </div>
                 <hr/>
@@ -77,6 +100,14 @@ class Topic extends React.Component {
                         <button type='button' onClick={this.handleSubmit.bind(this)} className="SubmitButton">Submit</button>
                     </form>
                 </div>
+                <Modal visible={this.state.visible}>
+                    <h3 className="dialogTitle">Deleting a topic</h3>
+                    <form> 
+                        <p>Are you sure you want to delete this topic?</p>
+                    </form>
+                    <button onClick={this.deleteTopic} type="button" className="closeDialogButton">Yes</button>
+                    <button onClick={this.hideModal} type="button" className="closeDialogButton">No</button>
+                </Modal>
             </div>
         );
     }
