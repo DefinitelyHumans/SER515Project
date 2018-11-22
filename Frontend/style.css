@@ -1,7 +1,7 @@
 /* GLOBAL DEFAULTS */
 *{
     font-family: Arial, Helvetica, sans-serif;
-    font-size: 16px;
+    font-size: 3vh;
     color:#000000;
 }
 
@@ -48,70 +48,87 @@
     text-align:center;
     text-decoration: none;
 }
-.FullTopic{
-    /* width: 40vw; */
-    /* height: 40vh; */
-    margin: 5vw;
-    padding: 2vw;
+.TopicExitButton{
     border: none;
     background-color: #d4eff7;
-    text-decoration-color: none;
+    width: 15vw;
+    height: 5vh;
+    margin:1vh;
+    text-align:center;
+    text-decoration: none;
 }
-.TopicExitButton{
-    border-radius: 50%;
-    width: 2.5vh;
-    height: 2.5vh;
-    background-color: #f2e701;
-    position: relative;
-}
-.UpperContainer{
-    display: flex;
-    justify-content: space-between;
+.TopicContainer{
+    height:14vh;
 }
 .TopicUserProfile{
-    height:7vh;
+    float:left;
+    margin:2vh;
+    width:8vh;
+    text-align:center;
 }
 .TopicUserImage{
     height: 7vh;
     width: 7vh;
     border-radius: 50%;
-    background-color: #266791;
-    float:left;
+    background-color: #d4eff7;
+    margin-bottom:1vh;
 }
 .TopicUserInfo{
-    height: 3vh;
-    color: #266791;
-    padding-top:2vh;
-    font-size:3vh;
+    color:white;
 }
-.TopicTitle{
-    height: 5vh;
-    color: #266791;
-    font-size: 3vh;
-    text-align: center;
+.TopicContent{
+    float:none;
+    height:5vh;
+    margin:2vh;
+    color:#d4eff7;
 }
 .TopicDescription{
-    height: 5vh;
-    color: #000000;
-    font-size: 2vh;
-    padding-bottom: 5vh;
-    text-align: center;
+    margin-left:8vw;
+    background-color:white;
+    padding:1vh;
+}
+.TopicComments{
+    display:block;
+}
+.Comment{
+    margin:1vh;
+    display:block;
+    min-height: 8vh;
+    min-width: 100%;
+    height:10vh;
+}
+.CommentUserProfile{
+    margin-left: 3vh;
+    max-width:4vw;
+}
+.CommentUserImage{
+    float:left;
+    height: 3vh;
+    width: 3vh;
+    border-radius: 50%;
+    background-color: #d4eff7;
+    margin-bottom:1vh;
+}
+.CommentUserInfo{
+    float:left;
+    text-align:center;
+    color:white;
+}
+.CommentContent{
+    margin-left:10vh;
+    width:90%;
+    padding-right:2vh;
+    background:#d4eff7;
+}
+.CommentStats{
+    float:right;
+}
+.CommentTime{
+    color:white;
 }
 .CommentArea{
-    border: none;
-    background-color: white;
-    resize: none;
-    width: 80%;
-    margin-right: 3vw;
+    margin-left:5vw;
 }
-.SubmitButton{
-    border-radius: 10%;
-    color: #d4eff7;
-    font-size: 3vh;
-    background-color: #266791;
-    vertical-align: 75%;
-}
-
 /* Pin Colors */
 /*
 Red: #dc3c41
@@ -138,16 +155,6 @@ Purple: #8e7cc3
     padding-top:2vh;
     font-size:3vh;
 }
-
-.SidebarUserSignUp {
-    background-color: #d4eff7;
-	margin: 5vh;
-	
-}
-.SidebarLoginErrorMsg {
-  color: red;
-  font-size: 12px; }
-  
 .SidebarUserProfile{
     height:13vh;
 }
@@ -225,6 +232,7 @@ Purple: #8e7cc3
     padding: 1vh;
     border: none;
     margin-top: 4vh;
+    overflow:auto;
 }
 /* menu things */
 /* settings things */
@@ -251,4 +259,24 @@ Purple: #8e7cc3
     width: 4vh;
     height: 4vh;
     background-color: #78b929;
+}
+
+.dialog{
+    margin-left:30vw;
+    width:60vw;
+    border:none;
+    background-color: #266791;
+    color:white;
+}
+.dialogContent{
+    color:white;
+}
+.closeDialogButton{
+    color:#266791;
+    text-align:center;
+    text-decoration: none;
+    float:right;
+}
+.formDescrip{
+    color:white;
 }
