@@ -14,9 +14,9 @@ class Viewpane extends React.Component {
             topic: {},
             comments: [{'id': 'ATitle', 'comment': [{'user': 'userC', 'content': 'comment content', 'time': 'Dec. 1. 1989'}]},
             {'id': 'B', 'comment':[]}],
-            inputTopicTitle: 'Title',
-            inputTopicContent: 'Content',
-            inputTopicType: 'Type',
+            inputTopicTitle: '',
+            inputTopicContent: '',
+            inputTopicType: '',
             visible: false
         }
         this.renderTopics = this.renderTopics.bind(this);
@@ -37,7 +37,10 @@ class Viewpane extends React.Component {
         let t = this.state.topics;
         t.push({'title': this.state.inputTopicTitle, 'descrip': this.state.inputTopicContent,'user': 'User', 'type': this.state.inputTopicType});
         this.setState({topics: t});
-        NotificationManager.success('Topic '+this.state.topics[this.state.topics.length-1]['title']+' is created.', 'Success');
+        let c = this.state.comments;
+        c.push({'id': this.state.inputTopicTitle, 'comment':[]});
+        this.setState({comments: c});
+        NotificationManager.success('Topic '+this.state.inputTopicTitle +' is created.', 'Success');
         this.setState({inputTopicContent: '', inputTopicTitle: '', inputTopicType: ''});
         this.hideModal();
     }
