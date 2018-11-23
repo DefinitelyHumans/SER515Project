@@ -92,7 +92,7 @@ class Viewpane extends React.Component {
      */
     getTopics() {
         const access_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoibm91YTlwNzR1Z3ozc2hheng0N2o4Nzk1YXhxZW9xcDQiLCJpYXQiOjE1NDI5MjAwMzQsImV4cCI6MTU0MjkzNDQzNH0.SgNf4BDgPBvXdlIh-_bY_3EbwHu2dVjROck9JZOp_os";
-        const userID = "noua9p74ugz3shazx47j8795axqeoqp4";  // TODO: Retrieve
+        const userID = "ze19dxj0tk4odr8fx8um5943t0feak75";  // TODO: Retrieve
         const endpoint = 'http://localhost:3300/api/topic/user/' + userID;
         fetch(endpoint, {
             credentials: 'include',
@@ -156,7 +156,7 @@ class Viewpane extends React.Component {
      */
     deleteTopic() {
         const topic_title = "Bag of Chips";
-        const topicID = "olupc254lfzwk6ohoesnspcyv7z9bl8q3fbq2x6od8d3wd8ochwl8q5wq04bns88";
+        const topicID = "0uvoucfe3o2j0qi36bizy87t1e7ltieajt77kaewk4al2iwo8sx58obwxol6611s";
         const access_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoibm91YTlwNzR1Z3ozc2hheng0N2o4Nzk1YXhxZW9xcDQiLCJpYXQiOjE1NDI5NTk5NzYsImV4cCI6MTU0Mjk3NDM3Nn0.z5iyPg58a0-_tln7SopyJhYoYn5iSXHB__TIYDCwWTs";
         const endpoint = 'http://localhost:3300/api/topic/' + topicID;
         // const userID = "noua9p74ugz3shazx47j8795axqeoqp4"; 
@@ -170,13 +170,13 @@ class Viewpane extends React.Component {
             body: JSON.stringify({ "access_token": access_token })
         }).then(response => {
             if (response.ok) {
-                console.log("DELETE", response);
+                // console.log("DELETE", response);
                 let t = this.state.topics;
-                console.log("TOPICS", this.state.topics);
-                console.log("T", t);
+                // console.log("TOPICS", this.state.topics);
+                // console.log("T", t);
                 // var index = t.findIndex(x => x.topic_id === topicID);        // TODO: Utilize topic ID.
                 var index = t.findIndex(x => x.topic_title === topic_title);
-                console.log("Location", index);
+                // console.log("Location", index);
                 if (index > -1) {   // Found index.
                     t.splice(index, 1);
                 }
@@ -191,10 +191,10 @@ class Viewpane extends React.Component {
      * The topic property, topic_content, is updated, and restored to array.
      */
     updateTopic() {
-        const topicID = "olupc254lfzwk6ohoesnspcyv7z9bl8q3fbq2x6od8d3wd8ochwl8q5wq04bns88";
+        const topicID = "fjovljgljkgy85apml6al04rdu7tfyw6kgkhfluepmsadfr3eapztwdutl5yww5c";
         const endpoint = 'http://localhost:3300/api/topic/' + topicID;
-        const topic_content = "change this bad boy away";
-        const access_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoibm91YTlwNzR1Z3ozc2hheng0N2o4Nzk1YXhxZW9xcDQiLCJpYXQiOjE1NDI5NTk5NzYsImV4cCI6MTU0Mjk3NDM3Nn0.z5iyPg58a0-_tln7SopyJhYoYn5iSXHB__TIYDCwWTs";
+        const topic_content = "change this bad boy away beyond the stars";
+        const access_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiemUxOWR4ajB0azRvZHI4Zng4dW01OTQzdDBmZWFrNzUiLCJpYXQiOjE1NDI5Njc2MzMsImV4cCI6MTU0Mjk4MjAzM30.E4zjsnKVRf5-ruq9HlOm9Gf34aE8uF8K1bJFj08iOpw";
         fetch(endpoint, {
             method: 'put',
             headers: new Headers({
@@ -202,17 +202,18 @@ class Viewpane extends React.Component {
             }),
             body: JSON.stringify({ "topic_content": topic_content, "access_token": access_token })
         }).then(response => {
+            // console.log("UPDATE",response);
             if (response.ok) {
                 let t = this.state.topics;
-                var index = t.findIndex(x => x.topic_id === topic_id);      // Find index to retr obj, better than find.()
-                console.log("Location", index);
+                // console.log("T", t);
+                var index = t.findIndex(x => x.topic_title === 'Nother Onel');      // Find index to retr obj, better than find.()
+                // console.log("Location", index);
                 if (index > -1) {   // Found index.
                     var tempTopic = t[index];                   // temporarily store topic object.
                     tempTopic.topic_content = topic_content;    // chagne property.
                     t[index] = tempTopic;   // update topic object.
                 }
-                this.setState({ topics: t });
-                // t.push({ 'topic_content': this.state.inputTopicContent });             
+                this.setState({ topics: t });      
             }
             NotificationManager.success('Topic ' + this.state.inputTopicTitle + ' has been updated!', 'Success');
         }).catch(error => {
@@ -232,9 +233,9 @@ class Viewpane extends React.Component {
         const topic_title = this.state.inputTopicTitle;
         const topic_content = this.state.inputTopicContent;
         const topic_type = this.state.inputTopicType;
-        console.log("The type", topic_type);
+        // console.log("The type", topic_type);
         // TODO: Retrieve access token from login.
-        const access_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoibm91YTlwNzR1Z3ozc2hheng0N2o4Nzk1YXhxZW9xcDQiLCJpYXQiOjE1NDI5NTk5NzYsImV4cCI6MTU0Mjk3NDM3Nn0.z5iyPg58a0-_tln7SopyJhYoYn5iSXHB__TIYDCwWTs";
+        const access_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiemUxOWR4ajB0azRvZHI4Zng4dW01OTQzdDBmZWFrNzUiLCJpYXQiOjE1NDI5Njc2MzMsImV4cCI6MTU0Mjk4MjAzM30.E4zjsnKVRf5-ruq9HlOm9Gf34aE8uF8K1bJFj08iOpw";
         fetch('http://localhost:3300/api/topic/create', {
             credentials: 'include',
             method: 'post',
@@ -247,7 +248,8 @@ class Viewpane extends React.Component {
                 "topic_type": topic_type,
                 "access_token": access_token
             })
-        }).then(console.log, this.saveTopic());
+        }).then(this.saveTopic());
+        // }).then(console.log, this.saveTopic());
     }
 
     handleTitle(event) {
@@ -257,7 +259,7 @@ class Viewpane extends React.Component {
         this.setState({ inputTopicContent: event.target.value })
     }
     handleSelect(event) {
-        console.log('change', this.inputEl)
+        // console.log('change', this.inputEl)
         this.setState({ inputTopicType: this.inputEl.value })
     }
 
@@ -320,8 +322,8 @@ class Viewpane extends React.Component {
     render() {
         let renderedTopics = this.renderTopics();
         // console.log("TOPICS", this.state.topics);
-        let newButton = this.state.singleTopicView ? null : <button className="ViewPane-Topic-Button" onClick={this.deleteTopic}>add topic</button>;
-        // let newButton = this.state.singleTopicView ? null : <button className="ViewPane-Topic-Button" onClick={this.showModal}>add topic</button>;
+        // let newButton = this.state.singleTopicView ? null : <button className="ViewPane-Topic-Button" onClick={this.updateTopic}>add topic</button>;
+        let newButton = this.state.singleTopicView ? null : <button className="ViewPane-Topic-Button" onClick={this.showModal}>add topic</button>;
         return (<div className="ViewPane">
             {renderedTopics}
             {newButton}

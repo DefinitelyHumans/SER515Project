@@ -16,8 +16,9 @@ const { gen_topic_id } = require('../lib/id_gen');
  * @param {String} topic_title 
  */
 function check_title(topic_title) {
-    if (!topic_title || (topic_title.length > 64)) return false;
-    return /^[a-z0-9.,\w\s]+$/i.test(topic_title);
+    if (!topic_title || (topic_title.length > 64) || (topic_title.length < 2)) return false;
+    // return /^[a-z0-9.,\w\s]+$/i.test(topic_title);
+    return true;
 }
 
 /**
@@ -27,7 +28,8 @@ function check_title(topic_title) {
  */
 function check_content(topic_content) {
     if (!topic_content || (topic_content.length > 500)) return false;
-    return /^[a-z0-9.,\w\s]+$/i.test(topic_content);
+    // return /^[a-z0-9.,\w\s]+$/i.test(topic_content);
+    return true;
 }
 
 // EXPORTED FUNCTIONS
@@ -48,8 +50,9 @@ async function CreateTopic(userID, topic_title, topic_type, topic_content) {
         };
     }
     // Sanitize topic title and input.
-    topic_title = topic_title.replace(/[^a-zA-Z0-9\w\s]/gi, "");
-    topic_content = topic_content.replace(/[^a-zA-Z0-9\w\s]/gi, "");
+    // topic_title = topic_title.replace(/[^a-zA-Z0-9\w\s]/gi, "");
+    // topic_content = topic_content.replace(/[^a-zA-Z0-9\w\s]/gi, "");
+    // console.log("Going to create topic object, now that input is validated");
     // Send DB query.
     let topic_id = gen_topic_id();  // Generate topic ID.
     let topic = {
@@ -107,7 +110,7 @@ async function UpdateTopic(userID, topic_id, topic_content) {
     // Validate topic id length.
     if (topic_id.length > 64) return {success:false, invalid_input: true};
     // Sanitize topic content input.
-    topic_content = topic_content.replace(/[^a-zA-Z0-9\w\s]/gi, "");
+    // topic_content = topic_content.replace(/[^a-zA-Z0-9\w\s]/gi, "");
     if (!check_content(topic_content)) {
         return {
             success: false,

@@ -95,7 +95,6 @@ router.put('/:id', async function (req, res) {
 // Creating/Posting new topic
 router.post('/create', async function (req, res) {
     let user_id;
-    // console.log("Creating a topic from topic_route.js");
     if(req.token) user_id = await token.check_token(req.token);
     else res.status(401).send("Authentication token required");
 
