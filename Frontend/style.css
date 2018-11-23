@@ -158,6 +158,13 @@ Purple: #8e7cc3
 .SidebarUserProfile{
     height:13vh;
 }
+.SidebarUserSignUp {
+    margin: 5vh;
+}
+.SidebarLoginErrorMsg {
+  color: red;
+  font-size: 12px; 
+}
 .TopicSearch{
     width:100%;
     height:5vh;

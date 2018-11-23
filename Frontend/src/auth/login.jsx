@@ -9,6 +9,7 @@ import { Form, FormControl, Label, Input, Col, FormGroup, FormFeedback, HelpBloc
 import {Tabs, Tab } from 'react-bootstrap';
 require('react-bootstrap')
 import userValidator from './validators';
+import {NotificationManager} from 'react-notifications';
 
 class Login extends React.Component {
   constructor(props) {
@@ -16,7 +17,7 @@ class Login extends React.Component {
     this.state = {
       userCred: {
         email: '',
-        password: '',
+        password: ''
       }
     };
     this.validators = userValidator;
@@ -51,9 +52,15 @@ class Login extends React.Component {
      'Content-Type':'application/json'}),
       body: JSON.stringify({ "email": email, "password": password})
     }).then(function(response) {
-        if(!response.ok)
-          console.log(response.statusText);
-    })
+        if(!response.ok) {
+          let resp = response.json();
+          resp.then(function(resp) {
+                NotificationManager.error(resp.error);
+              });
+        }
+        else
+        NotificationManager.success('Registered with email '+email);        
+  });
   }
 
   handleLogin(e) {
@@ -68,9 +75,12 @@ class Login extends React.Component {
      'Content-Type':'application/json'}),
       body: JSON.stringify({ "email": email, "password": password})
     }).then(function(response) {
-        if(!response.ok)
-          console.log(response.statusText);
-    })
+        if(!response.ok) {
+          NotificationManager.error('Error, try again!');
+        }
+        else
+          NotificationManager.success('Logged in with email '+email);        
+  });
   }
   
 
@@ -127,17 +137,16 @@ class Login extends React.Component {
   }
 
   render() {
-    return (<Popup className="SidebarUserSignUp"
+    return (<Popup
               trigger = {<p>Login/Signup <FontAwesome name="Login" className="fa fa-sign-out" /></p>}
-              position = "bottom center"
+              position = "bottom left"
               on = "hover"
               closeOnDocumentClick
               mouseLeaveDelay = {300}
               mouseEnterDelay = {0}
               overlayStyle = {{backgroundColor: 'transparent'}}>
-                <Tabs
-                  id="controlled-tab-example">
-                    <Tab eventKey={1} title="Log In">
+                <Tabs id="SideBarSignUpLogin">
+                    <Tab eventKey={1} title="Login">
                       <Form onSubmit={this.handleLogin}>
                         <Col>
                           <FormGroup>
@@ -167,10 +176,10 @@ class Login extends React.Component {
                              <Label>{ this.displayValidationErrors('password') }</Label>
                           </FormGroup>
                         </Col>
-                        <Button id="login_button">Submit</Button>
+                        <Button>Login</Button>
                       </Form>
                     </Tab>
-                    <Tab eventKey={2} title="Sign Up">
+                    <Tab eventKey={2} title="SignUp">
                      <Form className="form" onSubmit={this.handleRegister}>
                         <Col>
                           <FormGroup>
@@ -198,7 +207,7 @@ class Login extends React.Component {
                              <Label>{ this.displayValidationErrors('password') }</Label>
                           </FormGroup>
                         </Col>
-                        <Button id="signup_button">Submit</Button>
+                        <Button>SignUp</Button>
                       </Form>
                     </Tab>
                 </Tabs>
