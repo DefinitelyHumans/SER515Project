@@ -18,7 +18,9 @@ class Login extends React.Component {
       userCred: {
         email: '',
         password: ''
-      }
+      },
+      auth_token: '',
+      loggedIn: 'false'
     };
     this.validators = userValidator;
     this.resetValidators();
@@ -30,6 +32,7 @@ class Login extends React.Component {
     this.handleLogin = this.handleLogin.bind(this);
     this.handleRegister = this.handleRegister.bind(this);
     this.isFormValid = this.isFormValid.bind(this);
+    this.handleLogout = this.handleLogout.bind(this);
   }
   
   resetValidators() {
@@ -59,12 +62,15 @@ class Login extends React.Component {
               });
         }
         else
-        NotificationManager.success('Registered with email '+email);        
+        NotificationManager.success('You can now login with '+email);        
   });
   }
 
   handleLogin(e) {
+   
     e.preventDefault();
+    let curComponent = this;
+     let auth = '';
      const email = this.state.userCred.email
      const password = this.state.userCred.password
     fetch('http://localhost:3300/api/auth/login/',{
@@ -75,15 +81,26 @@ class Login extends React.Component {
      'Content-Type':'application/json'}),
       body: JSON.stringify({ "email": email, "password": password})
     }).then(function(response) {
+        let resp = response.json();        
         if(!response.ok) {
           NotificationManager.error('Error, try again!');
         }
-        else
+        else{
+          resp.then(function(resp) {
+          auth = resp.auth_token;
+          console.log(auth);
+          curComponent.setState({auth_token: auth});
+          curComponent.setState({loggedIn: 'true'});
           NotificationManager.success('Logged in with email '+email);        
+        })
+        }
   });
   }
   
-
+  handleLogout(e){
+    e.preventDefault();
+    this.setState({loggedIn: 'false', auth_token: '', userCred: {email: '', password:''}});
+  }
   updateValidators(fieldName, value) {
     this.validators[fieldName].errors = [];
     this.validators[fieldName].state = value;
@@ -137,6 +154,7 @@ class Login extends React.Component {
   }
 
   render() {
+    if(this.state.loggedIn=='false'){
     return (<Popup
               trigger = {<p>Login/Signup <FontAwesome name="Login" className="fa fa-sign-out" /></p>}
               position = "bottom left"
@@ -213,6 +231,9 @@ class Login extends React.Component {
                 </Tabs>
             </Popup>);
   }
+  else{
+    return(<Button className="SideBarLogoutButton" onClick={this.handleLogout}><p>Logout <FontAwesome name="Login" className="fa fa-sign-out" /></p></Button>);
+  }
 }
-
+}
 export default Login;

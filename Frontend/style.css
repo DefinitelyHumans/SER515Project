@@ -165,6 +165,9 @@ Purple: #8e7cc3
   color: red;
   font-size: 12px; 
 }
+.SideBarLogoutButton {
+    background-color: transparent;
+}
 .TopicSearch{
     width:100%;
     height:5vh;
