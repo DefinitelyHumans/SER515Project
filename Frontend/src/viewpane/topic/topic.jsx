@@ -19,7 +19,7 @@ class Topic extends React.Component {
     }
 
     renderTopicCard(){
-        return (<button className="Topic" onClick={this.swapTopic}><p>{this.props.topic['title']}</p></button>);
+        return (<button className="Topic" onClick={this.swapTopic}><p>{this.props.topic['topic_title']}</p></button>);
     }
 
     renderComments(){
@@ -63,11 +63,11 @@ class Topic extends React.Component {
                 <div className="TopicContainer">
                     <div className="TopicUserProfile">
                         <div className="TopicUserImage"></div>
-                        <p className="TopicUserInfo">{this.props.topic['user']}</p>
+                        <p className="TopicUserInfo">{this.props.topic['user_posted']}</p>
                     </div>
                     <div className="TopicContent">
-                        <h1 className="TopicTitle">{this.props.topic['title']}</h1>
-                        <p className="TopicDescription">{this.props.topic['descrip']}</p>
+                        <h1 className="TopicTitle">{this.props.topic['topic_title']}</h1>
+                        <p className="TopicDescription">{this.props.topic['topic_content']}</p>
                     </div>
                 </div>
                 <hr/>
