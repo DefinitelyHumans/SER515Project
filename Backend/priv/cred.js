@@ -1,11 +1,11 @@
 exports.db_cred = {
-    user_name: "postgres",
-    host:      "localhost",
-    database:  "515ChatForum",
-    password:  "postgres",
-    port:      "5432",
+    user_name: "",
+    host:      "",
+    database:  "",
+    password:  "",
+    port:      "",
 };
 
 exports.jwt_cred = {
-    secret: "fsgsywdgdgdgayqt"
+    secret: ""
 }
