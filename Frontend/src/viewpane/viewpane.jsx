@@ -151,7 +151,7 @@ class Viewpane extends React.Component {
             }),
         }).then(reponse => response.json())
             .then(response => {
-                console.log(response);
+//                 console.log(response);
                 let t = this.state.topics;
                 this.setState({ topics: t });
             }).catch(error => {
