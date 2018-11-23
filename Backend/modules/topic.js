@@ -166,9 +166,10 @@ async function GetTopic(topic_id) {
 
 exports.GetTopicByUserID =
 async function GetTopicByUserID(user_id) {
-    if (topic_id.length > 32) return {success: false, invalid_input: true};
+    if (user_id.length > 32) return {success: false, invalid_input: true};
     // console.log("Get topic:", topic_id);
     let {topics, error} = await database.get_topics_by_user(user_id);
+    // console.log("Topics retrieved", topics);
     if (error == database.errors.NO_RESPONSE) {
         // console.log(topic);
         return {
@@ -182,7 +183,7 @@ async function GetTopicByUserID(user_id) {
             server_error: true
         };
     } else {
-        console.log("Topics retrieved",topics);
+        // console.log("Topics retrieved",topics);
         return {
             success: true,
             topics: topics

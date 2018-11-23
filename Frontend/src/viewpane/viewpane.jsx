@@ -61,6 +61,7 @@ class Viewpane extends React.Component {
     componentDidMount() {
         // let t = this.state.topics;
         let topic = this.getTopic();
+        let topics = this.getTopics();
         // t.push(topic);
         // this.setState({ topics: t });
     }
@@ -83,18 +84,30 @@ class Viewpane extends React.Component {
         this.hideModal();
     }
 
-    // getTopics() {
-    //     const access_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoibm91YTlwNzR1Z3ozc2hheng0N2o4Nzk1YXhxZW9xcDQiLCJpYXQiOjE1NDI5MjAwMzQsImV4cCI6MTU0MjkzNDQzNH0.SgNf4BDgPBvXdlIh-_bY_3EbwHu2dVjROck9JZOp_os";
-    //     const userID = "noua9p74ugz3shazx47j8795axqeoqp4";  // TODO: Retrieve
-    //     const endpoint = 'http://localhost:3300/api/topic/user/' + userID;
-    //     fetch(endpoint, {
-    //         credentials: 'include',
-    //         method: 'get',
-    //         headers: new Headers({
-    //             'Content-Type': 'application/json'
-    //         }),
-    //     }).then(console.log);
-    // }
+    getTopics() {
+        const access_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoibm91YTlwNzR1Z3ozc2hheng0N2o4Nzk1YXhxZW9xcDQiLCJpYXQiOjE1NDI5MjAwMzQsImV4cCI6MTU0MjkzNDQzNH0.SgNf4BDgPBvXdlIh-_bY_3EbwHu2dVjROck9JZOp_os";
+        const userID = "noua9p74ugz3shazx47j8795axqeoqp4";  // TODO: Retrieve
+        const endpoint = 'http://localhost:3300/api/topic/user/' + userID;
+        fetch(endpoint, {
+            credentials: 'include',
+            method: 'get',
+            headers: new Headers({
+                'Content-Type': 'application/json'
+            }),
+        }).then(response => response.json())
+        .then(response => {
+            let that = this;        // TODO: Fix call back referencing, this isn't the best means of accomplishing task.
+            response.forEach(function(obj) { 
+                // console.log("ITER",obj); 
+                let t = that.state.topics;
+                t.push(obj);
+                that.setState({ topics: t });
+                let c = that.state.comments;
+                c.push({ 'id': obj.topic_title, 'comment': [] });
+                that.setState({ comments: c });
+            });
+        })
+    }
 
     getTopic() {
         const topicID = "olupc254lfzwk6ohoesnspcyv7z9bl8q3fbq2x6od8d3wd8ochwl8q5wq04bns88";  // TODO: Retrieve
@@ -114,7 +127,7 @@ class Viewpane extends React.Component {
             }),
         }).then(response => response.json())
             .then(response => {
-                console.log("Resp", response);
+                // console.log("Resp", response);
                 let t = this.state.topics;
                 t.push(response);
                 this.setState({ topics: t });

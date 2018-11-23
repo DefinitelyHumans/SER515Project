@@ -40,16 +40,9 @@ router.get('/user/:id', async function (req, res) {
     let get_info = await topic.GetTopicByUserID(id);
 
     if(get_info.success) {
-        console.log("Object returned", get_info);
-        let topic = get_info.topic;
-        res.status(200).send();
-        // res.status(200).send({
-        //     topic_title: topic.topic_title,
-        //     topic_type: topic.topic_type,
-        //     topic_content: topic.topic_content,
-        //     topic_timePosted: topic.topic_time_posted,
-        //     topic_timeUpdated: topic.update_time
-        // });
+        // console.log("Object returned", get_info);
+        let topics = get_info.topics;
+        res.status(200).send(topics);   // Return array of topics by user.
     } else {
         if(get_info.not_found) {
             res.status(404).send("not found");
