@@ -158,6 +158,24 @@ class Viewpane extends React.Component {
                 return error;
             });
     }
+    
+    updateTopic() {
+        const topicID = "olupc254lfzwk6ohoesnspcyv7z9bl8q3fbq2x6od8d3wd8ochwl8q5wq04bns88";
+        const endpoint = 'http://localhost:3300/api/topic/' + topicID;
+        fetch(endpoint,{
+            method: 'put',
+            headers: new Headers({
+                'Content-Type': 'application/json'
+            })
+        }).then(response => {
+            let t = this.state.topics;
+            t.push({'topic_content':this.state.inputTopicContent});
+            this.setState({topics: t});
+            NotificationManager.success('Topic ' + this.state.inputTopicTitle + ' has been updated!', 'Success');
+        }).catch(error => {
+            return error;
+        });
+    }
 
     handleSubmit(e) {
         e.preventDefault();
