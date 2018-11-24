@@ -69,7 +69,7 @@ class Topic extends React.Component {
                         <Panel.Heading>
                             {this.props.topic['topic_title']}
                         </Panel.Heading>
-                        <Panel.Body>{this.props.topic['descrip']}</Panel.Body>
+                        <Panel.Body>{this.props.topic['topic_content']}</Panel.Body>
                         <Panel.Footer>
                             {/* <Image src='' responsive circle/> */}
                             {this.props.topic['user_posted']}
