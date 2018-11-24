@@ -13,10 +13,21 @@ class Sidebar extends React.Component {
         this.state = {
             settingsHidden: true,
             settings : {"Mute Notifications":true, "Report a Bug":true, "Delete Data":true},
+            userDetails: {
+                loggedIn: false,
+                user_id: '',
+                email: '',
+                password: ''
+            }
         }
         this.swapMenus = this.swapMenus.bind(this);
+        this.handleUserDetails = this.handleUserDetails.bind(this);
     }
 
+    handleUserDetails(e){
+        this.setState({userDetails:e});
+        this.props.handleUserDetails(this.state.userDetails);
+    }
     swapMenus(){
         this.setState({settingsHidden : !this.state.settingsHidden})
     }
@@ -41,7 +52,7 @@ class Sidebar extends React.Component {
                 <div className="SidebarUserProfile">
                     <div className="SidebarUserImage"></div>
                 </div>
-                <Login className="SidebarUserSignUp"/>
+                <Login handleUserDetails = {this.handleUserDetails} className="SidebarUserSignUp"/>
                 <input className="TopicSearch"></input>
                 {this.currentWindow(this.state.settingsHidden)}
                 <button className="SettingsButton" onClick={this.swapMenus}>{settingText}</button>

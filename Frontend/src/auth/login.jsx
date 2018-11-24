@@ -16,13 +16,13 @@ class Login extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      userCred: {
-        email: '',
-        password: ''
-      },
-      auth_token: '',
-      loggedIn: 'false',
-      visible: false
+      visible: false,
+      userDetails: {
+        loggedIn: false,
+            user_id: '',
+            email: '',
+            password: ''
+      }
     };
     this.validators = userValidator;
     this.resetValidators();
@@ -37,8 +37,12 @@ class Login extends React.Component {
     this.handleLogout = this.handleLogout.bind(this);
     this.showModal = this.showModal.bind(this);
     this.hideModal = this.hideModal.bind(this);
+    this.handleUserDetails = this.handleUserDetails.bind(this);
   }
   
+  handleUserDetails(e){
+    this.props.handleUserDetails(this.state.userDetails);
+  }
   resetValidators() {
     Object.keys(this.validators).forEach((fieldName) => {
       this.validators[fieldName].errors = [];
@@ -49,8 +53,8 @@ class Login extends React.Component {
 
   handleRegister(e) {
     e.preventDefault();
-     const email = this.state.userCred.email
-     const password = this.state.userCred.password
+     const email = this.state.userDetails.email
+     const password = this.state.userDetails.password
     fetch('http://localhost:3300/api/auth/register/',{
       credentials: 'include',
       method:'post',
@@ -75,8 +79,8 @@ class Login extends React.Component {
     e.preventDefault();
     let curComponent = this;
      let auth = '';
-     const email = this.state.userCred.email
-     const password = this.state.userCred.password
+     const email = this.state.userDetails.email
+     const password = this.state.userDetails.password
     fetch('http://localhost:3300/api/auth/login/',{
       credentials: 'include',
       method:'post',
@@ -92,17 +96,20 @@ class Login extends React.Component {
         else{
           resp.then(function(resp) {
           auth = resp.auth_token;
-          curComponent.setState({auth_token: auth});
-          curComponent.setState({loggedIn: 'true'});
+          curComponent.setState({userDetails:{user_id: auth}});
+          curComponent.setState({userDetails: {loggedIn: true}});
           NotificationManager.success('Logged in with email '+email);        
         })
         }
   });
+  curComponent.handleUserDetails(curComponent.state.userDetails);
   }
   
   handleLogout(e){
     e.preventDefault();
-    this.setState({loggedIn: 'false', auth_token: '', userCred: {email: '', password:''}, visible:false});
+    this.setState({userDetails: {email: '', password:'', loggedIn: false, user_id: ''}})
+    this.handleUserDetails(this.state.userDetails);
+    this.setState({visible:false});
   }
   updateValidators(fieldName, value) {
     this.validators[fieldName].errors = [];
@@ -124,7 +131,7 @@ class Login extends React.Component {
   }
   handleInputChange(event, inputPropName) {
     const newState = Object.assign({}, this.state);
-    newState.userCred[inputPropName] = event.target.value;
+    newState.userDetails[inputPropName] = event.target.value;
     this.setState(newState);
     this.updateValidators(inputPropName, event.target.value);
   }
@@ -165,7 +172,7 @@ class Login extends React.Component {
     }
 
   render() {
-    if(this.state.loggedIn=='false'){
+    if(!this.state.userDetails.loggedIn){
     return (<Popup
               trigger = {<p>Login/Signup <FontAwesome name="Login" className="fa fa-sign-out" /></p>}
               position = "bottom left"
@@ -185,7 +192,7 @@ class Login extends React.Component {
                               name="email"
                               id="userEmail"
                               required
-                              value={this.state.userCred.email}
+                              value={this.state.userDetails.email}
                               onChange={event => this.handleInputChange(event, 'email')}
                             />
                             <Label>{ this.displayValidationErrors('email') }</Label>
@@ -199,7 +206,7 @@ class Login extends React.Component {
                               name="password"
                               id="userPassword"
                               required
-                              value={this.state.userCred.password}
+                              value={this.state.userDetails.password}
                               onChange={event => this.handleInputChange(event, 'password')}
                             />
                              <Label>{ this.displayValidationErrors('password') }</Label>
@@ -218,7 +225,7 @@ class Login extends React.Component {
                               name="email"
                               id="userEmail"
                               required 
-                              value={this.state.userCred.email}
+                              value={this.state.userDetails.email}
                               onChange={event => this.handleInputChange(event, 'email')}/>
                               <Label>{ this.displayValidationErrors('email') }</Label>
                           </FormGroup>
@@ -230,7 +237,7 @@ class Login extends React.Component {
                               type="password"
                               name="password"
                               id="userPassword"
-                              value={this.state.userCred.password}
+                              value={this.state.userDetails.password}
                               onChange={event => this.handleInputChange(event, 'password')}
                             />
                              <Label>{ this.displayValidationErrors('password') }</Label>
