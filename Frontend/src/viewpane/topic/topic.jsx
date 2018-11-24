@@ -4,7 +4,7 @@ window.jQuery = jQuery;
 require('bootstrap')
 var FontAwesome = require('react-fontawesome');
 import { Form, FormControl, Label, Input, Col, FormGroup, FormFeedback, HelpBlock,ControlLabel, Button} from 'reactstrap';
-import { Tabs, Tab, Panel, Well } from 'react-bootstrap';
+import { Panel, Well } from 'react-bootstrap';
 require('react-bootstrap')
 
 class Topic extends React.Component {
@@ -35,18 +35,16 @@ class Topic extends React.Component {
         if (this.props.comment !== {'content':''}){
             return this.props.comment.map((c) => {
                 return (
-                <div className="Comment">
-                    <div className="CommentUserProfile">
-                        <div className="CommentUserImage"></div>
-                        <p className="CommentUserInfo">{c['user']}</p>
-                    </div>
-                    <div className="CommentContent">
+                <Panel>
+                    <Panel.Body>
                         <Well bsSize="small">{c['content']}</Well>
-                    </div>
-                    <div className="CommentStats">
-                        <p className="CommentTime">{c['time']}</p>
-                    </div>
-                </div>)
+                    </Panel.Body>
+                    <Panel.Footer>
+                        <div className="CommentUserImage"></div>
+                        <span className="CommentUserInfo">{c['user']}</span>
+                        <span className="CommentTime">{c['time']}</span>
+                    </Panel.Footer>
+                </Panel>)
             });
         }
     }
@@ -66,13 +64,10 @@ class Topic extends React.Component {
     renderFullTopic(){
         return (
             <div className="FullTopic">
-                <div className="UpperContainer">
-                    <Button className="TopicExitButton" onClick={this.swapTopic}>Return</Button>
-                </div>
                 <div className="TopicContainer">
                     <Panel bsStyle="primary">
                         <Panel.Heading>
-                            <Panel.Title componentClass="h3">{this.props.topic['title']}</Panel.Title>
+                            {this.props.topic['title']}
                         </Panel.Heading>
                         <Panel.Body>{this.props.topic['descrip']}</Panel.Body>
                         <Panel.Footer>
@@ -84,11 +79,15 @@ class Topic extends React.Component {
                 <hr/>
                 <div className='TopicComments'>
                     {this.renderComments()}
-                    <form className='CommentSubmission'>
-                        <textarea className="CommentArea" rows="4" cols="60" onChange={this.handleComment.bind(this)} value={this.state.newComment['content']}></textarea>
+                    <Form className='CommentSubmission'>
+                        <FormGroup>
+                            <Label>Add a comment</Label>
+                            <Input type="textarea" onChange={this.handleComment.bind(this)} value={this.state.newComment['content']}/>
+                        </FormGroup>
                         <Button type='Button' onClick={this.handleSubmit.bind(this)} className="SubmitButton">Submit</Button>
-                    </form>
+                    </Form>
                 </div>
+                <Button className="TopicExitButton" onClick={this.swapTopic}>Return</Button>
             </div>
         );
     }
