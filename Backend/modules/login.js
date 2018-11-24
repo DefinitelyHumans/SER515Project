@@ -66,12 +66,12 @@ async function register(email, password, recaptcha_code) {
 
     if(!check_password(password) || !check_email(email)) return { invalid_login: true };
 
-    //check the recaptcha field
-    let recaptcha_check = await check_recaptcha(recaptcha_code);
-    if(!recaptcha_check.success)
-        return { recaptcha_fail: true };
-    else if(recaptcha_check.error)
-        return { server_error: true };
+    // //check the recaptcha field
+    // let recaptcha_check = await check_recaptcha(recaptcha_code);
+    // if(!recaptcha_check.success)
+    //     return { recaptcha_fail: true };
+    // else if(recaptcha_check.error)
+    //     return { server_error: true };
 
     let salted_hash = await bcrypt.hash(password, salt_rounds);
     let userID = gen_user_id();
