@@ -1,4 +1,11 @@
 import React from 'react';
+import jQuery from 'jquery';
+window.jQuery = jQuery;
+require('bootstrap')
+var FontAwesome = require('react-fontawesome');
+import { Form, FormControl, Label, Input, Col, FormGroup, FormFeedback, HelpBlock,ControlLabel, Button} from 'reactstrap';
+import { Tabs, Tab, Panel, Well } from 'react-bootstrap';
+require('react-bootstrap')
 
 class Topic extends React.Component {
 
@@ -18,7 +25,10 @@ class Topic extends React.Component {
     }
 
     renderTopicCard(){
-        return (<button className="Topic" onClick={this.swapTopic}><p>{this.props.topic['title']}</p></button>);
+        return (<Panel onClick={this.swapTopic}>
+            <Panel.Body>{this.props.topic['title']}</Panel.Body>
+        </Panel>)
+        //return (<Button className="Topic" onClick={this.swapTopic}><p>{this.props.topic['title']}</p></Button>);
     }
 
     renderComments(){
@@ -31,7 +41,7 @@ class Topic extends React.Component {
                         <p className="CommentUserInfo">{c['user']}</p>
                     </div>
                     <div className="CommentContent">
-                        <p>{c['content']}</p>
+                        <Well bsSize="small">{c['content']}</Well>
                     </div>
                     <div className="CommentStats">
                         <p className="CommentTime">{c['time']}</p>
@@ -57,24 +67,26 @@ class Topic extends React.Component {
         return (
             <div className="FullTopic">
                 <div className="UpperContainer">
-                    <button className="TopicExitButton" onClick={this.swapTopic}>Return</button>
+                    <Button className="TopicExitButton" onClick={this.swapTopic}>Return</Button>
                 </div>
                 <div className="TopicContainer">
-                    <div className="TopicUserProfile">
-                        <div className="TopicUserImage"></div>
-                        <p className="TopicUserInfo">{this.props.topic['user']}</p>
-                    </div>
-                    <div className="TopicContent">
-                        <h1 className="TopicTitle">{this.props.topic['title']}</h1>
-                        <p className="TopicDescription">{this.props.topic['descrip']}</p>
-                    </div>
+                    <Panel bsStyle="primary">
+                        <Panel.Heading>
+                            <Panel.Title componentClass="h3">{this.props.topic['title']}</Panel.Title>
+                        </Panel.Heading>
+                        <Panel.Body>{this.props.topic['descrip']}</Panel.Body>
+                        <Panel.Footer>
+                            {/* <Image src='' responsive circle/> */}
+                            {this.props.topic['user']}
+                        </Panel.Footer>
+                    </Panel>
                 </div>
                 <hr/>
                 <div className='TopicComments'>
                     {this.renderComments()}
                     <form className='CommentSubmission'>
                         <textarea className="CommentArea" rows="4" cols="60" onChange={this.handleComment.bind(this)} value={this.state.newComment['content']}></textarea>
-                        <button type='button' onClick={this.handleSubmit.bind(this)} className="SubmitButton">Submit</button>
+                        <Button type='Button' onClick={this.handleSubmit.bind(this)} className="SubmitButton">Submit</Button>
                     </form>
                 </div>
             </div>

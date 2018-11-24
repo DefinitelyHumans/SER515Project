@@ -1,6 +1,12 @@
 import React from 'react';
-import Modal from '../modal'
 import Topic from './topic/topic';
+import jQuery from 'jquery';
+window.jQuery = jQuery;
+require('bootstrap')
+var FontAwesome = require('react-fontawesome');
+import { Form, FormControl, Label, Input, Col, FormGroup, FormFeedback, HelpBlock,ControlLabel, Button} from 'reactstrap';
+import {Modal, Tabs, Tab } from 'react-bootstrap';
+require('react-bootstrap')
 import {NotificationContainer, NotificationManager} from 'react-notifications';
 
 class Viewpane extends React.Component {
@@ -34,15 +40,17 @@ class Viewpane extends React.Component {
         this.setState({visible: false});
     }
     saveTopic(){
-        let t = this.state.topics;
-        t.push({'title': this.state.inputTopicTitle, 'descrip': this.state.inputTopicContent,'user': 'User', 'type': this.state.inputTopicType});
-        this.setState({topics: t});
-        let c = this.state.comments;
-        c.push({'id': this.state.inputTopicTitle, 'comment':[]});
-        this.setState({comments: c});
-        NotificationManager.success('Topic '+this.state.inputTopicTitle +' is created.', 'Success');
-        this.setState({inputTopicContent: '', inputTopicTitle: '', inputTopicType: ''});
-        this.hideModal();
+        if (this.state.inputTopicContent != '' && this.state.inputTopicTitle!= ''){
+            let t = this.state.topics;
+            t.push({'title': this.state.inputTopicTitle, 'descrip': this.state.inputTopicContent,'user': 'User', 'type': this.state.inputTopicType});
+            this.setState({topics: t});
+            let c = this.state.comments;
+            c.push({'id': this.state.inputTopicTitle, 'comment':[]});
+            this.setState({comments: c});
+            NotificationManager.success('Topic '+this.state.inputTopicTitle +' is created.', 'Success');
+            this.setState({inputTopicContent: '', inputTopicTitle: '', inputTopicType: ''});
+            this.hideModal();
+        }
     }
 
     handleTitle(event){
@@ -90,28 +98,40 @@ class Viewpane extends React.Component {
 
     render(){
         let renderedTopics = this.renderTopics();
-        let newButton = this.state.singleTopicView ? null : <button className="ViewPane-Topic-Button" onClick={this.showModal}>add topic</button>;
+        let newButton = this.state.singleTopicView ? null : <Button className="ViewPane-Topic-Button" onClick={this.showModal}>Create New Topic</Button>;
         return (<div className="ViewPane">
             {renderedTopics}
             {newButton}
-            <Modal visible={this.state.visible}>
-                <h3 className="dialogTitle">Create a topic</h3>
-                <form>
-                    <table>
-                        <tr className='dialogTopicTitle'><td className='formDescrip'>Topic Title: </td>
-                            <td><input type="text" name="TopicTitle" onChange={this.handleTitle.bind(this)} value={this.state.inputTopicTitle}/><br/></td></tr>
-                        <tr className='dialogTopicContent'><td className='formDescrip'>Topic Content: </td>
-                            <td><input type="text" name="TopicContent" onChange={this.handleContent.bind(this)} value={this.state.inputTopicContent}/><br/></td></tr>
-                        <tr><td className='formDescrip'>Topic Type:</td>
-                            <td><select onChange={this.handleSelect.bind(this)}>
-                                <option value="text">Text</option>
-                                <option value="link">Link</option>
-                                <option value="image">Image</option>
-                            </select></td></tr>
-                    </table> 
-                </form>
-                <button onClick={this.hideModal} type="button" className="closeDialogButton">Cancel</button>
-                <button onClick={this.saveTopic} type="button" className="closeDialogButton">Create Topic</button>
+            <Modal show={this.state.visible} onHide={this.hideMOdal}>
+                <Modal.Header>
+                <Modal.Title>Create A Topic</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form>
+                        <FormGroup>
+                            <Label>Title</Label>
+                            <Input
+                                type="title"
+                                name="Title"
+                                required={true}
+                                value={this.state.inputTopicTitle}
+                                onChange={this.handleTitle.bind(this)}/>
+                        </FormGroup>
+                        <FormGroup>
+                            <Label>Content</Label>
+                            <Input
+                                type="content"
+                                name="Content"
+                                required={true}
+                                value={this.state.inputTopicContent}
+                                onChange={this.handleContent.bind(this)}/>
+                        </FormGroup> 
+                    </Form>
+                </Modal.Body>
+                <Modal.Footer>
+                <Button onClick={this.hideModal}>Close</Button>
+                <Button bsStyle="primary" onClick={this.saveTopic}>Create Topic</Button>
+                </Modal.Footer>
             </Modal>
             <NotificationContainer/>
         </div>);
