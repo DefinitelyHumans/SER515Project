@@ -8,11 +8,24 @@ class App extends React.Component {
 
     constructor(props){
         super(props);
+        this.state = {
+        	userDetails: {
+        		loggedIn: false,
+        		user_id: '',
+        		email: '',
+        		password: ''
+        	}
+        }
+        this.handleUserDetails = this.handleUserDetails.bind(this); 
+    }
+
+    handleUserDetails(e){
+    	this.setState({userDetails: e});
     }
 
     render(){
         return (<div className="App">
-            <Sidebar></Sidebar>
+            <Sidebar handleUserDetails = {this.handleUserDetails}></Sidebar>
             <ViewPane></ViewPane>
             </div>);
 
