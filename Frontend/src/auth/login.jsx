@@ -9,6 +9,8 @@ import { Form, FormControl, Label, Input, Col, FormGroup, FormFeedback, HelpBloc
 import {Tabs, Tab } from 'react-bootstrap';
 require('react-bootstrap')
 import userValidator from './validators';
+import {NotificationManager} from 'react-notifications';
+import Modal from './../modal';
 
 class Login extends React.Component {
   constructor(props) {
@@ -16,8 +18,11 @@ class Login extends React.Component {
     this.state = {
       userCred: {
         email: '',
-        password: '',
-      }
+        password: ''
+      },
+      auth_token: '',
+      loggedIn: 'false',
+      visible: false
     };
     this.validators = userValidator;
     this.resetValidators();
@@ -26,8 +31,12 @@ class Login extends React.Component {
     this.displayValidationErrors = this.displayValidationErrors.bind(this);
     this.updateValidators = this.updateValidators.bind(this);
     this.resetValidators = this.resetValidators.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleLogin = this.handleLogin.bind(this);
+    this.handleRegister = this.handleRegister.bind(this);
     this.isFormValid = this.isFormValid.bind(this);
+    this.handleLogout = this.handleLogout.bind(this);
+    this.showModal = this.showModal.bind(this);
+    this.hideModal = this.hideModal.bind(this);
   }
   
   resetValidators() {
@@ -38,10 +47,62 @@ class Login extends React.Component {
     });
   }
 
-  handleSubmit(e) {
-    console.log(this.state.userCred);
-    console.log('Yepee! form submitted');
+  handleRegister(e) {
     e.preventDefault();
+     const email = this.state.userCred.email
+     const password = this.state.userCred.password
+    fetch('http://localhost:3300/api/auth/register/',{
+      credentials: 'include',
+      method:'post',
+      headers: new Headers({
+     'Authorization': 'Basic '+btoa('username:password'),
+     'Content-Type':'application/json'}),
+      body: JSON.stringify({ "email": email, "password": password})
+    }).then(function(response) {
+        if(!response.ok) {
+          let resp = response.json();
+          resp.then(function(resp) {
+                NotificationManager.error(resp.error);
+              });
+        }
+        else
+        NotificationManager.success('You can now login with '+email);        
+  });
+  }
+
+  handleLogin(e) {
+   
+    e.preventDefault();
+    let curComponent = this;
+     let auth = '';
+     const email = this.state.userCred.email
+     const password = this.state.userCred.password
+    fetch('http://localhost:3300/api/auth/login/',{
+      credentials: 'include',
+      method:'post',
+      headers: new Headers({
+     'Authorization': 'Basic '+btoa('username:password'),
+     'Content-Type':'application/json'}),
+      body: JSON.stringify({ "email": email, "password": password})
+    }).then(function(response) {
+        let resp = response.json();        
+        if(!response.ok) {
+          NotificationManager.error('Error, try again!');
+        }
+        else{
+          resp.then(function(resp) {
+          auth = resp.auth_token;
+          curComponent.setState({auth_token: auth});
+          curComponent.setState({loggedIn: 'true'});
+          NotificationManager.success('Logged in with email '+email);        
+        })
+        }
+  });
+  }
+  
+  handleLogout(e){
+    e.preventDefault();
+    this.setState({loggedIn: 'false', auth_token: '', userCred: {email: '', password:''}, visible:false});
   }
   updateValidators(fieldName, value) {
     this.validators[fieldName].errors = [];
@@ -95,19 +156,27 @@ class Login extends React.Component {
     return status;
   }
 
+    showModal () {
+        this.setState({visible: true});
+    }
+    
+    hideModal () {
+        this.setState({visible: false});
+    }
+
   render() {
-    return (<Popup className="SidebarUserSignUp"
+    if(this.state.loggedIn=='false'){
+    return (<Popup
               trigger = {<p>Login/Signup <FontAwesome name="Login" className="fa fa-sign-out" /></p>}
-              position = "bottom center"
+              position = "bottom left"
               on = "hover"
               closeOnDocumentClick
               mouseLeaveDelay = {300}
               mouseEnterDelay = {0}
               overlayStyle = {{backgroundColor: 'transparent'}}>
-                <Tabs
-                  id="controlled-tab-example">
-                    <Tab eventKey={1} title="Log In">
-                      <Form onSubmit={this.handleSubmit}>
+                <Tabs id="SideBarSignUpLogin">
+                    <Tab eventKey={1} title="Login">
+                      <Form onSubmit={this.handleLogin}>
                         <Col>
                           <FormGroup>
                             <Label>Email</Label>
@@ -136,11 +205,11 @@ class Login extends React.Component {
                              <Label>{ this.displayValidationErrors('password') }</Label>
                           </FormGroup>
                         </Col>
-                        <Button id="login_button">Submit</Button>
+                        <Button>Login</Button>
                       </Form>
                     </Tab>
-                    <Tab eventKey={2} title="Sign Up">
-                     <Form className="form" onSubmit={this.handleSubmit}>
+                    <Tab eventKey={2} title="SignUp">
+                     <Form className="form" onSubmit={this.handleRegister}>
                         <Col>
                           <FormGroup>
                             <Label>Email</Label>
@@ -167,12 +236,22 @@ class Login extends React.Component {
                              <Label>{ this.displayValidationErrors('password') }</Label>
                           </FormGroup>
                         </Col>
-                        <Button id="signup_button">Submit</Button>
+                        <Button>SignUp</Button>
                       </Form>
                     </Tab>
                 </Tabs>
             </Popup>);
   }
+  else{
+    return(<div><Button className="SideBarLogoutButton" onClick={this.showModal}><p>Logout <FontAwesome name="Login" className="fa fa-sign-out" /></p></Button><Modal visible={this.state.visible}>
+                    <h3 className="dialogTitle">Logging out</h3>
+                    <form> 
+                        <p>Are you sure you want to logout?</p>
+                    </form>
+                    <button onClick={this.handleLogout} type="button" className="closeDialogButton">Logout</button>
+                    <button onClick={this.hideModal} type="button" className="closeDialogButton">Cancel</button>
+                </Modal></div>);
+  }
 }
-
+}
 export default Login;
