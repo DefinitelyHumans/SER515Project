@@ -15,11 +15,34 @@ class Viewpane extends React.Component {
         super(props);
         this.state = {
             singleTopicView: false,
-            topics:[{'title': 'ATitle', 'descrip':'descripA', 'type':'link', 'user':'AUser'},
-                {'title': 'B', 'descrip':'descripB', 'type':'link', 'user':'BUser'}],
+            topics: [
+                {
+                    'topic_title': 'ATitle',
+                    'topic_content': 'descripA',
+                    'topic_type': 'link',
+                    'user': 'AUser'
+                },
+                {
+                    'topic_title': 'B',
+                    'topic_content': 'descripB',
+                    'topic_type': 'link',
+                    'user': 'BUser'
+                }],
             topic: {},
-            comments: [{'id': 'ATitle', 'comment': [{'user': 'userC', 'content': 'comment content', 'time': 'Dec. 1. 1989'}]},
-            {'id': 'B', 'comment':[]}],
+            comments: [
+                {
+                    'id': 'ATitle',
+                    'comment': [
+                        {
+                            'user': 'userC',
+                            'content': 'comment content',
+                            'time': 'Dec. 1. 1989'
+                        }]
+                },
+                {
+                    'id': 'B',
+                    'comment': []
+                }],
             inputTopicTitle: '',
             inputTopicContent: '',
             inputTopicType: '',
@@ -42,7 +65,7 @@ class Viewpane extends React.Component {
     saveTopic(){
         if (this.state.inputTopicContent != '' && this.state.inputTopicTitle!= ''){
             let t = this.state.topics;
-            t.push({'title': this.state.inputTopicTitle, 'descrip': this.state.inputTopicContent,'user': 'User', 'type': this.state.inputTopicType});
+            t.push({'topic_title': this.state.inputTopicTitle, 'topic_content': this.state.inputTopicContent,'user': 'User', 'type': this.state.inputTopicType});
             this.setState({topics: t});
             let c = this.state.comments;
             c.push({'id': this.state.inputTopicTitle, 'comment':[]});
@@ -68,13 +91,13 @@ class Viewpane extends React.Component {
         if (this.state.singleTopicView){
             let i;
             for (i=0; i < this.state.topics.length; i++){
-                if (this.state.comments[i]['id'] === this.state.topic['title']){
+                if (this.state.comments[i]['id'] === this.state.topic['topic_title']){
                     break;
                 }
             }
-            tmp = <Topic key={this.state.topic['title']} topic={this.state.topic} parentSwapTopic={this.swapTopic} singleView={this.state.singleTopicView} addComment={this.addComment} comment={this.state.comments[i]['comment']}></Topic>
+            tmp = <Topic key={this.state.topic['topic_title']} topic={this.state.topic} parentSwapTopic={this.swapTopic} singleView={this.state.singleTopicView} addComment={this.addComment} comment={this.state.comments[i]['comment']}></Topic>
         } else {
-            tmp = this.state.topics.map((a) => <Topic key={a['title']} topic={a} parentSwapTopic={this.swapTopic} singleView={this.state.singleTopicView}></Topic>)
+            tmp = this.state.topics.map((a) => <Topic key={a['topic_title']} topic={a} parentSwapTopic={this.swapTopic} singleView={this.state.singleTopicView}></Topic>)
         }
         return <div className="ViewPaneTopics">{tmp}</div>
     }

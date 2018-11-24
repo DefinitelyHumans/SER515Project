@@ -26,9 +26,9 @@ class Topic extends React.Component {
 
     renderTopicCard(){
         return (<Panel onClick={this.swapTopic}>
-            <Panel.Body>{this.props.topic['title']}</Panel.Body>
+            <Panel.Body>{this.props.topic['topic_title']}</Panel.Body>
         </Panel>)
-        //return (<Button className="Topic" onClick={this.swapTopic}><p>{this.props.topic['title']}</p></Button>);
+        //return (<Button className="Topic" onClick={this.swapTopic}><p>{this.props.topic['topic_title']}</p></Button>);
     }
 
     renderComments(){
@@ -41,7 +41,7 @@ class Topic extends React.Component {
                     </Panel.Body>
                     <Panel.Footer>
                         <div className="CommentUserImage"></div>
-                        <span className="CommentUserInfo">{c['user']}</span>
+                        <span className="CommentUserInfo">{c['user_posted']}</span>
                         <span className="CommentTime">{c['time']}</span>
                     </Panel.Footer>
                 </Panel>)
@@ -51,14 +51,14 @@ class Topic extends React.Component {
 
     handleSubmit(){
         if (this.state.newComment['content'] !== ''){
-            this.props.addComment(this.props.topic['title'], this.state.newComment);
+            this.props.addComment(this.props.topic['topic_title'], this.state.newComment);
             this.setState({newComment: {'content': ''}});
         }
     }
 
     handleComment(event){
         if (event.target.value != '')
-            this.setState({newComment: {'id': this.props.topic['title'], 'user': 'user', 'time': 'time', 'content': event.target.value}});
+            this.setState({newComment: {'id': this.props.topic['topic_title'], 'user': 'user', 'time': 'time', 'content': event.target.value}});
     }
 
     renderFullTopic(){
@@ -67,12 +67,12 @@ class Topic extends React.Component {
                 <div className="TopicContainer">
                     <Panel bsStyle="primary">
                         <Panel.Heading>
-                            {this.props.topic['title']}
+                            {this.props.topic['topic_title']}
                         </Panel.Heading>
                         <Panel.Body>{this.props.topic['descrip']}</Panel.Body>
                         <Panel.Footer>
                             {/* <Image src='' responsive circle/> */}
-                            {this.props.topic['user']}
+                            {this.props.topic['user_posted']}
                         </Panel.Footer>
                     </Panel>
                 </div>
