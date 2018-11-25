@@ -44,7 +44,7 @@ class Topic extends React.Component {
 
     handleSubmit(){
         if (this.state.newComment['content'] !== ''){
-            this.props.addComment(this.props.topic['title'], this.state.newComment);
+            this.props.addComment(this.props.topic['topic_title'], this.state.newComment);
             this.setState({newComment: {'content': ''}});
         }
     }
