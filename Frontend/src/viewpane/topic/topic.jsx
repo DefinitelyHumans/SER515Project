@@ -51,7 +51,7 @@ class Topic extends React.Component {
 
     handleComment(event){
         if (event.target.value != '')
-            this.setState({newComment: {'id': this.props.topic['title'], 'user': 'user', 'time': 'time', 'content': event.target.value}});
+            this.setState({newComment: {'id': this.props.topic['topic_title'], 'user': 'user', 'time': 'time', 'content': event.target.value}});
     }
 
     renderFullTopic(){
