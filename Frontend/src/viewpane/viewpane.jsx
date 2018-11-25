@@ -7,10 +7,9 @@ var FontAwesome = require('react-fontawesome');
 // import { Form, FormControl, Label, Input, Col, FormGroup, FormFeedback, HelpBlock,ControlLabel, Button} from 'reactstrap';
 import {Modal, Tabs, Tab } from 'react-bootstrap';
 require('react-bootstrap')
-import {NotificationContainer, NotificationManager} from 'react-notifications';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
-// import { Button, FormControl, ControlLabel, FormGroup, HelpBlock } from 'react-bootstrap/lib/';
-import { Button, FormControl, ControlLabel, FormGroup, HelpBlock } from 'react-bootstrap';
+import { Button, FormControl, ControlLabel, FormGroup, HelpBlock } from 'react-bootstrap/lib/';
+// import { Button, FormControl, ControlLabel, FormGroup, HelpBlock } from 'react-bootstrap';
 
 class Viewpane extends React.Component {
 
@@ -114,7 +113,7 @@ class Viewpane extends React.Component {
      * object and store them in the topics array property.
      */
     getTopics() {
-        const access_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoibm91YTlwNzR1Z3ozc2hheng0N2o4Nzk1YXhxZW9xcDQiLCJpYXQiOjE1NDI5MjAwMzQsImV4cCI6MTU0MjkzNDQzNH0.SgNf4BDgPBvXdlIh-_bY_3EbwHu2dVjROck9JZOp_os";
+        const access_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiemUxOWR4ajB0azRvZHI4Zng4dW01OTQzdDBmZWFrNzUiLCJpYXQiOjE1NDMxNzM3ODUsImV4cCI6MTU0MzE4ODE4NX0.DlnkU1x5IZuePxVqGCsV9Tn8L-y3zCMDb6676sow9ho";
         const userID = "ze19dxj0tk4odr8fx8um5943t0feak75";  // TODO: Retrieve
         const endpoint = 'http://localhost:3300/api/topic/user/' + userID;
         fetch(endpoint, {
@@ -258,7 +257,7 @@ class Viewpane extends React.Component {
         const topic_type = this.state.inputTopicType;
         // console.log("The type", topic_type);
         // TODO: Retrieve access token from login.
-        const access_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiemUxOWR4ajB0azRvZHI4Zng4dW01OTQzdDBmZWFrNzUiLCJpYXQiOjE1NDI5Njc2MzMsImV4cCI6MTU0Mjk4MjAzM30.E4zjsnKVRf5-ruq9HlOm9Gf34aE8uF8K1bJFj08iOpw";
+        const access_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiemUxOWR4ajB0azRvZHI4Zng4dW01OTQzdDBmZWFrNzUiLCJpYXQiOjE1NDMxNzM3ODUsImV4cCI6MTU0MzE4ODE4NX0.DlnkU1x5IZuePxVqGCsV9Tn8L-y3zCMDb6676sow9ho";
         fetch('http://localhost:3300/api/topic/create', {
             credentials: 'include',
             method: 'post',
@@ -345,49 +344,53 @@ class Viewpane extends React.Component {
     render() {
         let renderedTopics = this.renderTopics();
 
-<!--         let newButton = this.state.singleTopicView ? null : <Button className="ViewPane-Topic-Button" onClick={this.showModal}><span className="glyphicon glyphicon-plus NewPlusIcon" aria-hidden="true"></span> Create New Topic</Button>;
-        return (<div className="ViewPane">
-//             {renderedTopics}
-//             {newButton}
-            <Modal show={this.state.visible} onHide={this.hideModal}>
-                <Modal.Header>
-                <Modal.Title>Create A Topic</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <Form>
-                        <FormGroup>
-                            <Label>Title</Label>
-                            <Input
-                                type="title"
-                                name="Title"
-                                required={true}
-                                value={this.state.inputTopicTitle}
-                                onChange={this.handleTitle.bind(this)}/>
-                        </FormGroup>
-                        <FormGroup>
-                            <Label>Content</Label>
-                            <Input
-                                type="content"
-                                name="Content"
-                                required={true}
-                                value={this.state.inputTopicContent}
-                                onChange={this.handleContent.bind(this)}/>
-                        </FormGroup> 
-                    </Form>
-                </Modal.Body>
-                <Modal.Footer>
-                <Button onClick={this.hideModal}>Close</Button>
-                <Button className="btn btn-success" onClick={this.saveTopic}>Create Topic</Button>
-                </Modal.Footer> -->
+        //  let newButton = this.state.singleTopicView ? null : <Button className="ViewPane-Topic-Button" onClick={this.showModal}><span className="glyphicon glyphicon-plus NewPlusIcon" aria-hidden="true"></span> Create New Topic</Button>;
+        // return (<div className="ViewPane">
+        //      {renderedTopics}
+        //      {newButton}
+        //     <Modal show={this.state.visible} onHide={this.hideModal}>
+        //         <Modal.Header>
+        //         <Modal.Title>Create A Topic</Modal.Title>
+        //         </Modal.Header>
+        //         <Modal.Body>
+        //             <Form>
+        //                 <FormGroup>
+        //                     <Label>Title</Label>
+        //                     <Input
+        //                         type="title"
+        //                         name="Title"
+        //                         required={true}
+        //                         value={this.state.inputTopicTitle}
+        //                         onChange={this.handleTitle.bind(this)}/>
+        //                 </FormGroup>
+        //                 <FormGroup>
+        //                     <Label>Content</Label>
+        //                     <Input
+        //                         type="content"
+        //                         name="Content"
+        //                         required={true}
+        //                         value={this.state.inputTopicContent}
+        //                         onChange={this.handleContent.bind(this)}/>
+        //                 </FormGroup> 
+        //             </Form>
+        //         </Modal.Body>
+        //         <Modal.Footer>
+        //         <Button onClick={this.hideModal}>Close</Button>
+        //         <Button className="btn btn-success" onClick={this.saveTopic}>Create Topic</Button>
+        //         </Modal.Footer> 
 
         // console.log("TOPICS", this.state.topics);
         // let newButton = this.state.singleTopicView ? null : <button className="ViewPane-Topic-Button" onClick={this.updateTopic}>add topic</button>;
-        let newButton = this.state.singleTopicView ? null : <button className="ViewPane-Topic-Button" onClick={this.showModal}>add topic</button>;
+        // let newButton = this.state.singleTopicView ? null : <button className="ViewPane-Topic-Button" onClick={this.showModal}>add topic</button>;
+         let newButton = this.state.singleTopicView ? null : <Button className="ViewPane-Topic-Button" onClick={this.showModal}><span className="glyphicon glyphicon-plus NewPlusIcon" aria-hidden="true"></span> Create New Topic</Button>;
         return (<div className="ViewPane">
             {renderedTopics}
             {newButton}
-            <Modal visible={this.state.visible}>
-                <h2 className="dialogTitle">Create Topic</h2>
+                <Modal show={this.state.visible} onHide={this.hideModal}>
+                 <Modal.Header>
+                 <Modal.Title>Create A Topic</Modal.Title>
+                 </Modal.Header>
+                 <Modal.Body>
                 <form>
                     <FormGroup
                         controlId="formTitle"
@@ -433,10 +436,13 @@ class Viewpane extends React.Component {
                         </FormControl>
                     </FormGroup>
                 </form>
+                </Modal.Body>
+                <Modal.Footer>
                 <Button bsStyle="danger" onClick={this.hideModal} type="button" className="closeDialogButton">Cancel</Button>
-                {/* <Button bsStyle="success" onClick={this.saveTopic} type="button" className="closeDialogButton">Submit</Button> */}
                 <Button bsStyle="success" onClick={this.createTopic} type="button" className="closeDialogButton">Submit</Button>
-            </Modal>
+                {/* <Button bsStyle="success" onClick={this.saveTopic} type="button" className="closeDialogButton">Submit</Button> */}
+                </Modal.Footer>
+                </Modal>
             <NotificationContainer />
         </div>);
     }

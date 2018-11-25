@@ -68,8 +68,11 @@ class Topic extends React.Component {
     renderFullTopic(){
         return (
             <div className="FullTopic">
+            <div className="UpperContainer">
+                    <button className="TopicExitButton" onClick={this.swapTopic}>Return</button>
+                </div>
                 <div className="TopicContainer">
-                   <PageHeader><Panel className="panel panel-primary">
+                <PageHeader><Panel className="panel panel-primary">
                     <Panel.Heading className="FullTopicTitle">{this.props.topic['topic_title']}</Panel.Heading> 
                     <Panel.Body className="FullTopicContent">{this.props.topic['topic_content']}
                    <small>{this.props.topic['user_posted']} </small>
