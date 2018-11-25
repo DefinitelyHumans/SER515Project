@@ -46,10 +46,7 @@ class Sidebar extends React.Component {
                         <Tab eventKey={1} title="Topics">
                             {this.state.topicCards.map((i) => <TopicCard></TopicCard>)}
                         </Tab>
-                        <Tab eventKey={2} title="Boards">
-                            {this.state.subsCards.map((i) => <SubscriptionCard></SubscriptionCard>)}
-                        </Tab>
-                        <Tab eventKey={3} title="Settings">
+                        <Tab eventKey={2} title="Settings">
                             <Options></Options>
                         </Tab>
                     </Tabs>

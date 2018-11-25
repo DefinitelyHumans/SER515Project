@@ -41,29 +41,29 @@ class Options extends React.Component {
     handleData
     render(){
         return <div>
-        <Panel bsStyle="primary" onClick={this.showModal}>
+        <Panel bsStyle="primary" className="Option" onClick={this.showModal}>
             <Panel.Heading>
             <Panel.Title>About CorkBoard</Panel.Title>
             </Panel.Heading>
         </Panel>
-        <Panel bsStyle="primary" onClick={this.handleNotifs.bind(this)}>
+        <Panel bsStyle="primary" className="Option" onClick={this.handleNotifs.bind(this)}>
             <Panel.Heading>
             <Panel.Title>Mute Notifications</Panel.Title>
             </Panel.Heading>
         </Panel>
-        <Panel bsStyle="primary" onClick={this.handleBugs.bind(this)}>
+        <Panel bsStyle="primary" className="Option" onClick={this.handleBugs.bind(this)}>
             <Panel.Heading>
             <Panel.Title>Report a Bug</Panel.Title>
             </Panel.Heading>
         </Panel>
-        <Panel bsStyle="primary" onClick={this.handleDelete.bind(this)}>
+        <Panel bsStyle="primary" className="Option" onClick={this.handleDelete.bind(this)}>
             <Panel.Heading>
             <Panel.Title>Delete Data</Panel.Title>
             </Panel.Heading>
         </Panel>
 
         <Modal show={this.state.visible} onHide={this.hideModal}>
-            <Modal.Header>Hello World</Modal.Header>
+            <Modal.Header>Cork Board</Modal.Header>
             <Modal.Body>Welcome to CorkBoard. A Reddit/Slack clone made by Arizona State University students to practice AGILE development.</Modal.Body>
             <Modal.Footer>
                 <Button onClick={this.hideModal}>Close</Button>

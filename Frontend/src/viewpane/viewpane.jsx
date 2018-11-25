@@ -121,7 +121,7 @@ class Viewpane extends React.Component {
 
     render(){
         let renderedTopics = this.renderTopics();
-        let newButton = this.state.singleTopicView ? null : <Button className="ViewPane-Topic-Button" onClick={this.showModal}>Create New Topic</Button>;
+        let newButton = this.state.singleTopicView ? null : <Button className="ViewPane-Topic-Button" onClick={this.showModal}><span className="glyphicon glyphicon-plus NewPlusIcon" aria-hidden="true"></span> Create New Topic</Button>;
         return (<div className="ViewPane">
             {renderedTopics}
             {newButton}
@@ -153,7 +153,7 @@ class Viewpane extends React.Component {
                 </Modal.Body>
                 <Modal.Footer>
                 <Button onClick={this.hideModal}>Close</Button>
-                <Button onClick={this.saveTopic}>Create Topic</Button>
+                <Button className="btn btn-success" onClick={this.saveTopic}>Create Topic</Button>
                 </Modal.Footer>
             </Modal>
             <NotificationContainer/>

@@ -4,7 +4,7 @@ window.jQuery = jQuery;
 require('bootstrap')
 var FontAwesome = require('react-fontawesome');
 import { Form, FormControl, Label, Input, Col, FormGroup, FormFeedback, HelpBlock,ControlLabel, Button} from 'reactstrap';
-import { Panel, Well } from 'react-bootstrap';
+import { Panel, Well, PageHeader } from 'react-bootstrap';
 require('react-bootstrap')
 
 class Topic extends React.Component {
@@ -18,6 +18,7 @@ class Topic extends React.Component {
         this.renderTopicCard = this.renderTopicCard.bind(this);
         this.renderFullTopic = this.renderFullTopic.bind(this);
         this.renderComments = this.renderComments.bind(this);
+
     }
 
     swapTopic(){
@@ -25,26 +26,26 @@ class Topic extends React.Component {
     }
 
     renderTopicCard(){
-        return (<Panel onClick={this.swapTopic}>
-            <Panel.Body>{this.props.topic['topic_title']}</Panel.Body>
-        </Panel>)
+        return (<Panel className="flip-card" onClick={this.swapTopic}><Panel.Body className="flip-card-inner">
+    <div className="flip-card-front" >
+           {this.props.topic['topic_title']}
+        </div>
+    <div className="flip-card-back">{this.props.topic['topic_content']}
+    </div>
+</Panel.Body></Panel>)
         //return (<Button className="Topic" onClick={this.swapTopic}><p>{this.props.topic['topic_title']}</p></Button>);
     }
 
     renderComments(){
         if (this.props.comment !== {'content':''}){
             return this.props.comment.map((c) => {
-                return (
-                <Panel>
-                    <Panel.Body>
-                        <Well bsSize="small">{c['content']}</Well>
-                    </Panel.Body>
-                    <Panel.Footer>
-                        <div className="CommentUserImage"></div>
-                        <span className="CommentUserInfo">{c['user_posted']}</span>
-                        <span className="CommentTime">{c['time']}</span>
-                    </Panel.Footer>
-                </Panel>)
+                return (<Panel>
+                <Panel.Body className="CommentContent">
+                        {c['content']}
+                        <br/>
+                        <small className="CommentUser"> {c['user']}</small>
+                        <small className="CommentTime">{c['time']} | </small>
+                </Panel.Body></Panel>)
             });
         }
     }
@@ -65,29 +66,25 @@ class Topic extends React.Component {
         return (
             <div className="FullTopic">
                 <div className="TopicContainer">
-                    <Panel bsStyle="primary">
-                        <Panel.Heading>
-                            {this.props.topic['topic_title']}
-                        </Panel.Heading>
-                        <Panel.Body>{this.props.topic['topic_content']}</Panel.Body>
-                        <Panel.Footer>
-                            {/* <Image src='' responsive circle/> */}
-                            {this.props.topic['user_posted']}
-                        </Panel.Footer>
+                   <PageHeader><Panel className="panel panel-primary">
+                    <Panel.Heading className="FullTopicTitle">{this.props.topic['topic_title']}</Panel.Heading> 
+                    <Panel.Body className="FullTopicContent">{this.props.topic['topic_content']}
+                   <small>{this.props.topic['user_posted']} </small>
+                    </Panel.Body>
                     </Panel>
+                    </PageHeader>
                 </div>
-                <hr/>
                 <div className='TopicComments'>
                     {this.renderComments()}
                     <Form className='CommentSubmission'>
                         <FormGroup>
-                            <Label>Add a comment</Label>
                             <Input type="textarea" onChange={this.handleComment.bind(this)} value={this.state.newComment['content']}/>
                         </FormGroup>
-                        <Button type='Button' onClick={this.handleSubmit.bind(this)} className="SubmitButton">Submit</Button>
+                        <Button type='Button' onClick={this.handleSubmit.bind(this)} className="SubmitButton CommentButton"><span onClick={this.handleSubmit.bind(this)} className="glyphicon glyphicon-plus NewCommentIcon" aria-hidden="true"></span> Comment</Button>&nbsp;
+                        <Button className="ReturnButton" onClick={this.swapTopic}>&laquo; Return</Button>
                     </Form>
                 </div>
-                <Button className="TopicExitButton" onClick={this.swapTopic}>Return</Button>
+                
             </div>
         );
     }

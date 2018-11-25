@@ -18,17 +18,61 @@
     background-color:#3b9ddc;
     overflow:auto;
     color: #d4eff7;
-    padding:2vw;
+    padding:1vw;
 }
 .ViewPane{
     flex: 1;
-    margin-left:.5vw;
     background-color:#266791;
     overflow:auto;
+    padding-left: 1vw;
+    padding-right: 1vw;
+    padding-top: 1vw;
+    padding-bottom: 1vw;
 }
 
 /* VIEWPANE */
 /* This is for topics to be formatted in the viewpane */
+.CommentTime {
+    float:right;
+
+}
+.CommentUser {
+    float:right;
+    padding-right: 2vw;
+    padding-left: 0.5vw; 
+}
+.CommentContent {
+    max-width: 100% !important;
+    overflow-x: hidden !important; 
+    overflow-y: auto;
+    background-color: #d9edf7;
+    padding-left: 1vw;
+    padding-right: 1vw;
+}
+.CommentButton {
+    background-color: #0e2d4c;
+    color: white;
+}
+.NewCommentIcon {
+    font-size: 2vh;
+    color: white;
+}
+.ReturnButton {
+    color: white;
+    background-color: #0e2d4c;
+}
+.Option {
+    cursor:pointer;
+}
+.ViewPane-Topic-Button{
+   background-color: #3b9ddc;
+    text-align:center;
+    text-decoration: none;
+    width: 18vw;
+    height: 20vh;
+    margin:5vh;
+    float:left; 
+}
 /*
 .Topic{
     text-align:center;
@@ -292,3 +336,65 @@ Purple: #8e7cc3
 .formDescrip{
     color:white;
 }*/
+.NewPlusIcon {
+    font-size: 2vh;
+}
+.FullTopicTitle {
+    background-color: #0e2d4c;
+}
+.FullTopicContent {
+    background-color: #d9edf7;
+}
+/* Flip Card Styling */
+/* The flip card container - set the width and height to whatever you want. We have added the border property to demonstrate that the flip itself goes out of the box on hover (remove perspective if you don't want the 3D effect */
+
+.flip-card {
+    width: 18vw;
+    height: 20vh;
+    margin:5vh;
+    float:left;
+    border: none; 
+  perspective: 1000px;
+
+}
+
+.flip-card-inner {
+background-color: #3b9ddc;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+  box-shadow: 0 0 0 0 rgba(0,0,0,0.2);
+  display: flex;
+  text-overflow: ellipsis;
+  border: none; 
+}
+
+.flip-card:hover .flip-card-inner {
+    background-color:#337ab7;
+  transform: rotateY(180deg);
+  width: 100%;
+  height: 100%;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  text-overflow: ellipsis;
+}
+
+.flip-card-front, .flip-card-back {
+  position: absolute;
+  backface-visibility: hidden;
+  
+}
+
+.flip-card-front {
+  color: black;
+  z-index: 2;
+}
+
+.flip-card-back {
+  color: white;
+  transform: rotateY(180deg);
+  z-index: 1;
+}
