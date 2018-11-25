@@ -1,10 +1,14 @@
 import React from 'react';
-
-import Menu from './menu/menu';
 import Login from './../auth/login';
-require('react-bootstrap');
-import Settings from './settings/settings'
-
+import TopicCard from './topics/topicCard';
+import SubscriptionCard from './subscriptions/subscriptionCard';
+import Options from './options'
+window.jQuery = jQuery;
+require('bootstrap')
+var FontAwesome = require('react-fontawesome');
+import { Form, FormControl, Label, Input, Col, FormGroup, FormFeedback, HelpBlock,ControlLabel, Button} from 'reactstrap';
+import {Tabs, Tab } from 'react-bootstrap';
+require('react-bootstrap')
 
 class Sidebar extends React.Component {
 
@@ -13,19 +17,8 @@ class Sidebar extends React.Component {
         this.state = {
             settingsHidden: true,
             settings : {"Mute Notifications":true, "Report a Bug":true, "Delete Data":true},
-        }
-        this.swapMenus = this.swapMenus.bind(this);
-    }
-
-    swapMenus(){
-        this.setState({settingsHidden : !this.state.settingsHidden})
-    }
-
-    currentWindow(status){
-        if (status){
-            return <Menu></Menu>
-        } else {
-            return <Settings settings={this.state.settings} changeSetting={this.updateSettings.bind(this)}></Settings>
+            topicCards: [1,2,3,4, 5, 6],
+            subsCards: [1,2,3]
         }
     }
 
@@ -35,17 +28,29 @@ class Sidebar extends React.Component {
         this.setState({settings : dict})
     }
     render(){
-        let settingText = this.state.settingsHidden ? "Settings" : "Exit";
-
         return (<div className="Sidebar">
                 <div className="SidebarUserProfile">
-                    <div className="SidebarUserImage"></div>
+                    <div className="SidebarUserImage"></div> {/*<Image src='../profileDefault.png' circle reactive */}
                 </div>
                 <Login className="SidebarUserSignUp"/>
-                <input className="TopicSearch"></input>
-                {this.currentWindow(this.state.settingsHidden)}
-                <button className="SettingsButton" onClick={this.swapMenus}>{settingText}</button>
-                
+                <Col md="12">
+                    <input
+                    className="form-control"
+                    type="text"
+                    placeholder="Search"
+                    aria-label="Search"
+                    />
+                </Col>
+                <Col sm={16}>
+                    <Tabs defaultActiveKey={1} id="sidebartabs">
+                        <Tab eventKey={1} title="Topics">
+                            {this.state.topicCards.map((i) => <TopicCard></TopicCard>)}
+                        </Tab>
+                        <Tab eventKey={2} title="Settings">
+                            <Options></Options>
+                        </Tab>
+                    </Tabs>
+                </Col>
             </div>);
     }
 }
