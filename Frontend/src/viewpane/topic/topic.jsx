@@ -7,6 +7,7 @@ import { Form, FormControl, Label, Input, Col, FormGroup, FormFeedback, HelpBloc
 import { Panel, Well, PageHeader } from 'react-bootstrap';
 require('react-bootstrap')
 
+
 class Topic extends React.Component {
 
     constructor(props){
@@ -26,6 +27,7 @@ class Topic extends React.Component {
     }
 
     renderTopicCard(){
+
         return (<Panel className="flip-card" onClick={this.swapTopic}><Panel.Body className="flip-card-inner">
     <div className="flip-card-front" >
            {this.props.topic['topic_title']}
@@ -34,6 +36,7 @@ class Topic extends React.Component {
     </div>
 </Panel.Body></Panel>)
         //return (<Button className="Topic" onClick={this.swapTopic}><p>{this.props.topic['topic_title']}</p></Button>);
+        //return (<button className="Topic" onClick={this.swapTopic}><p>{this.props.topic['topic_title']}</p></button>);
     }
 
     renderComments(){
@@ -73,16 +76,14 @@ class Topic extends React.Component {
                     </Panel.Body>
                     </Panel>
                     </PageHeader>
-                </div>
-                <div className='TopicComments'>
-                    {this.renderComments()}
-                    <Form className='CommentSubmission'>
-                        <FormGroup>
-                            <Input type="textarea" onChange={this.handleComment.bind(this)} value={this.state.newComment['content']}/>
-                        </FormGroup>
-                        <Button type='Button' onClick={this.handleSubmit.bind(this)} className="SubmitButton CommentButton"><span onClick={this.handleSubmit.bind(this)} className="glyphicon glyphicon-plus NewCommentIcon" aria-hidden="true"></span> Comment</Button>&nbsp;
-                        <Button className="ReturnButton" onClick={this.swapTopic}>&laquo; Return</Button>
-                    </Form>
+                    <div className="TopicUserProfile">
+                        <div className="TopicUserImage"></div>
+                        <p className="TopicUserInfo">{this.props.topic['user_posted']}</p>
+                    </div>
+                    <div className="TopicContent">
+                        <h1 className="TopicTitle">{this.props.topic['topic_title']}</h1>
+                        <p className="TopicDescription">{this.props.topic['topic_content']}</p>
+                    </div>
                 </div>
                 
             </div>

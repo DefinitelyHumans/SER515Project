@@ -10,6 +10,7 @@ import {Tabs, Tab } from 'react-bootstrap';
 require('react-bootstrap')
 import userValidator from './validators';
 import {NotificationManager} from 'react-notifications';
+import Modal from './../modal';
 
 class Login extends React.Component {
   constructor(props) {
@@ -20,7 +21,8 @@ class Login extends React.Component {
         password: ''
       },
       auth_token: '',
-      loggedIn: 'false'
+      loggedIn: 'false',
+      visible: false
     };
     this.validators = userValidator;
     this.resetValidators();
@@ -33,6 +35,8 @@ class Login extends React.Component {
     this.handleRegister = this.handleRegister.bind(this);
     this.isFormValid = this.isFormValid.bind(this);
     this.handleLogout = this.handleLogout.bind(this);
+    this.showModal = this.showModal.bind(this);
+    this.hideModal = this.hideModal.bind(this);
   }
   
   resetValidators() {
@@ -88,7 +92,6 @@ class Login extends React.Component {
         else{
           resp.then(function(resp) {
           auth = resp.auth_token;
-          console.log(auth);
           curComponent.setState({auth_token: auth});
           curComponent.setState({loggedIn: 'true'});
           NotificationManager.success('Logged in with email '+email);        
@@ -99,7 +102,7 @@ class Login extends React.Component {
   
   handleLogout(e){
     e.preventDefault();
-    this.setState({loggedIn: 'false', auth_token: '', userCred: {email: '', password:''}});
+    this.setState({loggedIn: 'false', auth_token: '', userCred: {email: '', password:''}, visible:false});
   }
   updateValidators(fieldName, value) {
     this.validators[fieldName].errors = [];
@@ -152,6 +155,14 @@ class Login extends React.Component {
     });
     return status;
   }
+
+    showModal () {
+        this.setState({visible: true});
+    }
+    
+    hideModal () {
+        this.setState({visible: false});
+    }
 
   render() {
     if(this.state.loggedIn=='false'){
@@ -232,7 +243,14 @@ class Login extends React.Component {
             </Popup>);
   }
   else{
-    return(<Button className="SideBarLogoutButton" onClick={this.handleLogout}><p>Logout <FontAwesome name="Login" className="fa fa-sign-out" /></p></Button>);
+    return(<div><Button className="SideBarLogoutButton" onClick={this.showModal}><p>Logout <FontAwesome name="Login" className="fa fa-sign-out" /></p></Button><Modal visible={this.state.visible}>
+                    <h3 className="dialogTitle">Logging out</h3>
+                    <form> 
+                        <p>Are you sure you want to logout?</p>
+                    </form>
+                    <button onClick={this.handleLogout} type="button" className="closeDialogButton">Logout</button>
+                    <button onClick={this.hideModal} type="button" className="closeDialogButton">Cancel</button>
+                </Modal></div>);
   }
 }
 }

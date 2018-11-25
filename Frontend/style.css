@@ -318,10 +318,9 @@ Purple: #8e7cc3
 }
 
 .dialog{
-    margin-left:30vw;
-    width:60vw;
     border:none;
     background-color: #266791;
+    /* background-color: #79cbe4; */
     color:white;
 }
 .dialogContent{

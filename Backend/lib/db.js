@@ -129,9 +129,10 @@ async function get_topics_by_user(user_id) {
             if(res.rowCount == 0) {
                 //if none, return empty
                 return { error: db_errors.NO_RESPONSE };
-            } else if(res.rowCount > 1) {   // If list found, return list.
+            } else if(res.rowCount >= 1) {   // If list found, return list.
                 // Result list is stripped in query for necessary information.
-                return res.rows;
+                // console.log("GOTTEM", res.rows);
+                return { topics: res.rows, error: db_errors.NO_ERROR };
             } else {    // If more than one, internal error.
                 return { error: db_errors.INTERNAL_ERROR }
             }
