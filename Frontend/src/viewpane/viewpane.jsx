@@ -48,7 +48,11 @@ class Viewpane extends React.Component {
             inputTopicTitle: '',
             inputTopicContent: '',
             inputTopicType: 'text',
-            visible: false
+            visible: false,
+            user_session: {
+                user_id: '',
+                access_token: '',
+            },
         }
         this.renderTopics = this.renderTopics.bind(this);
         this.swapTopic = this.swapTopic.bind(this);
@@ -60,6 +64,8 @@ class Viewpane extends React.Component {
         this.deleteTopic = this.deleteTopic.bind(this);
         this.updateTopic = this.updateTopic.bind(this);
         this.addComment = this.addComment.bind(this);
+        // Parent from app
+        this.getUserCredentials = this.getUserCredentials.bind(this);
     }
 
     /**
@@ -68,9 +74,8 @@ class Viewpane extends React.Component {
      * from a remote endpoint, this is a good place to instantiate the network request.
      */
     componentDidMount() {
-        // let t = this.state.topics;
-        let topic = this.getTopic();
-        let topics = this.getTopics();
+        // let topic = this.getTopic();
+        // let topics = this.getTopics();
     }
 
     showModal() {
@@ -78,6 +83,15 @@ class Viewpane extends React.Component {
     }
     hideModal() {
         this.setState({ visible: false });
+    }
+
+    getUserCredentials() {
+        let uSess = this.props.parentUserCredentials();
+        // console.log("USESS", uSess);
+        this.setState({ user_session: uSess}, () => {
+            // console.log("USER", this.state.user_session);
+            this.getTopics();
+        });
     }
 
   
@@ -113,8 +127,7 @@ class Viewpane extends React.Component {
      * object and store them in the topics array property.
      */
     getTopics() {
-        const access_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiemUxOWR4ajB0azRvZHI4Zng4dW01OTQzdDBmZWFrNzUiLCJpYXQiOjE1NDMxNzM3ODUsImV4cCI6MTU0MzE4ODE4NX0.DlnkU1x5IZuePxVqGCsV9Tn8L-y3zCMDb6676sow9ho";
-        const userID = "ze19dxj0tk4odr8fx8um5943t0feak75";  // TODO: Retrieve
+        const userID = this.state.user_session.user_id;
         const endpoint = 'http://localhost:3300/api/topic/user/' + userID;
         fetch(endpoint, {
             credentials: 'include',
@@ -179,7 +192,7 @@ class Viewpane extends React.Component {
     deleteTopic() {
         const topic_title = "Bag of Chips";
         const topicID = "0uvoucfe3o2j0qi36bizy87t1e7ltieajt77kaewk4al2iwo8sx58obwxol6611s";
-        const access_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoibm91YTlwNzR1Z3ozc2hheng0N2o4Nzk1YXhxZW9xcDQiLCJpYXQiOjE1NDI5NTk5NzYsImV4cCI6MTU0Mjk3NDM3Nn0.z5iyPg58a0-_tln7SopyJhYoYn5iSXHB__TIYDCwWTs";
+        const access_token = this.state.user_session.access_token;
         const endpoint = 'http://localhost:3300/api/topic/' + topicID;
         // const userID = "noua9p74ugz3shazx47j8795axqeoqp4"; 
 
@@ -216,7 +229,7 @@ class Viewpane extends React.Component {
         const topicID = "fjovljgljkgy85apml6al04rdu7tfyw6kgkhfluepmsadfr3eapztwdutl5yww5c";
         const endpoint = 'http://localhost:3300/api/topic/' + topicID;
         const topic_content = "change this bad boy away beyond the stars";
-        const access_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiemUxOWR4ajB0azRvZHI4Zng4dW01OTQzdDBmZWFrNzUiLCJpYXQiOjE1NDI5Njc2MzMsImV4cCI6MTU0Mjk4MjAzM30.E4zjsnKVRf5-ruq9HlOm9Gf34aE8uF8K1bJFj08iOpw";
+        const access_token = this.state.user_session.access_token;
         fetch(endpoint, {
             method: 'put',
             headers: new Headers({
@@ -257,7 +270,7 @@ class Viewpane extends React.Component {
         const topic_type = this.state.inputTopicType;
         // console.log("The type", topic_type);
         // TODO: Retrieve access token from login.
-        const access_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiemUxOWR4ajB0azRvZHI4Zng4dW01OTQzdDBmZWFrNzUiLCJpYXQiOjE1NDMxNzM3ODUsImV4cCI6MTU0MzE4ODE4NX0.DlnkU1x5IZuePxVqGCsV9Tn8L-y3zCMDb6676sow9ho";
+        // const access_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiemUxOWR4ajB0azRvZHI4Zng4dW01OTQzdDBmZWFrNzUiLCJpYXQiOjE1NDMxNzM3ODUsImV4cCI6MTU0MzE4ODE4NX0.DlnkU1x5IZuePxVqGCsV9Tn8L-y3zCMDb6676sow9ho";
         fetch('http://localhost:3300/api/topic/create', {
             credentials: 'include',
             method: 'post',
@@ -268,7 +281,7 @@ class Viewpane extends React.Component {
                 "topic_title": topic_title,
                 "topic_content": topic_content,
                 "topic_type": topic_type,
-                "access_token": access_token
+                "access_token": this.state.user_session.access_token,
             })
         }).then(this.saveTopic());
         // }).then(console.log, this.saveTopic());
@@ -382,8 +395,13 @@ class Viewpane extends React.Component {
         // console.log("TOPICS", this.state.topics);
         // let newButton = this.state.singleTopicView ? null : <button className="ViewPane-Topic-Button" onClick={this.updateTopic}>add topic</button>;
         // let newButton = this.state.singleTopicView ? null : <button className="ViewPane-Topic-Button" onClick={this.showModal}>add topic</button>;
-         let newButton = this.state.singleTopicView ? null : <Button className="ViewPane-Topic-Button" onClick={this.showModal}><span className="glyphicon glyphicon-plus NewPlusIcon" aria-hidden="true"></span> Create New Topic</Button>;
+        let newButton = this.state.singleTopicView ? null : <Button className="ViewPane-Topic-Button" onClick={this.showModal}><span className="glyphicon glyphicon-plus NewPlusIcon" aria-hidden="true"></span> Create New Topic</Button>;
+
         return (<div className="ViewPane">
+            <div>
+                {/* <h1>HEREEEE</h1> */}
+                <Button bsStyle="primary" onClick={this.getUserCredentials}><span className="glyphicon glyphicon-refresh" aria-hidden="true"></span>Update</Button>
+            </div>
             {renderedTopics}
             {newButton}
                 <Modal show={this.state.visible} onHide={this.hideModal}>

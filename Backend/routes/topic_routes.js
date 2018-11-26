@@ -107,12 +107,13 @@ router.put('/:id', async function (req, res) {
 // Creating/Posting new topic
 router.post('/create', async function (req, res) {
     let user_id;
-
-    if(req.token) user_id = await token.check_token(req.token).catch( () => { return false; })
+    // console.log("Hitting create", req.token);
+    if(req.token) user_id = await token.check_token(req.token).catch( () => { return false; })    
     else {
         res.status(401).send("Authentication token required");
         return;
     }
+    // console.log("WE got it",user_id);
 
     if(!user_id) {
         res.status(401).send("Invalid authentication token");

@@ -18,8 +18,19 @@ class Sidebar extends React.Component {
             settingsHidden: true,
             settings : {"Mute Notifications":true, "Report a Bug":true, "Delete Data":true},
             topicCards: [1,2,3,4, 5, 6],
-            subsCards: [1,2,3]
+            subsCards: [1,2,3],
+            user_sess: {
+                user_id: '',
+                access_token: '',
+            }
         }
+        this.setUserCredentials = this.setUserCredentials.bind(this);
+    }
+
+    setUserCredentials(user_sess) {
+        this.state.user_sess = user_sess;
+        // console.log("LOGIN GOTTEM", this.state.user_sess);
+        this.props.parentUserCredentials(this.state.user_sess);
     }
 
     updateSettings(id){
@@ -32,7 +43,7 @@ class Sidebar extends React.Component {
                 <div className="SidebarUserProfile">
                     <div className="SidebarUserImage"></div> {/*<Image src='../profileDefault.png' circle reactive */}
                 </div>
-                <Login className="SidebarUserSignUp"/>
+                <Login parentUserSession={this.setUserCredentials} userCredentials={this.state.user_sess} className="SidebarUserSignUp"/>
                 <Col md="12">
                     <input
                     className="form-control"
