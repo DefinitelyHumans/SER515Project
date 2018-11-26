@@ -35,12 +35,18 @@ router.get('/:id', async function (req, res) {
 
 router.delete('/:id', async function (req, res) {
     let id = req.params.id; // Grab topic ID from request parameters.
-    // console.log("topic id", id)
-    let user_id;
-    if(req.token) user_id = token.check_token(req.token);
-    else res.status(401).send("Authentication token required");
 
-    if(!user_id) res.status(401).send("Invalid authentication token");
+    let user_id;
+    if(req.token) user_id = await token.check_token(req.token).catch( () => { return false; })
+    else {
+        res.status(401).send("Authentication token required");
+        return;
+    }
+
+    if(!user_id) {
+        res.status(401).send("Invalid authentication token");
+        return;
+    }
 
     let del_info = await topic.DeleteTopic(id)
 
@@ -55,12 +61,18 @@ router.delete('/:id', async function (req, res) {
 router.put('/:id', async function (req, res) {
     let body = req.body;
     let id = req.params.id;
-    let user_id;
-    // console.log("Body request", body);
-    if(req.token) user_id = token.check_token(req.token);
-    else res.status(401).send("Authentication token required");
 
-    if(!user_id) res.status(401).send("Invalid authentication token");
+    let user_id;
+    if(req.token) user_id = await token.check_token(req.token).catch( () => { return false; })
+    else {
+        res.status(401).send("Authentication token required");
+        return;
+    }
+
+    if(!user_id) {
+        res.status(401).send("Invalid authentication token");
+        return;
+    }
 
     let upd_info = await topic.UpdateTopic(user_id, id, body.topic_content);
 
@@ -74,11 +86,16 @@ router.put('/:id', async function (req, res) {
 // Creating/Posting new topic
 router.post('/create', async function (req, res) {
     let user_id;
-    // console.log("Creating a topic from topic_route.js");
-    if(req.token) user_id = await token.check_token(req.token);
-    else res.status(401).send("Authentication token required");
+    if(req.token) user_id = await token.check_token(req.token).catch( () => { return false; })
+    else {
+        res.status(401).send("Authentication token required");
+        return;
+    }
 
-    if(!user_id) res.status(401).send("Invalid authentication token");
+    if(!user_id) {
+        res.status(401).send("Invalid authentication token");
+        return;
+    }
 
     let title = req.body.topic_title;
     let type = req.body.topic_type;
