@@ -17,7 +17,8 @@ const { gen_topic_id } = require('../lib/id_gen');
  */
 function check_title(topic_title) {
     if (!topic_title || (topic_title.length > 64)) return false;
-    return /^[a-z0-9]+$/i.test(topic_title);
+    return true;
+    // return /^[a-z0-9]+$/i.test(topic_title);
 }
 
 /**
@@ -27,7 +28,8 @@ function check_title(topic_title) {
  */
 function check_content(topic_content) {
     if (!topic_content || (topic_content.length > 500)) return false;
-    return /^[a-z0-9]+$/i.test(topic_content);
+    return true;
+    // return /^[a-z0-9]+$/i.test(topic_content);
 }
 
 // EXPORTED FUNCTIONS
@@ -47,9 +49,9 @@ async function CreateTopic(userID, topic_title, topic_type, topic_content) {
             invalid_input: true,
         };
     }
-    // Sanitize topic title and input.
-    topic_title = topic_title.replace(/[^a-zA-Z0-9\w\s]/gi, "");
-    topic_content = topic_content.replace(/[^a-zA-Z0-9\w\s]/gi, "");
+    // // Sanitize topic title and input.
+    // topic_title = topic_title.replace(/[^a-zA-Z0-9\w\s]/gi, "");
+    // topic_content = topic_content.replace(/[^a-zA-Z0-9\w\s]/gi, "");
     // Send DB query.
     let topic_id = gen_topic_id();  // Generate topic ID.
     let topic = {
