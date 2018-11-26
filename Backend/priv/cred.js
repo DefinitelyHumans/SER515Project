@@ -1,6 +1,6 @@
-exports.g_cred = {
-    secret: ""
-};
+// exports.g_cred = {
+//     secret: ""
+// };
 
 exports.db_cred = {
     user_name: "",
