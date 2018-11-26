@@ -26,6 +26,15 @@ const comments_table = `${schema_name}.comments`;
 
 //local functions
 
+(function () {
+    if(db_cred.user_name.length == 0 ||
+       db_cred.host.length      == 0 ||
+       db_cred.database.length  == 0 ||
+       db_cred.password.length  == 0 ||
+       db_cred.port.length      == 0)
+        console.log("!! - One or more DB auth strings are null. Did you forget to populate ./priv/cred.js ?\n");
+})()
+
 //export
 exports.errors =
 db_errors = {
