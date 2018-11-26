@@ -15,31 +15,6 @@ const password_max_len = 32;
 
 const salt_rounds      = 10;
 
-//local functions
-async function check_recaptcha(response_token, remote_ip) {
-    if(!response_token) return { success: false };
-    return await request({
-        method: 'POST',
-        url: 'https://www.google.com/recaptcha/api/siteverify',
-        body: {
-            'secret': g_cred.secret,
-            'response': response_token,
-            'remoteip': remote_ip,
-        },
-        json: true,
-    })
-    .then((body) => {
-        if(body["success"]) {
-            return { success: true };
-        } else {
-            return { success: false };
-        }
-    })
-    .catch((err) => {
-       return { error: true };
-    });
-}
-
 function check_password(password) {
     if(!password) return false
     //check min and max lengths
@@ -59,19 +34,11 @@ exports.register =
 async function register(email, password, recaptcha_code) {
     //return fields:
     // invalid_login
-    // recaptcha_fail
     // server_error
     // user_already_registered
     // success
 
     if(!check_password(password) || !check_email(email)) return { invalid_login: true };
-
-    //check the recaptcha field
-    let recaptcha_check = await check_recaptcha(recaptcha_code);
-    if(!recaptcha_check.success)
-        return { recaptcha_fail: true };
-    else if(recaptcha_check.error)
-        return { server_error: true };
 
     let salted_hash = await bcrypt.hash(password, salt_rounds);
     let userID = gen_user_id();
