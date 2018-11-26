@@ -19,10 +19,9 @@ const pool = new Pool({
 
 const schema_name = 'public';
 
-const user_table     = `${schema_name}.users`;
-const token_table    = `${schema_name}.login_tokens`;
-const topic_table    = `${schema_name}.topics`;
-const comments_table = `${schema_name}.comments`;
+const user_table    = `${schema_name}.users`;
+const topic_table   = `${schema_name}.topics`;
+const comment_table = `${schema_name}.comments`;
 
 //local functions
 
@@ -138,9 +137,10 @@ async function get_topics_by_user(user_id) {
             if(res.rowCount == 0) {
                 //if none, return empty
                 return { error: db_errors.NO_RESPONSE };
-            } else if(res.rowCount > 1) {   // If list found, return list.
+            } else if(res.rowCount >= 1) {   // If list found, return list.
                 // Result list is stripped in query for necessary information.
-                return res.rows;
+                // console.log("GOTTEM", res.rows);
+                return { topics: res.rows, error: db_errors.NO_ERROR };
             } else {    // If more than one, internal error.
                 return { error: db_errors.INTERNAL_ERROR }
             }
@@ -217,6 +217,70 @@ async function remove_topic(topic_id) {
         return { error: db_errors.NO_ERROR };
     })
     .catch((err) => {
+        return { error: db_errors.INTERNAL_ERROR };
+    });
+};
+
+/**
+ * Get a comment entry by it's respective ID
+ */
+exports.get_comment =
+async function get_comment(comment_id) {
+    return await pool.query(
+        `SELECT topic_id, user_id, comment_body, extract(EPOCH FROM time_posted) as time_posted FROM ${comment_table} WHERE comment_id=$1;`,
+        [comment_id])
+    .then( (res) => {
+        if(res.rowCount == 0) {
+            //if none, return empty
+            return { error: db_errors.NO_RESPONSE };
+        } else {
+            return res.rows[0];
+        }
+    })
+    .catch((err) => {
+        console.log(err)
+        return { error: db_errors.INTERNAL_ERROR };
+    });
+};
+
+/**
+ * Get a list of comment id's associated with a particular topic
+ */
+exports.get_comments_by_topic =
+async function get_comments_by_topic(topic_id) {
+    return await pool.query(
+        `SELECT comment_id, time_posted FROM ${comment_table} WHERE topic_id=$1 ORDER BY time_posted, comment_id;`,
+        [topic_id])
+    .then( (res) => {
+        return {
+            error: db_errors.NO_ERROR,
+            comment_ids: res.rows
+        };
+    })
+    .catch((err) => {
+        console.log(err)
+        return { error: db_errors.INTERNAL_ERROR };
+    });
+};
+
+/**
+ * Create a comment entry
+ */
+exports.add_comment =
+async function add_comment(comment_id, topic_id, user_id, body) {
+    let timestamp = dateTime.create().epoch();
+    return await pool.query(
+        `INSERT INTO ${comment_table} (comment_id, topic_id, user_id, comment_body, time_posted) values($1,$2,$3,$4,to_timestamp($5))`,
+        [comment_id, topic_id, user_id, body, timestamp])
+    .then( (res) => {
+        console.log(res);
+        return {
+            error: db_errors.NO_ERROR,
+            time_posted: timestamp,
+        };
+    })
+    .catch((err) => {
+        console.log(err)
         return { error: db_errors.INTERNAL_ERROR };
     });
 };

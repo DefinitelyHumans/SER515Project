@@ -33,6 +33,27 @@ router.get('/:id', async function (req, res) {
     }
 });
 
+
+router.get('/user/:id', async function (req, res) {
+    let id = req.params.id;
+
+    let get_info = await topic.GetTopicByUserID(id);
+
+    if(get_info.success) {
+        // console.log("Object returned", get_info);
+        let topics = get_info.topics;
+        res.status(200).send(topics);   // Return array of topics by user.
+    } else {
+        if(get_info.not_found) {
+            res.status(404).send("not found");
+        } else if(get_info.server_error) {
+            res.status(500).send("Internal Error");
+        }
+    }
+});
+
+
+
 router.delete('/:id', async function (req, res) {
     let id = req.params.id; // Grab topic ID from request parameters.
 
@@ -86,6 +107,7 @@ router.put('/:id', async function (req, res) {
 // Creating/Posting new topic
 router.post('/create', async function (req, res) {
     let user_id;
+
     if(req.token) user_id = await token.check_token(req.token).catch( () => { return false; })
     else {
         res.status(401).send("Authentication token required");

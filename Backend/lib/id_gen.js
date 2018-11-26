@@ -8,6 +8,9 @@ const userid_style   = '0123456789abcdefghijklmnopqrstuvwxyz';
 const topicid_length = 64;
 const topicid_style  = '0123456789abcdefghijklmnopqrstuvwxyz';
 
+const commentid_length = 64;
+const commentid_style  = '0123456789abcdefghijklmnopqrstuvwxyz';
+
 exports.gen_user_id =
 function gen_user_id() {
     return rand.generate(userid_length, userid_style);
@@ -16,4 +19,9 @@ function gen_user_id() {
 exports.gen_topic_id =
 function gen_topic_id() {
     return rand.generate(topicid_length, topicid_style);
+}
+
+exports.gen_comment_id =
+function gen_comment_id() {
+    return rand.generate(commentid_length, commentid_style);
 }

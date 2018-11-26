@@ -6,6 +6,7 @@ const enforceContentType = require('enforce-content-type')
 
 const { auth_router } = require('./routes/auth_routes.js');
 const { topic_router } = require('./routes/topic_routes.js');
+const { comment_router } = require('./routes/comment_routes.js');
 
 //module setup
 const app = express();
@@ -23,8 +24,9 @@ app.use(bearerToken({
 }));
 
 //routers
-app.use('/api/auth/', auth_router);
-app.use('/api/topic/', topic_router);
+app.use('/api/auth/',    auth_router);
+app.use('/api/topic/',   topic_router);
+app.use('/api/comment/', comment_router);
 
 //constants
 const port = 3300;

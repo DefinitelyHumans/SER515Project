@@ -49,6 +49,7 @@ async function CreateTopic(userID, topic_title, topic_type, topic_content) {
             invalid_input: true,
         };
     }
+
     // // Sanitize topic title and input.
     // topic_title = topic_title.replace(/[^a-zA-Z0-9\w\s]/gi, "");
     // topic_content = topic_content.replace(/[^a-zA-Z0-9\w\s]/gi, "");
@@ -109,7 +110,7 @@ async function UpdateTopic(userID, topic_id, topic_content) {
     // Validate topic id length.
     if (topic_id.length > 64) return {success:false, invalid_input: true};
     // Sanitize topic content input.
-    topic_content = topic_content.replace(/[^a-zA-Z0-9\w\s]/gi, "");
+    // topic_content = topic_content.replace(/[^a-zA-Z0-9\w\s]/gi, "");
     if (!check_content(topic_content)) {
         return {
             success: false,
@@ -162,6 +163,33 @@ async function GetTopic(topic_id) {
         return {
             success: true,
             topic: topic
+        };
+    }
+}
+
+exports.GetTopicByUserID =
+async function GetTopicByUserID(user_id) {
+    if (user_id.length > 32) return {success: false, invalid_input: true};
+    // console.log("Get topic:", topic_id);
+    let {topics, error} = await database.get_topics_by_user(user_id);
+    // console.log("Topics retrieved", topics);
+    if (error == database.errors.NO_RESPONSE) {
+        // console.log(topic);
+        return {
+            success: false,
+            not_found: true
+        };
+    } else if(error) {
+        // console.log("Failed", error);
+        return {
+            success: false,
+            server_error: true
+        };
+    } else {
+        // console.log("Topics retrieved",topics);
+        return {
+            success: true,
+            topics: topics
         };
     }
 }
