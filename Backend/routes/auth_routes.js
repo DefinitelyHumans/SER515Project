@@ -25,6 +25,7 @@ router.post('/login', async function (req, res) {
                 res.statusCode = 200;
                 res.send({
                     auth_token: token,
+                    user_id: login_info.user_id
                 });
             })
             .catch((error) => {
@@ -45,20 +46,16 @@ router.post('/login', async function (req, res) {
  */
 router.post('/register', async function (req, res) {
     // invalid_login
-    // recaptcha_fail
     // server_error
     // user_already_registered
     // success
     let body = req.body;
 
-    let register_info = await auth.register(body.email, body.password, body["g-recaptcha-response"]);
+    let register_info = await auth.register(body.email, body.password);
 
     if(register_info.invalid_login) {
         res.statusCode = 401;
         res.send({error: "Invalid Credentials"});
-    } else if(register_info.recaptcha_fail) {
-        res.statusCode = 412;
-        res.send({error: "Invalid Recaptcha Token"});
     } else if(register_info.user_already_registered) {
         res.statusCode = 400;
         res.send({error: "User Already Registered"});

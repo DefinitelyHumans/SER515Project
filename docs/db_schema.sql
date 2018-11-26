@@ -16,7 +16,6 @@ CREATE TYPE   C_topic_post_type AS ENUM ('text', 'link', 'image');
 
 CREATE TABLE public.users (
 	user_id CHAR(32) PRIMARY KEY,
-	tag_list VARCHAR(12) [],
 	topic_list CHAR(64) [],
 	email VARCHAR(254) UNIQUE NOT NULL,
 	password_hash VARCHAR(60) NOT NULL
@@ -41,8 +40,11 @@ CREATE TABLE public.topics (
 );
 
 CREATE TABLE public.comments (
-	comment_id CHAR(64) PRIMARY KEY,
+	comment_id   CHAR(64) PRIMARY KEY,
+	topic_id     CHAR(64) NOT NULL,
+	user_id      CHAR(32) NOT NULL,
 	comment_body TEXT,
-	user_id CHAR(32),
-	FOREIGN KEY (user_id) REFERENCES public.users(user_id)
+	time_posted  TIMESTAMP WITH TIME ZONE,
+	FOREIGN KEY  (user_id)  REFERENCES public.users  (user_id),
+	FOREIGN KEY  (topic_id) REFERENCES public.topics (topic_id)
 );

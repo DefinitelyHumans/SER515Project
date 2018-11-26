@@ -26,7 +26,7 @@ class App extends React.Component {
     render(){
         return (<div className="App">
             <Sidebar handleUserDetails = {this.handleUserDetails}></Sidebar>
-            <ViewPane></ViewPane>
+            <ViewPane className="viewpane"></ViewPane>
             </div>);
 
     }

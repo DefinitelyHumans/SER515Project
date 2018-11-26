@@ -33,14 +33,41 @@ router.get('/:id', async function (req, res) {
     }
 });
 
+
+router.get('/user/:id', async function (req, res) {
+    let id = req.params.id;
+
+    let get_info = await topic.GetTopicByUserID(id);
+
+    if(get_info.success) {
+        // console.log("Object returned", get_info);
+        let topics = get_info.topics;
+        res.status(200).send(topics);   // Return array of topics by user.
+    } else {
+        if(get_info.not_found) {
+            res.status(404).send("not found");
+        } else if(get_info.server_error) {
+            res.status(500).send("Internal Error");
+        }
+    }
+});
+
+
+
 router.delete('/:id', async function (req, res) {
     let id = req.params.id; // Grab topic ID from request parameters.
-    // console.log("topic id", id)
-    let user_id;
-    if(req.token) user_id = token.check_token(req.token);
-    else res.status(401).send("Authentication token required");
 
-    if(!user_id) res.status(401).send("Invalid authentication token");
+    let user_id;
+    if(req.token) user_id = await token.check_token(req.token).catch( () => { return false; })
+    else {
+        res.status(401).send("Authentication token required");
+        return;
+    }
+
+    if(!user_id) {
+        res.status(401).send("Invalid authentication token");
+        return;
+    }
 
     let del_info = await topic.DeleteTopic(id)
 
@@ -55,12 +82,18 @@ router.delete('/:id', async function (req, res) {
 router.put('/:id', async function (req, res) {
     let body = req.body;
     let id = req.params.id;
-    let user_id;
-    // console.log("Body request", body);
-    if(req.token) user_id = token.check_token(req.token);
-    else res.status(401).send("Authentication token required");
 
-    if(!user_id) res.status(401).send("Invalid authentication token");
+    let user_id;
+    if(req.token) user_id = await token.check_token(req.token).catch( () => { return false; })
+    else {
+        res.status(401).send("Authentication token required");
+        return;
+    }
+
+    if(!user_id) {
+        res.status(401).send("Invalid authentication token");
+        return;
+    }
 
     let upd_info = await topic.UpdateTopic(user_id, id, body.topic_content);
 
@@ -74,11 +107,17 @@ router.put('/:id', async function (req, res) {
 // Creating/Posting new topic
 router.post('/create', async function (req, res) {
     let user_id;
-    // console.log("Creating a topic from topic_route.js");
-    if(req.token) user_id = await token.check_token(req.token);
-    else res.status(401).send("Authentication token required");
 
-    if(!user_id) res.status(401).send("Invalid authentication token");
+    if(req.token) user_id = await token.check_token(req.token).catch( () => { return false; })
+    else {
+        res.status(401).send("Authentication token required");
+        return;
+    }
+
+    if(!user_id) {
+        res.status(401).send("Invalid authentication token");
+        return;
+    }
 
     let title = req.body.topic_title;
     let type = req.body.topic_type;
