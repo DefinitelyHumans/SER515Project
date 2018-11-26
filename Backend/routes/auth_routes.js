@@ -25,6 +25,7 @@ router.post('/login', async function (req, res) {
                 res.statusCode = 200;
                 res.send({
                     auth_token: token,
+                    user_id: login_info.user_id
                 });
             })
             .catch((error) => {
