@@ -28,7 +28,6 @@ exports.check_token =
 async function check_token(token) {
     return new Promise((resolve, reject) => {
         jwt.verify(token, jwt_cred.secret, (err, decoded) => {
-            console.log(err, decoded);
             if(err) {
                 reject(err["name"]);
             } else {

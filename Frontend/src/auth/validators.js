@@ -15,7 +15,7 @@ const userValidator = {
     rules: [
       {
         test: (value) => {
-          return value.length >= 6;
+          return value.length >= 8;
         },
         message: 'Password too short',
       },

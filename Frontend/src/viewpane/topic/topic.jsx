@@ -1,4 +1,12 @@
 import React from 'react';
+import jQuery from 'jquery';
+window.jQuery = jQuery;
+require('bootstrap')
+var FontAwesome = require('react-fontawesome');
+import { Form, FormControl, Label, Input, Col, FormGroup, FormFeedback, HelpBlock,ControlLabel, Button} from 'reactstrap';
+import { Panel, Well, PageHeader } from 'react-bootstrap';
+require('react-bootstrap')
+
 
 class Topic extends React.Component {
 
@@ -11,6 +19,7 @@ class Topic extends React.Component {
         this.renderTopicCard = this.renderTopicCard.bind(this);
         this.renderFullTopic = this.renderFullTopic.bind(this);
         this.renderComments = this.renderComments.bind(this);
+
     }
 
     swapTopic(){
@@ -18,65 +27,68 @@ class Topic extends React.Component {
     }
 
     renderTopicCard(){
-        return (<button className="Topic" onClick={this.swapTopic}><p>{this.props.topic['title']}</p></button>);
+
+        return (<Panel className="flip-card" onClick={this.swapTopic}><Panel.Body className="flip-card-inner">
+    <div className="flip-card-front" >
+           {this.props.topic['topic_title']}
+        </div>
+    <div className="flip-card-back">{this.props.topic['topic_content']}
+    </div>
+</Panel.Body></Panel>)
+        //return (<Button className="Topic" onClick={this.swapTopic}><p>{this.props.topic['topic_title']}</p></Button>);
+        //return (<button className="Topic" onClick={this.swapTopic}><p>{this.props.topic['topic_title']}</p></button>);
     }
 
     renderComments(){
         if (this.props.comment !== {'content':''}){
             return this.props.comment.map((c) => {
-                return (
-                <div className="Comment">
-                    <div className="CommentUserProfile">
-                        <div className="CommentUserImage"></div>
-                        <p className="CommentUserInfo">{c['user']}</p>
-                    </div>
-                    <div className="CommentContent">
-                        <p>{c['content']}</p>
-                    </div>
-                    <div className="CommentStats">
-                        <p className="CommentTime">{c['time']}</p>
-                    </div>
-                </div>)
+                return (<Panel>
+                <Panel.Body className="CommentContent">
+                        {c['content']}
+                        <br/>
+                        <small className="CommentUser"> {c['user']}</small>
+                        <small className="CommentTime">{c['time']} | </small>
+                </Panel.Body></Panel>)
             });
         }
     }
 
     handleSubmit(){
         if (this.state.newComment['content'] !== ''){
-            this.props.addComment(this.props.topic['title'], this.state.newComment);
+            this.props.addComment(this.props.topic['topic_title'], this.state.newComment);
             this.setState({newComment: {'content': ''}});
         }
     }
 
     handleComment(event){
         if (event.target.value != '')
-            this.setState({newComment: {'id': this.props.topic['title'], 'user': 'user', 'time': 'time', 'content': event.target.value}});
+            this.setState({newComment: {'id': this.props.topic['topic_title'], 'user': 'user', 'time': 'time', 'content': event.target.value}});
     }
 
     renderFullTopic(){
         return (
             <div className="FullTopic">
-                <div className="UpperContainer">
+            <div className="UpperContainer">
                     <button className="TopicExitButton" onClick={this.swapTopic}>Return</button>
                 </div>
                 <div className="TopicContainer">
+                <PageHeader><Panel className="panel panel-primary">
+                    <Panel.Heading className="FullTopicTitle">{this.props.topic['topic_title']}</Panel.Heading> 
+                    <Panel.Body className="FullTopicContent">{this.props.topic['topic_content']}
+                   <small>{this.props.topic['user_posted']} </small>
+                    </Panel.Body>
+                    </Panel>
+                    </PageHeader>
                     <div className="TopicUserProfile">
                         <div className="TopicUserImage"></div>
-                        <p className="TopicUserInfo">{this.props.topic['user']}</p>
+                        <p className="TopicUserInfo">{this.props.topic['user_posted']}</p>
                     </div>
                     <div className="TopicContent">
-                        <h1 className="TopicTitle">{this.props.topic['title']}</h1>
-                        <p className="TopicDescription">{this.props.topic['descrip']}</p>
+                        <h1 className="TopicTitle">{this.props.topic['topic_title']}</h1>
+                        <p className="TopicDescription">{this.props.topic['topic_content']}</p>
                     </div>
                 </div>
-                <hr/>
-                <div className='TopicComments'>
-                    {this.renderComments()}
-                    <form className='CommentSubmission'>
-                        <textarea className="CommentArea" rows="4" cols="60" onChange={this.handleComment.bind(this)} value={this.state.newComment['content']}></textarea>
-                        <button type='button' onClick={this.handleSubmit.bind(this)} className="SubmitButton">Submit</button>
-                    </form>
-                </div>
+                
             </div>
         );
     }
