@@ -2,7 +2,13 @@
 const jwt          = require('jsonwebtoken');
 
 //local files
-const { jwt_cred } = require('../priv/cred.js')
+const { jwt_cred } = require('../priv/cred.js');
+
+//local functions
+(function () {
+    if(jwt_cred.secret.length != 32)
+        console.log("!! - JWT Secret is an incorrect size. Please make sure it is exactly 32 characters in length.\n");
+})();
 
 //exported functions
 exports.get_token =
