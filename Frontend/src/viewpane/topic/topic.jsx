@@ -79,14 +79,16 @@ class Topic extends React.Component {
                     </Panel.Body>
                     </Panel>
                     </PageHeader>
-                    <div className="TopicUserProfile">
-                        <div className="TopicUserImage"></div>
-                        <p className="TopicUserInfo">{this.props.topic['user_posted']}</p>
-                    </div>
-                    <div className="TopicContent">
-                        <h1 className="TopicTitle">{this.props.topic['topic_title']}</h1>
-                        <p className="TopicDescription">{this.props.topic['topic_content']}</p>
-                    </div>
+                </div>
+                <div className='TopicComments'>
+                    {this.renderComments()}
+                    <Form className='CommentSubmission'>
+                        <FormGroup>
+                            <Input type="textarea" onChange={this.handleComment.bind(this)} value={this.state.newComment['content']}/>
+                        </FormGroup>
+                        <Button type='Button' onClick={this.handleSubmit.bind(this)} className="SubmitButton CommentButton"><span onClick={this.handleSubmit.bind(this)} className="glyphicon glyphicon-plus NewCommentIcon" aria-hidden="true"></span> Comment</Button>&nbsp;
+                        <Button className="ReturnButton" onClick={this.swapTopic}>&laquo; Return</Button>
+                    </Form>
                 </div>
                 
             </div>
