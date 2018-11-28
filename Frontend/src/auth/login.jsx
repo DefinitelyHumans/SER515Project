@@ -5,11 +5,11 @@ import jQuery from 'jquery';
 window.jQuery = jQuery;
 require('bootstrap')
 var FontAwesome = require('react-fontawesome');
-import { Form, FormControl, Label, Input, Col, FormGroup, FormFeedback, HelpBlock,ControlLabel, Button, Popover, PopoverHeader, PopoverBody } from 'reactstrap';
-import {Tabs, Tab } from 'react-bootstrap';
+import { Form, FormControl, Label, Input, Col, FormGroup, FormFeedback, HelpBlock, ControlLabel, Button, Popover, PopoverHeader, PopoverBody } from 'reactstrap';
+import { Tabs, Tab } from 'react-bootstrap';
 require('react-bootstrap')
 import userValidator from './validators';
-import {NotificationManager} from 'react-notifications';
+import { NotificationManager } from 'react-notifications';
 import Modal from './../modal';
 
 class Login extends React.Component {
@@ -20,13 +20,18 @@ class Login extends React.Component {
         email: '',
         password: ''
       },
-      auth_token: '',
+      user_sess: {
+        access_token: '',
+        user_id: '',
+      },
       loggedIn: 'false',
       visible: false
     };
     this.validators = userValidator;
     this.resetValidators();
-
+    // Parent component
+    this.setUserCredentials = this.setUserCredentials.bind(this);
+    // self
     this.handleInputChange = this.handleInputChange.bind(this);
     this.displayValidationErrors = this.displayValidationErrors.bind(this);
     this.updateValidators = this.updateValidators.bind(this);
@@ -38,7 +43,7 @@ class Login extends React.Component {
     this.showModal = this.showModal.bind(this);
     this.hideModal = this.hideModal.bind(this);
   }
-  
+
   resetValidators() {
     Object.keys(this.validators).forEach((fieldName) => {
       this.validators[fieldName].errors = [];
@@ -47,62 +52,81 @@ class Login extends React.Component {
     });
   }
 
+  setUserCredentials() {
+    // console.log("WITHIN", this.state.user_sess);
+    this.props.parentUserSession(this.state.user_sess);
+  }
+
   handleRegister(e) {
     e.preventDefault();
-     const email = this.state.userCred.email
-     const password = this.state.userCred.password
-    fetch('http://localhost:3300/api/auth/register/',{
+    const email = this.state.userCred.email
+    const password = this.state.userCred.password
+    fetch('http://localhost:3300/api/auth/register/', {
       credentials: 'include',
-      method:'post',
+      method: 'post',
       headers: new Headers({
-     'Authorization': 'Basic '+btoa('username:password'),
-     'Content-Type':'application/json'}),
-      body: JSON.stringify({ "email": email, "password": password})
-    }).then(function(response) {
-        if(!response.ok) {
-          let resp = response.json();
-          resp.then(function(resp) {
-                NotificationManager.error(resp.error);
-              });
-        }
-        else
-        NotificationManager.success('You can now login with '+email);        
-  });
+        'Authorization': 'Basic ' + btoa('username:password'),
+        'Content-Type': 'application/json'
+      }),
+      body: JSON.stringify({ "email": email, "password": password })
+    }).then(function (response) {
+      if (!response.ok) {
+        let resp = response.json();
+        resp.then(function (resp) {
+          NotificationManager.error(resp.error);
+        });
+      }
+      else
+        NotificationManager.success('You can now login with ' + email);
+    });
   }
 
   handleLogin(e) {
-   
+
     e.preventDefault();
     let curComponent = this;
-     let auth = '';
-     const email = this.state.userCred.email
-     const password = this.state.userCred.password
-    fetch('http://localhost:3300/api/auth/login/',{
+    let auth = '';
+    let uID = '';
+    const email = this.state.userCred.email
+    const password = this.state.userCred.password
+    fetch('http://localhost:3300/api/auth/login/', {
       credentials: 'include',
-      method:'post',
+      method: 'post',
       headers: new Headers({
-     'Authorization': 'Basic '+btoa('username:password'),
-     'Content-Type':'application/json'}),
-      body: JSON.stringify({ "email": email, "password": password})
-    }).then(function(response) {
-        let resp = response.json();        
-        if(!response.ok) {
-          NotificationManager.error('Error, try again!');
-        }
-        else{
-          resp.then(function(resp) {
+        'Authorization': 'Basic ' + btoa('username:password'),
+        'Content-Type': 'application/json'
+      }),
+      body: JSON.stringify({ "email": email, "password": password })
+    }).then(function (response) {
+      let resp = response.json();
+      if (!response.ok) {
+        NotificationManager.error('Error, try again!');
+      }
+      else {
+        resp.then(function (resp) {
+          console.log("RESP from login", resp);
           auth = resp.auth_token;
-          curComponent.setState({auth_token: auth});
-          curComponent.setState({loggedIn: 'true'});
-          NotificationManager.success('Logged in with email '+email);        
+          uID = resp.user_id;
+          let u_sess = {
+            user_id: uID,
+            access_token: auth
+          };
+          // Update parent app
+          // console.log("GRABBED", u_sess);
+          curComponent.state.user_sess = u_sess;
+          // console.log("ASSIGNED", curComponent.state.user_sess);
+          curComponent.setUserCredentials();
+          
+          curComponent.setState({ loggedIn: 'true' });
+          NotificationManager.success('Logged in with email ' + email);
         })
-        }
-  });
+      }
+    });
   }
-  
-  handleLogout(e){
+
+  handleLogout(e) {
     e.preventDefault();
-    this.setState({loggedIn: 'false', auth_token: '', userCred: {email: '', password:''}, visible:false});
+    this.setState({ loggedIn: 'false', auth_token: '', userCred: { email: '', password: '' }, visible: false });
   }
   updateValidators(fieldName, value) {
     this.validators[fieldName].errors = [];
@@ -129,7 +153,7 @@ class Login extends React.Component {
     this.updateValidators(inputPropName, event.target.value);
   }
 
-   displayValidationErrors(fieldName) {
+  displayValidationErrors(fieldName) {
     const validator = this.validators[fieldName];
     const result = '';
     if (validator && !validator.valid) {
@@ -144,9 +168,9 @@ class Login extends React.Component {
       );
     }
     return result;
-    }
+  }
 
-    isFormValid() {
+  isFormValid() {
     let status = true;
     Object.keys(this.validators).forEach((field) => {
       if (!this.validators[field].valid) {
@@ -156,102 +180,102 @@ class Login extends React.Component {
     return status;
   }
 
-    showModal () {
-        this.setState({visible: true});
-    }
-    
-    hideModal () {
-        this.setState({visible: false});
-    }
+  showModal() {
+    this.setState({ visible: true });
+  }
+
+  hideModal() {
+    this.setState({ visible: false });
+  }
 
   render() {
-    if(this.state.loggedIn=='false'){
-    return (<Popup
-              trigger = {<p>Login/Signup <FontAwesome name="Login" className="fa fa-sign-out" /></p>}
-              position = "bottom left"
-              on = "hover"
-              closeOnDocumentClick
-              mouseLeaveDelay = {300}
-              mouseEnterDelay = {0}
-              overlayStyle = {{backgroundColor: 'transparent'}}>
-                <Tabs id="SideBarSignUpLogin">
-                    <Tab eventKey={1} title="Login">
-                      <Form onSubmit={this.handleLogin}>
-                        <Col>
-                          <FormGroup>
-                            <Label>Email</Label>
-                            <Input
-                              type="email"
-                              name="email"
-                              id="userEmail"
-                              required
-                              value={this.state.userCred.email}
-                              onChange={event => this.handleInputChange(event, 'email')}
-                            />
-                            <Label>{ this.displayValidationErrors('email') }</Label>
-                          </FormGroup>
-                        </Col>
-                        <Col>
-                          <FormGroup>
-                            <Label for="userPassword">Password</Label>
-                            <Input
-                              type="password"
-                              name="password"
-                              id="userPassword"
-                              required
-                              value={this.state.userCred.password}
-                              onChange={event => this.handleInputChange(event, 'password')}
-                            />
-                             <Label>{ this.displayValidationErrors('password') }</Label>
-                          </FormGroup>
-                        </Col>
-                        <Button>Login</Button>
-                      </Form>
-                    </Tab>
-                    <Tab eventKey={2} title="SignUp">
-                     <Form className="form" onSubmit={this.handleRegister}>
-                        <Col>
-                          <FormGroup>
-                            <Label>Email</Label>
-                            <Input
-                              type="email"
-                              name="email"
-                              id="userEmail"
-                              required 
-                              value={this.state.userCred.email}
-                              onChange={event => this.handleInputChange(event, 'email')}/>
-                              <Label>{ this.displayValidationErrors('email') }</Label>
-                          </FormGroup>
-                        </Col>
-                        <Col>
-                          <FormGroup>
-                            <Label for="userPassword">Password</Label>
-                            <Input
-                              type="password"
-                              name="password"
-                              id="userPassword"
-                              value={this.state.userCred.password}
-                              onChange={event => this.handleInputChange(event, 'password')}
-                            />
-                             <Label>{ this.displayValidationErrors('password') }</Label>
-                          </FormGroup>
-                        </Col>
-                        <Button>SignUp</Button>
-                      </Form>
-                    </Tab>
-                </Tabs>
-            </Popup>);
+    if (this.state.loggedIn == 'false') {
+      return (<Popup
+        trigger={<p>Login/Signup <FontAwesome name="Login" className="fa fa-sign-out" /></p>}
+        position="bottom left"
+        on="hover"
+        closeOnDocumentClick
+        mouseLeaveDelay={300}
+        mouseEnterDelay={0}
+        overlayStyle={{ backgroundColor: 'transparent' }}>
+        <Tabs id="SideBarSignUpLogin">
+          <Tab eventKey={1} title="Login">
+            <Form onSubmit={this.handleLogin}>
+              <Col>
+                <FormGroup>
+                  <Label>Email</Label>
+                  <Input
+                    type="email"
+                    name="email"
+                    id="userEmail"
+                    required
+                    value={this.state.userCred.email}
+                    onChange={event => this.handleInputChange(event, 'email')}
+                  />
+                  <Label>{this.displayValidationErrors('email')}</Label>
+                </FormGroup>
+              </Col>
+              <Col>
+                <FormGroup>
+                  <Label for="userPassword">Password</Label>
+                  <Input
+                    type="password"
+                    name="password"
+                    id="userPassword"
+                    required
+                    value={this.state.userCred.password}
+                    onChange={event => this.handleInputChange(event, 'password')}
+                  />
+                  <Label>{this.displayValidationErrors('password')}</Label>
+                </FormGroup>
+              </Col>
+              <Button>Login</Button>
+            </Form>
+          </Tab>
+          <Tab eventKey={2} title="SignUp">
+            <Form className="form" onSubmit={this.handleRegister}>
+              <Col>
+                <FormGroup>
+                  <Label>Email</Label>
+                  <Input
+                    type="email"
+                    name="email"
+                    id="userEmail"
+                    required
+                    value={this.state.userCred.email}
+                    onChange={event => this.handleInputChange(event, 'email')} />
+                  <Label>{this.displayValidationErrors('email')}</Label>
+                </FormGroup>
+              </Col>
+              <Col>
+                <FormGroup>
+                  <Label for="userPassword">Password</Label>
+                  <Input
+                    type="password"
+                    name="password"
+                    id="userPassword"
+                    value={this.state.userCred.password}
+                    onChange={event => this.handleInputChange(event, 'password')}
+                  />
+                  <Label>{this.displayValidationErrors('password')}</Label>
+                </FormGroup>
+              </Col>
+              <Button>SignUp</Button>
+            </Form>
+          </Tab>
+        </Tabs>
+      </Popup>);
+    }
+    else {
+      return (<div><Button className="SideBarLogoutButton" onClick={this.showModal}><p>Logout <FontAwesome name="Login" className="fa fa-sign-out" /></p></Button><Modal visible={this.state.visible}>
+        <h3 className="dialogTitle">Logging out</h3>
+        <form>
+          <p>Are you sure you want to logout?</p>
+        </form>
+        <button onClick={this.handleLogout} type="button" className="closeDialogButton">Logout</button>
+        <button onClick={this.hideModal} type="button" className="closeDialogButton">Cancel</button>
+      </Modal></div>);
+    }
   }
-  else{
-    return(<div><Button className="SideBarLogoutButton" onClick={this.showModal}><p>Logout <FontAwesome name="Login" className="fa fa-sign-out" /></p></Button><Modal visible={this.state.visible}>
-                    <h3 className="dialogTitle">Logging out</h3>
-                    <form> 
-                        <p>Are you sure you want to logout?</p>
-                    </form>
-                    <button onClick={this.handleLogout} type="button" className="closeDialogButton">Logout</button>
-                    <button onClick={this.hideModal} type="button" className="closeDialogButton">Cancel</button>
-                </Modal></div>);
-  }
-}
 }
 export default Login;
