@@ -12,7 +12,20 @@ class Viewpane extends React.Component {
             topics:[{'title': 'ATitle', 'descrip':'descripA', 'type':'link', 'user':'AUser'},
                 {'title': 'B', 'descrip':'descripB', 'type':'link', 'user':'BUser'}],
             topic: {},
-            comments: [{'id': 'ATitle', 'comment': [{'user': 'userC', 'content': 'comment content', 'time': 'Dec. 1. 1989'}]},
+            comments: [
+                {
+                    'id': 'ATitle',
+                    'comment': [
+                        {
+                            'user': 'userC',
+                            'content': 'comment content',
+                            'time': 'Dec. 1. 1989'
+                        }]
+                },
+                {
+                    'id': 'B',
+                    'comment': []
+                }],
             {'id': 'B', 'comment':[]}],
             inputTopicTitle: '',
             inputTopicContent: '',
