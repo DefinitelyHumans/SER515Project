@@ -25,6 +25,12 @@ class Viewpane extends React.Component {
         this.hideModal = this.hideModal.bind(this);
         this.saveTopic = this.saveTopic.bind(this);
         this.addComment = this.addComment.bind(this);
+        this.createTopic = this.createTopic.bind(this);
+        this.deleteTopic = this.deleteTopic.bind(this);
+        this.updateTopic = this.updateTopic.bind(this);
+        this.addComment = this.addComment.bind(this);
+        this.deleteTopic = this.deleteTopic.bind(this);
+        this.getUserCredentials = this.getUserCredentials.bind(this);
     }
 
     showModal () {
