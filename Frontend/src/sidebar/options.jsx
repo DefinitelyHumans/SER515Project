@@ -29,7 +29,7 @@ class Options extends React.Component {
     }
 
     handleNotifs(){
-        console.log("Muted Notifications!")
+        this.props.muteChange();
     }
 
     handleAbout(){

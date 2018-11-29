@@ -16,7 +16,6 @@ class Sidebar extends React.Component {
         super(props);
         this.state = {
             settingsHidden: true,
-            settings : {"Mute Notifications":true, "Report a Bug":true, "Delete Data":true},
             topicCards: [1,2,3,4, 5, 6],
             subsCards: [1,2,3],
             user_sess: {
@@ -25,12 +24,17 @@ class Sidebar extends React.Component {
             }
         }
         this.setUserCredentials = this.setUserCredentials.bind(this);
+        this.muteChange = this.muteChange.bind(this);
     }
 
     setUserCredentials(user_sess) {
         this.state.user_sess = user_sess;
         // console.log("LOGIN GOTTEM", this.state.user_sess);
         this.props.parentUserCredentials(this.state.user_sess);
+    }
+
+    muteChange(){
+        this.props.muteChange();
     }
 
     updateSettings(id){
@@ -58,7 +62,7 @@ class Sidebar extends React.Component {
                             {this.state.topicCards.map((i) => <TopicCard></TopicCard>)}
                         </Tab>
                         <Tab eventKey={2} title="Settings">
-                            <Options></Options>
+                            <Options mute={this.props.mute} muteChange={this.muteChange}></Options>
                         </Tab>
                     </Tabs>
                 </Col>
