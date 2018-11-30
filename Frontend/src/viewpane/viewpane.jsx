@@ -64,6 +64,7 @@ class Viewpane extends React.Component {
         this.deleteTopic = this.deleteTopic.bind(this);
         this.updateTopic = this.updateTopic.bind(this);
         this.addComment = this.addComment.bind(this);
+        this.deleteTopic = this.deleteTopic.bind(this);
         // Parent from app
         this.getUserCredentials = this.getUserCredentials.bind(this);
     }
@@ -189,7 +190,7 @@ class Viewpane extends React.Component {
      * Delete takes a topic ID, or topic object, and hits the endpoint with user access token.
      * If response is valid, the topic object is located internally for topics array, and spliced away.
      */
-    deleteTopic() {
+    deleteTopic(topic_titleTemp) {
         const topic_title = "Bag of Chips";
         const topicID = "0uvoucfe3o2j0qi36bizy87t1e7ltieajt77kaewk4al2iwo8sx58obwxol6611s";
         const access_token = this.state.user_session.access_token;
@@ -307,7 +308,7 @@ class Viewpane extends React.Component {
                     break;
                 }
             }
-            tmp = <Topic key={this.state.topic['topic_title']} topic={this.state.topic} parentSwapTopic={this.swapTopic} singleView={this.state.singleTopicView} addComment={this.addComment} comment={this.state.comments[i]['comment']}></Topic>
+            tmp = <Topic key={this.state.topic['topic_title']} topic={this.state.topic} parentSwapTopic={this.swapTopic} singleView={this.state.singleTopicView} addComment={this.addComment} comment={this.state.comments[i]['comment']} parentDeleteTopic={this.deleteTopic}></Topic>
         } else {
             tmp = this.state.topics.map((a) => <Topic key={a['topic_title']} topic={a} parentSwapTopic={this.swapTopic} singleView={this.state.singleTopicView}></Topic>)
         }
