@@ -6,7 +6,7 @@ var FontAwesome = require('react-fontawesome');
 import { Form, FormControl, Label, Input, Col, FormGroup, FormFeedback, HelpBlock,ControlLabel, Button} from 'reactstrap';
 import { Modal, Panel, Well, PageHeader } from 'react-bootstrap';
 require('react-bootstrap')
-
+import {NotificationManager} from 'react-notifications';
 
 class Topic extends React.Component {
 
@@ -43,7 +43,7 @@ class Topic extends React.Component {
     }
 
     renderTopicCard(){
-
+        console.log(this.props.topic['topic_id']);
         return (<Panel className="flip-card" onClick={this.swapTopic}><Panel.Body className="flip-card-inner">
                 <div className="flip-card-front" >
                     {this.props.topic['topic_title']}
@@ -71,15 +71,32 @@ class Topic extends React.Component {
 
     handleSubmit(){
         if (this.state.newComment['content'] !== ''){
-            this.props.addComment(this.props.topic['topic_title'], this.state.newComment);
+            this.props.addComment(this.props.topic['topic_id'], this.state.newComment);
+           fetch('http://localhost:3300/api/comment/create/', {
+              credentials: 'include',
+              method: 'post',
+              headers: new Headers({
+                'Content-Type': 'application/json'
+              }),
+              body: JSON.stringify({ "user_id":this.props.user['user_id'],"topic_id": this.props.topic['topic_id'], "content": this.state.newComment['content'], "access_token":this.props.user['access_token'] })
+            }).then(function (response) {
+              if (!response.ok) {
+                let resp = response.json();
+                resp.then(function (resp) {
+                    NotificationManager.error(resp.error);
+                });
+              }
+              else
+                NotificationManager.success('New comment posted!');
+            }); 
             this.setState({newComment: {'content': ''}});
         }
     }
 
     handleComment(event){
         if (event.target.value != '')
-            this.setState({newComment: {'id': this.props.topic['topic_title'], 'user': 'user', 'time': 'time', 'content': event.target.value}});
-    }
+        this.setState({newComment: {'id': this.props.topic['topic_id'], 'user': 'user', 'time': 'time', 'content': event.target.value}});
+  }
 
     renderFullTopic(){
         return (

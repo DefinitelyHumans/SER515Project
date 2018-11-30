@@ -18,18 +18,7 @@ class Viewpane extends React.Component {
         this.state = {
             singleTopicView: false,
             topics: [
-                {
-                    'topic_title': 'ATitle',
-                    'topic_content': 'descripA',
-                    'topic_type': 'link',
-                    'user': 'AUser'
-                },
-                {
-                    'topic_title': 'B',
-                    'topic_content': 'descripB',
-                    'topic_type': 'link',
-                    'user': 'BUser'
-                }],
+               ],
             topic: {},
             comments: [
                 {
@@ -48,6 +37,7 @@ class Viewpane extends React.Component {
             inputTopicTitle: '',
             inputTopicContent: '',
             inputTopicType: 'text',
+            inputTopicId: '',
             visible: false,
             user_session: {
                 user_id: '',
@@ -111,10 +101,10 @@ class Viewpane extends React.Component {
 
     saveTopic() {
         let t = this.state.topics;
-        t.push({ 'topic_title': this.state.inputTopicTitle, 'topic_content': this.state.inputTopicContent, 'user_posted': 'User', 'topic_type': this.state.inputTopicType });
+        t.push({ 'topic_id': this.state.inputTopicId, 'topic_title': this.state.inputTopicTitle, 'topic_content': this.state.inputTopicContent, 'user_posted': 'User', 'topic_type': this.state.inputTopicType });
         this.setState({ topics: t });
         let c = this.state.comments;
-        c.push({ 'id': this.state.inputTopicTitle, 'comment': [] });
+        c.push({ 'id': this.state.inputTopicId, 'comment': [] });
         this.setState({ comments: c });
         NotificationManager.success('Topic ' + this.state.inputTopicTitle + ' is created.', 'Success');
         this.setState({ inputTopicContent: '', inputTopicTitle: '', inputTopicType: '' });
@@ -144,8 +134,9 @@ class Viewpane extends React.Component {
                     let t = that.state.topics;
                     t.push(obj);
                     that.setState({ topics: t });
+                    console.log(t);
                     let c = that.state.comments;
-                    c.push({ 'id': obj.topic_title, 'comment': [] });
+                    c.push({ 'id': obj.topic_id, 'comment': [] });
                     that.setState({ comments: c });
                 });
             })
@@ -178,7 +169,7 @@ class Viewpane extends React.Component {
                 t.push(response);
                 this.setState({ topics: t });
                 let c = this.state.comments;
-                c.push({ 'id': response.topic_title, 'comment': [] });
+                c.push({ 'id': response.topic_id, 'comment': [] });
                 this.setState({ comments: c });
             }).catch(error => {
                 return error;
@@ -264,6 +255,7 @@ class Viewpane extends React.Component {
      * @param {event} e 
      */
     createTopic(e) {
+    let parent = this; 
         e.preventDefault();
         // console.log('calling login ' + this.state.userCred.email);
         const topic_title = this.state.inputTopicTitle;
@@ -284,7 +276,11 @@ class Viewpane extends React.Component {
                 "topic_type": topic_type,
                 "access_token": this.state.user_session.access_token,
             })
-        }).then(this.saveTopic());
+        }).then(function(res){
+        console.log(res);
+        parent.setState({inputTopicId : res.topic_id})
+        parent.saveTopic();
+        });
         // }).then(console.log, this.saveTopic());
     }
 
@@ -304,27 +300,27 @@ class Viewpane extends React.Component {
         if (this.state.singleTopicView) {
             let i;
             for (i = 0; i < this.state.topics.length; i++) {
-                if (this.state.comments[i]['id'] === this.state.topic['topic_title']) {
+                if (this.state.comments[i]['id'] === this.state.topic['topic_id']) {
                     break;
                 }
             }
-            tmp = <Topic key={this.state.topic['topic_title']} topic={this.state.topic} parentSwapTopic={this.swapTopic} singleView={this.state.singleTopicView} addComment={this.addComment} comment={this.state.comments[i]['comment']} parentDeleteTopic={this.deleteTopic}></Topic>
+            tmp = <Topic key={this.state.topic['topic_id']} topic={this.state.topic} user={this.state.user_session} parentSwapTopic={this.swapTopic} singleView={this.state.singleTopicView} addComment={this.addComment} comment={this.state.comments[i]['comment']} parentDeleteTopic={this.deleteTopic}></Topic>
         } else {
-            tmp = this.state.topics.map((a) => <Topic key={a['topic_title']} topic={a} parentSwapTopic={this.swapTopic} singleView={this.state.singleTopicView}></Topic>)
+            tmp = this.state.topics.map((a) => <Topic key={a['topic_id']} topic={a} user={this.state.user_session} parentSwapTopic={this.swapTopic} singleView={this.state.singleTopicView}></Topic>)
         }
         return <div className="ViewPaneTopics">{tmp}</div>
     }
 
-    addComment(title, comment) {
+    addComment(id, comment) {
         let t = this.state.comments;
         let i;
         for (i = 0; i < t.length; i++) {
-            if (t[i]['id'] === title) {
+            if (t[i]['id'] === id) {
                 break;
             }
         }
         t[i]['comment'].push(comment);
-        this.setState({ comments: t });
+        this.setState({ comments: t }); 
     }
 
     swapTopic(topic) {

@@ -130,7 +130,7 @@ async function get_topic(topic_id) {
 exports.get_topics_by_user =
 async function get_topics_by_user(user_id) {
     return await pool.query(
-            `SELECT topic_title, topic_time_posted, topic_type, topic_content, user_posted FROM ${topic_table} WHERE user_posted=$1;`,
+            `SELECT topic_id, topic_title, topic_time_posted, topic_type, topic_content, user_posted FROM ${topic_table} WHERE user_posted=$1;`,
             [user_id])
         .then((res)=> {
             //check how many results we got
