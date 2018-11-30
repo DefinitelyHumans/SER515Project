@@ -462,7 +462,6 @@ class Viewpane extends React.Component {
                 {/* <Button bsStyle="success" onClick={this.saveTopic} type="button" className="closeDialogButton">Submit</Button> */}
                 </Modal.Footer>
                 </Modal>
-            <NotificationContainer />
         </div>);
     }
 }

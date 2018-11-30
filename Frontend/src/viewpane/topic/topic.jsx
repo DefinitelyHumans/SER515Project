@@ -117,7 +117,6 @@ class Topic extends React.Component {
                         <Button onClick={this.hideModal}>No</Button>
                     </Modal.Footer>
                 </Modal>
-
             </div>
         );
     }

@@ -48,17 +48,23 @@ class Options extends React.Component {
 
     handleData
     render(){
+        let muteTrue = <Panel bsStyle="primary" className="Option" onClick={this.handleNotifs.bind(this)}>
+            <Panel.Heading>
+            <Panel.Title>Mute Notifications</Panel.Title>
+            </Panel.Heading>
+        </Panel> 
+        let muteFalse =  <Panel bsStyle="success" className="Option" onClick={this.handleNotifs.bind(this)}>
+            <Panel.Heading>
+            <Panel.Title>Mute Notifications</Panel.Title>
+            </Panel.Heading>
+        </Panel>
         return <div>
         <Panel bsStyle="primary" className="Option" onClick={this.handleAbout.bind(this)}>
             <Panel.Heading>
             <Panel.Title>About CorkBoard</Panel.Title>
             </Panel.Heading>
         </Panel>
-        <Panel bsStyle="primary" className="Option" onClick={this.handleNotifs.bind(this)}>
-            <Panel.Heading>
-            <Panel.Title>Mute Notifications</Panel.Title>
-            </Panel.Heading>
-        </Panel>
+        { this.props.mute ? muteFalse : muteTrue }
         <Panel bsStyle="primary" className="Option" onClick={this.handleBugs.bind(this)}>
             <Panel.Heading>
             <Panel.Title>Report a Bug</Panel.Title>

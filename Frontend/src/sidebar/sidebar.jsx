@@ -9,6 +9,7 @@ var FontAwesome = require('react-fontawesome');
 import { Form, FormControl, Label, Input, Col, FormGroup, FormFeedback, HelpBlock,ControlLabel, Button} from 'reactstrap';
 import {Tabs, Tab } from 'react-bootstrap';
 require('react-bootstrap')
+import {NotificationContainer} from 'react-notifications';
 
 class Sidebar extends React.Component {
 
@@ -66,6 +67,7 @@ class Sidebar extends React.Component {
                         </Tab>
                     </Tabs>
                 </Col>
+        { this.props.mute ? null : <NotificationContainer /> }
             </div>);
     }
 }
