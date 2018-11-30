@@ -186,7 +186,6 @@ async function GetTopicByUserID(user_id) {
             server_error: true
         };
     } else {
-        console.log("Topics retrieved",topics);
         return {
             success: true,
             topics: topics
