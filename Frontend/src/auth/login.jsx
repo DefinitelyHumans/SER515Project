@@ -6,11 +6,10 @@ window.jQuery = jQuery;
 require('bootstrap')
 var FontAwesome = require('react-fontawesome');
 import { Form, FormControl, Label, Input, Col, FormGroup, FormFeedback, HelpBlock, ControlLabel, Button, Popover, PopoverHeader, PopoverBody } from 'reactstrap';
-import { Tabs, Tab } from 'react-bootstrap';
+import { Modal, Tabs, Tab } from 'react-bootstrap';
 require('react-bootstrap')
 import userValidator from './validators';
 import { NotificationManager } from 'react-notifications';
-import Modal from './../modal';
 
 class Login extends React.Component {
   constructor(props) {
@@ -267,14 +266,17 @@ class Login extends React.Component {
       </Popup>);
     }
     else {
-      return (<div><Button className="SideBarLogoutButton" onClick={this.showModal}><p>Logout <FontAwesome name="Login" className="fa fa-sign-out" /></p></Button><Modal visible={this.state.visible}>
-        <h3 className="dialogTitle">Logging out</h3>
-        <form>
-          <p>Are you sure you want to logout?</p>
-        </form>
-        <button onClick={this.handleLogout} type="button" className="closeDialogButton">Logout</button>
-        <button onClick={this.hideModal} type="button" className="closeDialogButton">Cancel</button>
-      </Modal></div>);
+      return (<div>
+        <Button className="SideBarLogoutButton" onClick={this.showModal}><p>Logout <FontAwesome name="Login" className="fa fa-sign-out" /></p></Button>
+        <Modal show={this.state.visible} onHide={this.hideModal}>
+          <Modal.Header>Logging Out</Modal.Header>
+          <Modal.Body>Are you sure you want to logout?</Modal.Body>
+          <Modal.Footer>
+              <Button onClick={this.handleLogout} className="closeDialogButton">Yes</Button>
+              <Button onClick={this.hideModal}>No</Button>
+          </Modal.Footer>
+        </Modal>
+        </div>);
     }
   }
 }
