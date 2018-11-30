@@ -14,7 +14,9 @@ class Topic extends React.Component {
         super(props);
         this.state = {
             visible: false,
-            newComment: {'content': ''}
+            newComment: {'content': ''},
+            commentsHere: [],
+            comment:''
         }
         this.swapTopic = this.swapTopic.bind(this);
         this.renderTopicCard = this.renderTopicCard.bind(this);
@@ -23,6 +25,8 @@ class Topic extends React.Component {
         this.showModal = this.showModal.bind(this);
         this.hideModal = this.hideModal.bind(this);
         this.deleteTopic = this.deleteTopic.bind(this);
+        this.saveComment = this.saveComment.bind(this);
+        this.renderItComments = this.renderItComments.bind(this);
     }
 
     swapTopic(){
@@ -43,7 +47,6 @@ class Topic extends React.Component {
     }
 
     renderTopicCard(){
-        console.log(this.props.topic['topic_id']);
         return (<Panel className="flip-card" onClick={this.swapTopic}><Panel.Body className="flip-card-inner">
                 <div className="flip-card-front" >
                     {this.props.topic['topic_title']}
@@ -55,19 +58,71 @@ class Topic extends React.Component {
         //return (<button className="Topic" onClick={this.swapTopic}><p>{this.props.topic['topic_title']}</p></button>);
     }
 
-    renderComments(){
-        if (this.props.comment !== {'content':''}){
-            return this.props.comment.map((c) => {
-                return (<Panel>
-                <Panel.Body className="CommentContent">
-                        {c['content']}
-                        <br/>
-                        <small className="CommentUser"> {c['user']}</small>
-                        <small className="CommentTime">{c['time']} | </small>
-                </Panel.Body></Panel>)
-            });
+    saveComment(){
+        let t = this.state.commentsHere;
+        let k;
+        let flag=false;
+        for(k=0;k<t.length;k++){
+            if(t[k]==this.state.comment){
+            flag=true;
+                break;        
+            }
         }
+        if(!flag){
+            t.push(this.state.comment);
+            this.setState({ commentsHere: t });
+        }      
+        return;
     }
+renderItComments(){
+    this.renderComments();
+    let k = this.state.commentsHere;
+    return k.map((c, i) => {
+                return (<Panel key={i}>
+                <Panel.Body className="CommentContent">
+                        {c}
+                        <br/>
+                </Panel.Body></Panel>)
+                    });
+}
+    renderComments(){
+    let parent = this;
+    let comments = {}
+    fetch("http://localhost:3300/api/comment/by_topic/"+this.props.topic['topic_id'], {
+              method: 'get',
+              headers: new Headers({
+                'Content-Type': 'application/json'
+              })}).then(function (response) {
+              if (!response.ok) {
+                let resp = response.json();
+                resp.then(function (resp) {
+                    NotificationManager.error(resp.error);
+                });
+              }
+              else {
+              let j;
+              let resp = response.json();
+              resp.then(function (resp) {
+              let comments = resp.comment_ids;
+              for (j = 0; j < comments.length; j++) {
+                  let commentid = (comments[j].comment_id)
+                    fetch("http://localhost:3300/api/comment/"+commentid, {
+                  method: 'get',
+                  headers: new Headers({
+                    'Content-Type': 'application/json'
+                  })}).then(function (response) {
+                  let commentresp = response.json();
+                  commentresp.then(function (commentresp) {
+                        parent.setState({comment:commentresp['comment_body']});
+                        parent.saveComment();
+                        return;
+                    });
+                });
+                }
+            });
+    }
+    });    
+}
 
     handleSubmit(){
         if (this.state.newComment['content'] !== ''){
@@ -110,13 +165,12 @@ class Topic extends React.Component {
                             <Button className="TopicMoodButton">Dislike</Button>
                             <Button className="TopicDelButton" onClick={this.showModal}>Delete</Button>
                     </Panel.Footer>
-                   <small>{this.props.topic['user_posted']} </small>
-                    </Panel.Body>
+                   </Panel.Body>
                     </Panel>
                     </PageHeader>
                 </div>
                 <div className='TopicComments'>
-                    {this.renderComments()}
+                    {this.renderItComments()}
                     <Form className='CommentSubmission'>
                         <FormGroup>
                             <Input type="textarea" onChange={this.handleComment.bind(this)} value={this.state.newComment['content']}/>

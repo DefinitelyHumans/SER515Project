@@ -134,7 +134,6 @@ class Viewpane extends React.Component {
                     let t = that.state.topics;
                     t.push(obj);
                     that.setState({ topics: t });
-                    console.log(t);
                     let c = that.state.comments;
                     c.push({ 'id': obj.topic_id, 'comment': [] });
                     that.setState({ comments: c });
@@ -277,7 +276,6 @@ class Viewpane extends React.Component {
                 "access_token": this.state.user_session.access_token,
             })
         }).then(function(res){
-        console.log(res);
         parent.setState({inputTopicId : res.topic_id})
         parent.saveTopic();
         });
