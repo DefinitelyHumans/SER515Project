@@ -188,7 +188,6 @@ renderItComments(){
                         <Button onClick={this.hideModal}>No</Button>
                     </Modal.Footer>
                 </Modal>
-
             </div>
         );
     }

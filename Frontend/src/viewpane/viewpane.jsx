@@ -129,15 +129,22 @@ class Viewpane extends React.Component {
         }).then(response => response.json())
             .then(response => {
                 let that = this;        // TODO: Fix call back referencing, this isn't the best means of accomplishing task.
+                let t = that.state.topics;
+                let c = that.state.comments;
                 response.forEach(function (obj) {
                     // console.log("ITER",obj); 
-                    let t = that.state.topics;
-                    t.push(obj);
-                    that.setState({ topics: t });
-                    let c = that.state.comments;
-                    c.push({ 'id': obj.topic_id, 'comment': [] });
-                    that.setState({ comments: c });
+                    let idx = t.findIndex(x => x.topic_title === obj.topic_title);
+                    if (idx === -1){
+                        t.push(obj);
+                        c.push({ 'id': obj.topic_title, 'comment': [] });
+                    }
+                    else{
+                        t[idx] = obj;
+                        // eventually comment updates but for now unnecessary;
+                    }
                 });
+                that.setState({ topics: t });
+                that.setState({ comments: c });
             })
     }
 
@@ -456,7 +463,6 @@ class Viewpane extends React.Component {
                 {/* <Button bsStyle="success" onClick={this.saveTopic} type="button" className="closeDialogButton">Submit</Button> */}
                 </Modal.Footer>
                 </Modal>
-            <NotificationContainer />
         </div>);
     }
 }
