@@ -129,7 +129,7 @@ class Viewpane extends React.Component {
      */
     getTopics() {
         const userID = this.state.user_session.user_id;
-        const endpoint = 'http://localhost:3300/api/topic/user/' + userID;
+        const endpoint = 'https://corkd.jzalden.com/api/topic/user/' + userID;
         fetch(endpoint, {
             credentials: 'include',
             method: 'get',
@@ -164,7 +164,7 @@ class Viewpane extends React.Component {
      */
     getTopic() {
         const topicID = "olupc254lfzwk6ohoesnspcyv7z9bl8q3fbq2x6od8d3wd8ochwl8q5wq04bns88";  // TODO: Retrieve
-        const endpoint = 'http://localhost:3300/api/topic/' + topicID;
+        const endpoint = 'https://corkd.jzalden.com/api/topic/' + topicID;
         // Convert response to JSON, and log out to screen.
         // }).then(response => {
         //     if (response.ok) {
@@ -201,7 +201,7 @@ class Viewpane extends React.Component {
         const topic_title = "Bag of Chips";
         const topicID = "0uvoucfe3o2j0qi36bizy87t1e7ltieajt77kaewk4al2iwo8sx58obwxol6611s";
         const access_token = this.state.user_session.access_token;
-        const endpoint = 'http://localhost:3300/api/topic/' + topicID;
+        const endpoint = 'https://corkd.jzalden.com/api/topic/' + topicID;
         // const userID = "noua9p74ugz3shazx47j8795axqeoqp4"; 
 
         fetch(endpoint, {
@@ -235,7 +235,7 @@ class Viewpane extends React.Component {
      */
     updateTopic() {
         const topicID = "fjovljgljkgy85apml6al04rdu7tfyw6kgkhfluepmsadfr3eapztwdutl5yww5c";
-        const endpoint = 'http://localhost:3300/api/topic/' + topicID;
+        const endpoint = 'https://corkd.jzalden.com/api/topic/' + topicID;
         const topic_content = "change this bad boy away beyond the stars";
         const access_token = this.state.user_session.access_token;
         fetch(endpoint, {
@@ -279,7 +279,7 @@ class Viewpane extends React.Component {
         // console.log("The type", topic_type);
         // TODO: Retrieve access token from login.
         // const access_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiemUxOWR4ajB0azRvZHI4Zng4dW01OTQzdDBmZWFrNzUiLCJpYXQiOjE1NDMxNzM3ODUsImV4cCI6MTU0MzE4ODE4NX0.DlnkU1x5IZuePxVqGCsV9Tn8L-y3zCMDb6676sow9ho";
-        fetch('http://localhost:3300/api/topic/create', {
+        fetch('https://corkd.jzalden.com/api/topic/create', {
             credentials: 'include',
             method: 'post',
             headers: new Headers({

@@ -60,7 +60,7 @@ class Login extends React.Component {
     e.preventDefault();
     const email = this.state.userCred.email
     const password = this.state.userCred.password
-    fetch('http://localhost:3300/api/auth/register/', {
+    fetch('https://corkd.jzalden.com/api/auth/register/', {
       credentials: 'include',
       method: 'post',
       headers: new Headers({
@@ -88,7 +88,7 @@ class Login extends React.Component {
     let uID = '';
     const email = this.state.userCred.email
     const password = this.state.userCred.password
-    fetch('http://localhost:3300/api/auth/login/', {
+    fetch('https://corkd.jzalden.com/api/auth/login/', {
       credentials: 'include',
       method: 'post',
       headers: new Headers({
